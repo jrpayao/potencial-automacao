@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.nx/cache/
+.nx/workspace-data/
+*.sqlite
+data/
+.angular/
+coverage/
+playwright-report/
+e2e/.auth/
+docs/evolucao/
+error.log

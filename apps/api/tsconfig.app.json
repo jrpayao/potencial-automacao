@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "types": ["node"],
+    "rootDir": "src",
+    "baseUrl": ".",
+    "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "emitDeclarationOnly": false,
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "target": "es2021",
+    "paths": {
+      "@ipa/shared": ["../../libs/shared/src/index.ts"]
+    }
+  },
+  "include": ["src/**/*.ts"],
+  "exclude": []
+}
