@@ -15,25 +15,35 @@ O design aprovado esta em `docs/superpowers/specs/`.
 
 ## Git e Documentacao
 
-### Commits por Feature
+### Commits por Grupo (Feature)
 
-- Agrupe as tasks por feature e faca UM commit por feature completa
-- SEMPRE peca minha permissao antes de commitar
+- Agrupe as tasks por grupo (G1, G2, ...) e faca UM commit por grupo completo
+- NAO pedir permissao para commitar — commitar automaticamente ao concluir cada grupo
 - NAO adicionar Co-Authored-By nos commits
 - Formato: `feat({feature}): {descricao em portugues}`
 
-### Documentacao Continua
+### OBRIGATORIO apos cada grupo concluido
 
-- Atualize o TASKS.md em TEMPO REAL conforme implementa (nao no final)
-- Marcar [x] cada task assim que concluir, com timestamp
-- Atualizar o CHANGELOG.md a cada feature commitada (nao a cada task)
-- Formato CHANGELOG:
-  ```
-  ## [data] — feat({feature})
-  - O que foi implementado
-  - Arquivos criados/modificados
-  - Tasks cobertas: T{NN}, T{NN}, T{NN}
-  ```
+1. **Marcar tasks como feitas** em `docs/sdd/TASKS.md`:
+   - Trocar `- [ ]` por `- [x]` em cada task concluida
+   - Adicionar timestamp: `- [x] **T{NN}** — descricao *(concluida em YYYY-MM-DD HH:MM)*`
+
+2. **Atualizar CHANGELOG** em `docs/CHANGELOG.md`:
+   ```
+   ## [YYYY-MM-DD] — feat({feature})
+   - O que foi implementado
+   - Arquivos criados/modificados
+   - Tasks cobertas: T{NN}, T{NN}, T{NN}
+   ```
+
+3. **Commitar** tudo junto (codigo + TASKS.md + CHANGELOG.md):
+   ```
+   feat({feature}): {descricao em portugues}
+   ```
+
+4. **Mostrar progresso**:
+   - "✅ Feature {nome} commitada — T{NN} a T{NN}"
+   - Resumo: "{N} de 50 tasks concluidas ({X}%)"
 
 ### Branch
 
@@ -41,9 +51,8 @@ O design aprovado esta em `docs/superpowers/specs/`.
 
 ### Progresso
 
-- Ao iniciar uma feature, mostre: "🔨 Feature: {nome} — Tasks T{NN} a T{NN}"
-- Ao concluir a feature, mostre: "✅ Feature {nome} pronta — commitar?"
-- Mostrar resumo do progresso geral apos cada commit
+- Ao iniciar um grupo, mostre: "🔨 Feature: {nome} — Tasks T{NN} a T{NN}"
+- Ao concluir e commitar, mostre resumo do progresso geral
 
 ## Testes
 

@@ -1,1 +1,9 @@
-// Calculos IPA serao implementados na task T17
+export {
+  calcularIT,
+  calcularImpactoCidadao,
+  calcularEficiencia,
+  calcularIN,
+  calcularIPA,
+  classificarIPA,
+} from './calcular-ipa.js';
+export type { ResultadoIPA } from './calcular-ipa.js';

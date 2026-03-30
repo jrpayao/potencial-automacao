@@ -6,48 +6,43 @@ export interface IAvaliacao {
   id: number;
   processoId: number;
 
-  // Dimensao Tecnica
-  notaVolume: number;
-  notaRepeticao: number;
-  notaRegras: number;
-  notaDigital: number;
-  notaEstabilidade: number;
-  justificativaVolume?: string;
-  justificativaRepeticao?: string;
-  justificativaRegras?: string;
-  justificativaDigital?: string;
-  justificativaEstabilidade?: string;
+  // Dimensão Técnica (IT)
+  notaSegurancaAcessos: number;
+  justifSegurancaAcessos: string;
+  notaEstabilidadeLegado: number;
+  justifEstabilidadeLegado: string;
+  notaEstruturacaoDados: number;
+  justifEstruturacaoDados: string;
 
-  // Dimensao Negocio
-  notaImpactoErro: number;
-  notaGanhoEficiencia: number;
-  notaSatisfacao: number;
-  notaConformidade: number;
-  justificativaImpactoErro?: string;
-  justificativaGanhoEficiencia?: string;
-  justificativaSatisfacao?: string;
-  justificativaConformidade?: string;
+  // Dimensão Negócio (IN)
+  notaGestaoRisco: number;
+  justifGestaoRisco: string;
+  notaReducaoSla: number;
+  notaAbrangencia: number;
+  notaExperienciaCidadao: number;
+  justifImpactoCidadao: string;
+  notaVolumeMensal: number;
+  notaFteLiberado: number;
+  justifEficiencia: string;
 
   // Fatores
   fatorImpedimento: FatorImpedimento;
+  justifImpedimento: string;
   fatorUrgencia: FatorUrgencia;
-  justificativaImpedimento?: string;
-  justificativaUrgencia?: string;
+  justifUrgencia: string;
 
   // Riscos
-  riscoSeguranca: number;
-  riscoReputacao: number;
-  justificativaRiscoSeguranca?: string;
-  justificativaRiscoReputacao?: string;
+  riscosContingencia?: string;
 
   // Calculados
-  mediaTecnica: number;
-  mediaNegocio: number;
-  mediaRiscos: number;
-  ipa: number;
+  indiceTecnico: number;
+  indiceNegocio: number;
+  ipaBase: number;
+  ipaFinal: number;
   statusIpa: StatusIpa;
 
   avaliadoPorId: number;
+  organizacaoId: number;
   criadoEm: string;
   atualizadoEm: string;
 }

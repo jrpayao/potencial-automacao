@@ -6,84 +6,28 @@
 
 ## G1 — Scaffold Nx + Shared Lib
 
-- [ ] **T01** — Criar workspace Nx com preset `apps`
-  - `npx create-nx-workspace@latest potencial-automacao --preset=apps --pm=npm`
-  - Configurar `tsconfig.base.json` com strict mode
-  - Commit: `feat(scaffold): workspace Nx`
-
-- [ ] **T02** — Criar app Angular no Nx
-  - `nx g @nx/angular:app frontend --style=scss --routing --standalone --ssr=false`
-  - Configurar zoneless: `provideZonelessChangeDetection()` em app.config.ts
-  - Configurar environments (dev: apiUrl `http://localhost:3000/api`, prod: `/api`)
-
-- [ ] **T03** — Criar app NestJS no Nx
-  - `nx g @nx/nest:app api`
-  - Instalar dependencias: `typeorm`, `better-sqlite3`, `@nestjs/typeorm`, `@nestjs/jwt`, `@nestjs/passport`, `passport-jwt`, `bcrypt`, `class-validator`, `class-transformer`, `pdfmake`
-  - Configurar prefixo global `/api` no main.ts
-  - Habilitar ValidationPipe global
-
-- [ ] **T04** — Criar lib shared
-  - `nx g @nx/js:lib shared --directory=libs/shared --bundler=tsc`
-  - Criar estrutura: `interfaces/`, `dtos/`, `enums/`, `calculos/`
-  - Configurar path alias `@ipa/shared` no tsconfig.base.json
-  - Criar enums: StatusIPA, Perfil, SituacaoProcesso, FatorImpedimento, FatorUrgencia
-  - Criar interfaces: IOrganizacao, IUsuario, IProcesso, IAvaliacao
-  - Criar DTOs: CreateProcessoDto, CreateAvaliacaoDto, UpdateAvaliacaoDto, LoginDto
+- [x] **T01** — Criar workspace Nx com preset `apps` *(concluida em 2026-03-30 17:00)*
+- [x] **T02** — Criar app Angular no Nx *(concluida em 2026-03-30 17:00)*
+- [x] **T03** — Criar app NestJS no Nx *(concluida em 2026-03-30 17:00)*
+- [x] **T04** — Criar lib shared *(concluida em 2026-03-30 17:00)*
 
 ---
 
 ## G2 — Backend: Database + Entities
 
-- [ ] **T05** — Configurar TypeORM + SQLite
-  - Criar `database.module.ts` com TypeOrmModule.forRoot({ type: 'better-sqlite3' })
-  - Arquivo do banco: `data/ipa.sqlite`
-  - synchronize: true em dev (migrations manuais em prod)
-
-- [ ] **T06** — Criar entity Organizacao
-  - Arquivo: `organizacao.entity.ts`
-  - Mapear para `IPATB001_ORGANIZACAO` com @Entity({ name: 'IPATB001_ORGANIZACAO' })
-  - Colunas com nomes fisicos: @Column({ name: 'NO_ORGANIZACAO' })
-  - PK autoincrement: ID_ORGANIZACAO
-
-- [ ] **T07** — Criar entity Usuario
-  - Arquivo: `usuario.entity.ts`
-  - Mapear para `IPATB002_USUARIO`
-  - FK para Organizacao com @ManyToOne
-  - Indice em ID_ORGANIZACAO
-
-- [ ] **T08** — Criar entities Processo e Avaliacao
-  - Arquivo: `processo.entity.ts` → `IPATB003_PROCESSO`
-  - Arquivo: `avaliacao.entity.ts` → `IPATB004_AVALIACAO`
-  - Todas as colunas conforme SPEC secao E3/E4
-  - FKs e indices conforme design
-  - Relacao: Processo @OneToOne Avaliacao
+- [x] **T05** — Configurar TypeORM + SQLite *(concluida em 2026-03-30 17:10)*
+- [x] **T06** — Criar entity Organizacao *(concluida em 2026-03-30 17:10)*
+- [x] **T07** — Criar entity Usuario *(concluida em 2026-03-30 17:10)*
+- [x] **T08** — Criar entities Processo e Avaliacao *(concluida em 2026-03-30 17:10)*
 
 ---
 
 ## G3 — Backend: Auth
 
-- [ ] **T09** — Criar AuthModule + AuthService
-  - Login: validar email/senha com bcrypt.compare
-  - Gerar access token (15min) + refresh token (7d)
-  - Refresh: validar refresh token, gerar novo par
-  - Logout: invalidar refresh token
-  - Me: retornar usuario do JWT
-
-- [ ] **T10** — Criar JwtStrategy + JwtAuthGuard
-  - Extrair token do header Authorization: Bearer
-  - Payload: { sub, email, perfil, organizacaoId }
-  - Guard aplicavel via @UseGuards(JwtAuthGuard)
-
-- [ ] **T11** — Criar RolesGuard + @Roles decorator
-  - Decorator: @Roles(Perfil.ADMIN, Perfil.ANALISTA)
-  - Guard verifica perfil do JWT contra roles permitidas
-  - 403 se perfil insuficiente
-
-- [ ] **T12** — Criar TenantGuard + @CurrentUser decorator
-  - @CurrentUser() extrai usuario do request
-  - TenantGuard injeta organizacaoId em toda query
-  - Superadmin bypassa filtro
-  - Testes: auth.service.spec.ts (login, refresh, roles)
+- [x] **T09** — Criar AuthModule + AuthService *(concluida em 2026-03-30 17:15)*
+- [x] **T10** — Criar JwtStrategy + JwtAuthGuard *(concluida em 2026-03-30 17:15)*
+- [x] **T11** — Criar RolesGuard + @Roles decorator *(concluida em 2026-03-30 17:15)*
+- [x] **T12** — Criar TenantGuard + @CurrentUser decorator *(concluida em 2026-03-30 17:15)*
 
 ---
 
