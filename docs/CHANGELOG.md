@@ -1,6 +1,13 @@
 # CHANGELOG — Sistema IPA
 
-## [2026-03-30] — feat(crud-calculo)
+## [2026-03-30 23:07] — feat(dashboard-pdf)
+- DashboardModule: GET /api/dashboard/ranking (JOIN processos+avaliacoes, paginado, tenant scoped), GET /api/dashboard/resumo (contagem por status)
+- PdfService: export PDF com pdfmake (6 secoes: identificacao, tecnica, negocio, fatores, riscos, resultado)
+- GET /api/avaliacoes/:id/pdf → Content-Type: application/pdf
+- Testes E2E backend: auth, CRUD processo, avaliacao+IPA, PDF export, dashboard, tenant isolation
+- Tasks cobertas: T19, T20, T21
+
+## [2026-03-30 22:40] — feat(crud-calculo)
 - calcularIPA lib shared: 6 funcoes puras (calcularIT, calcularIN, calcularIPA, etc.) + 22 testes
 - CRUD Organizacoes: GET/POST/PATCH com @Roles(SUPERADMIN)
 - CRUD Usuarios: GET/POST/PATCH/DELETE com hash bcrypt e tenant scoping

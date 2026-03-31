@@ -6,61 +6,47 @@
 
 ## G1 — Scaffold Nx + Shared Lib
 
-- [x] **T01** — Criar workspace Nx com preset `apps` *(concluida em 2026-03-30 17:00)*
-- [x] **T02** — Criar app Angular no Nx *(concluida em 2026-03-30 17:00)*
-- [x] **T03** — Criar app NestJS no Nx *(concluida em 2026-03-30 17:00)*
-- [x] **T04** — Criar lib shared *(concluida em 2026-03-30 17:00)*
+- [x] **T01** — Criar workspace Nx com preset `apps` *(concluida em 2026-03-30 21:30)*
+- [x] **T02** — Criar app Angular no Nx *(concluida em 2026-03-30 21:30)*
+- [x] **T03** — Criar app NestJS no Nx *(concluida em 2026-03-30 21:30)*
+- [x] **T04** — Criar lib shared *(concluida em 2026-03-30 21:30)*
 
 ---
 
 ## G2 — Backend: Database + Entities
 
-- [x] **T05** — Configurar TypeORM + SQLite *(concluida em 2026-03-30 17:10)*
-- [x] **T06** — Criar entity Organizacao *(concluida em 2026-03-30 17:10)*
-- [x] **T07** — Criar entity Usuario *(concluida em 2026-03-30 17:10)*
-- [x] **T08** — Criar entities Processo e Avaliacao *(concluida em 2026-03-30 17:10)*
+- [x] **T05** — Configurar TypeORM + SQLite *(concluida em 2026-03-30 22:00)*
+- [x] **T06** — Criar entity Organizacao *(concluida em 2026-03-30 22:00)*
+- [x] **T07** — Criar entity Usuario *(concluida em 2026-03-30 22:00)*
+- [x] **T08** — Criar entities Processo e Avaliacao *(concluida em 2026-03-30 22:00)*
 
 ---
 
 ## G3 — Backend: Auth
 
-- [x] **T09** — Criar AuthModule + AuthService *(concluida em 2026-03-30 17:15)*
-- [x] **T10** — Criar JwtStrategy + JwtAuthGuard *(concluida em 2026-03-30 17:15)*
-- [x] **T11** — Criar RolesGuard + @Roles decorator *(concluida em 2026-03-30 17:15)*
-- [x] **T12** — Criar TenantGuard + @CurrentUser decorator *(concluida em 2026-03-30 17:15)*
+- [x] **T09** — Criar AuthModule + AuthService *(concluida em 2026-03-30 22:10)*
+- [x] **T10** — Criar JwtStrategy + JwtAuthGuard *(concluida em 2026-03-30 22:10)*
+- [x] **T11** — Criar RolesGuard + @Roles decorator *(concluida em 2026-03-30 22:10)*
+- [x] **T12** — Criar TenantGuard + @CurrentUser decorator *(concluida em 2026-03-30 22:10)*
 
 ---
 
 ## G4 — Backend: CRUD + Calculo IPA
 
-- [x] **T13** — Implementar calcularIPA na lib shared *(concluida em 2026-03-30 17:45)*
-- [x] **T14** — CRUD Organizacoes *(concluida em 2026-03-30 17:45)*
-- [x] **T15** — CRUD Usuarios *(concluida em 2026-03-30 17:45)*
-- [x] **T16** — CRUD Processos *(concluida em 2026-03-30 17:45)*
-- [x] **T17** — CRUD Avaliacoes *(concluida em 2026-03-30 17:45)*
-- [x] **T18** — Seed de dados iniciais *(concluida em 2026-03-30 17:45)*
+- [x] **T13** — Implementar calcularIPA na lib shared *(concluida em 2026-03-30 22:40)*
+- [x] **T14** — CRUD Organizacoes *(concluida em 2026-03-30 22:40)*
+- [x] **T15** — CRUD Usuarios *(concluida em 2026-03-30 22:40)*
+- [x] **T16** — CRUD Processos *(concluida em 2026-03-30 22:40)*
+- [x] **T17** — CRUD Avaliacoes *(concluida em 2026-03-30 22:40)*
+- [x] **T18** — Seed de dados iniciais *(concluida em 2026-03-30 22:40)*
 
 ---
 
 ## G5 — Backend: Dashboard + PDF
 
-- [ ] **T19** — Endpoints Dashboard
-  - DashboardModule, Controller, Service
-  - GET /api/dashboard/ranking: query processos JOIN avaliacoes ORDER BY VR_IPA_FINAL DESC, paginado
-  - GET /api/dashboard/resumo: COUNT por CO_STATUS_IPA + total
-  - Scoped por tenant
-  - Testes: dashboard.service.spec.ts
-
-- [ ] **T20** — Export PDF
-  - PdfService usando pdfmake
-  - Template: replica estrutura do formulario_avaliacao.pdf
-  - Secoes: Identificacao, Dimensao Tecnica (notas + justificativas), Dimensao Negocio, Fatores, Riscos, Resultado Final (memoria de calculo)
-  - GET /api/avaliacoes/:id/pdf → Content-Type: application/pdf
-
-- [ ] **T21** — Testes E2E do backend
-  - test/app.e2e-spec.ts com supertest
-  - Fluxo completo: login → criar processo → criar avaliacao → verificar IPA calculado → dashboard ranking
-  - Verificar tenant isolation: org A nao ve dados de org B
+- [x] **T19** — Endpoints Dashboard *(concluida em 2026-03-30 23:07)*
+- [x] **T20** — Export PDF *(concluida em 2026-03-30 23:07)*
+- [x] **T21** — Testes E2E do backend *(concluida em 2026-03-30 23:07)*
 
 ---
 
