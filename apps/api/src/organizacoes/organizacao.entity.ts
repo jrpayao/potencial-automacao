@@ -16,7 +16,7 @@ export class Organizacao {
   @Column({ name: 'CO_SLUG', type: 'varchar', length: 100, unique: true, nullable: false })
   coSlug!: string;
 
-  @Column({ name: 'IC_SITUACAO', type: 'char', length: 1, nullable: false, default: 'A' })
+  @Column({ name: 'IC_SITUACAO', type: 'varchar', length: 1, nullable: false, default: 'A' })
   icSituacao!: string;
 
   @CreateDateColumn({ name: 'TS_CRIACAO' })

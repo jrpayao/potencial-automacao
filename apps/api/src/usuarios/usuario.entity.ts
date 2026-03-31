@@ -25,14 +25,14 @@ export class Usuario {
   @Column({ name: 'CO_PERFIL', type: 'varchar', length: 20, nullable: false })
   coPerfil!: string;
 
-  @Column({ name: 'ID_ORGANIZACAO', nullable: false })
+  @Column({ name: 'ID_ORGANIZACAO', type: 'int', nullable: false })
   idOrganizacao!: number;
 
   @ManyToOne(() => Organizacao)
   @JoinColumn({ name: 'ID_ORGANIZACAO' })
   organizacao!: Organizacao;
 
-  @Column({ name: 'IC_SITUACAO', type: 'char', length: 1, nullable: false, default: 'A' })
+  @Column({ name: 'IC_SITUACAO', type: 'varchar', length: 1, nullable: false, default: 'A' })
   icSituacao!: string;
 
   @CreateDateColumn({ name: 'TS_CRIACAO' })

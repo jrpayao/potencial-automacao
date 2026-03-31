@@ -17,21 +17,21 @@ export class Avaliacao {
   @PrimaryGeneratedColumn({ name: 'ID_AVALIACAO' })
   idAvaliacao!: number;
 
-  @Column({ name: 'ID_PROCESSO', nullable: false })
+  @Column({ name: 'ID_PROCESSO', type: 'int', nullable: false })
   idProcesso!: number;
 
   @OneToOne(() => Processo, (processo) => processo.avaliacao)
   @JoinColumn({ name: 'ID_PROCESSO' })
   processo!: Processo;
 
-  @Column({ name: 'ID_ORGANIZACAO', nullable: false })
+  @Column({ name: 'ID_ORGANIZACAO', type: 'int', nullable: false })
   idOrganizacao!: number;
 
   @ManyToOne(() => Organizacao)
   @JoinColumn({ name: 'ID_ORGANIZACAO' })
   organizacao!: Organizacao;
 
-  @Column({ name: 'ID_USUARIO_AVALIADOR', nullable: false })
+  @Column({ name: 'ID_USUARIO_AVALIADOR', type: 'int', nullable: false })
   idUsuarioAvaliador!: number;
 
   @ManyToOne(() => Usuario)

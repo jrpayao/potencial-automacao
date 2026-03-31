@@ -33,54 +33,12 @@
 
 ## G4 — Backend: CRUD + Calculo IPA
 
-- [ ] **T13** — Implementar calcularIPA na lib shared
-  - Funcoes puras: calcularIT(), calcularIN(), calcularIPA(), classificarIPA()
-  - Testes: calcular-ipa.spec.ts
-    - Caso basico (notas medias)
-    - Edge: todas as notas 0 → IPA = 0
-    - Edge: todas as notas 5, FI=1, FU=1.20 → IPA maximo (6.0)
-    - Edge: FI=0 → IPA = 0 (impedimento absoluto)
-    - Classificacao: 4.0 → prioridade_alta, 3.0 → backlog, 1.0 → descarte
-    - Normalizacao ImpactoCidadao: min(valor, 5.0)
-
-- [ ] **T14** — CRUD Organizacoes
-  - OrganizacoesModule, Controller, Service
-  - Endpoints: GET /api/organizacoes, POST, PATCH /:id
-  - Guard: @Roles(Perfil.SUPERADMIN)
-  - Testes: organizacoes.service.spec.ts
-
-- [ ] **T15** — CRUD Usuarios
-  - UsuariosModule, Controller, Service
-  - Endpoints: GET /api/usuarios, POST, PATCH /:id, DELETE /:id
-  - Senha hasheada com bcrypt ao criar
-  - Scoped por tenant (TenantGuard)
-  - Guard: @Roles(Perfil.ADMIN)
-  - Testes: usuarios.service.spec.ts
-
-- [ ] **T16** — CRUD Processos
-  - ProcessosModule, Controller, Service
-  - Endpoints: GET /api/processos (filtros), GET /:id, POST, PATCH /:id, DELETE /:id
-  - Filtros: area, status, dataInicio, dataFim
-  - Scoped por tenant
-  - Guard: @Roles(Perfil.ANALISTA, Perfil.ADMIN)
-  - Testes: processos.service.spec.ts
-
-- [ ] **T17** — CRUD Avaliacoes
-  - AvaliacoesModule, Controller, Service
-  - POST /api/avaliacoes: recebe notas + justificativas, calcula IPA no service usando calcularIPA() da lib shared, salva tudo
-  - PATCH /api/avaliacoes/:id: atualiza e recalcula
-  - POST /api/avaliacoes/:id/rascunho: salva parcial (campos nullable)
-  - GET /api/avaliacoes/:id: retorna com calculos
-  - Scoped por tenant
-  - Testes: avaliacoes.service.spec.ts (incluindo calculo integrado)
-
-- [ ] **T18** — Seed de dados iniciais
-  - Arquivo: `database/seed.ts`
-  - Criar 1 organizacao: "Ministerio da Gestao"
-  - Criar 1 superadmin: admin@ipa.gov.br / admin123
-  - Criar 1 analista: analista@ipa.gov.br / analista123
-  - Criar 3 processos com avaliacoes completas (dados do PDF como exemplo)
-  - Executavel via: `nx run api:seed`
+- [x] **T13** — Implementar calcularIPA na lib shared *(concluida em 2026-03-30 17:45)*
+- [x] **T14** — CRUD Organizacoes *(concluida em 2026-03-30 17:45)*
+- [x] **T15** — CRUD Usuarios *(concluida em 2026-03-30 17:45)*
+- [x] **T16** — CRUD Processos *(concluida em 2026-03-30 17:45)*
+- [x] **T17** — CRUD Avaliacoes *(concluida em 2026-03-30 17:45)*
+- [x] **T18** — Seed de dados iniciais *(concluida em 2026-03-30 17:45)*
 
 ---
 

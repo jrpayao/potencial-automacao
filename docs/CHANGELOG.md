@@ -1,5 +1,15 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-30] — feat(crud-calculo)
+- calcularIPA lib shared: 6 funcoes puras (calcularIT, calcularIN, calcularIPA, etc.) + 22 testes
+- CRUD Organizacoes: GET/POST/PATCH com @Roles(SUPERADMIN)
+- CRUD Usuarios: GET/POST/PATCH/DELETE com hash bcrypt e tenant scoping
+- CRUD Processos: GET (filtros area/status/periodo)/POST/PATCH/DELETE com tenant scoping
+- CRUD Avaliacoes: POST (calcula IPA), GET, PATCH (recalcula), rascunho
+- Seed: 1 org, 2 usuarios, 3 processos com avaliacoes (IPA 5.54, 3.12, 0.78)
+- 27 testes passando (22 calculo + 5 auth)
+- Tasks cobertas: T13, T14, T15, T16, T17, T18
+
 ## [2026-03-30] — feat(auth)
 - AuthModule: login (bcrypt), refresh token, logout, me
 - JwtStrategy + JwtAuthGuard (Bearer token)

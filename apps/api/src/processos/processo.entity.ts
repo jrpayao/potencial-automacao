@@ -35,14 +35,14 @@ export class Processo {
   @Column({ name: 'DT_LEVANTAMENTO', type: 'date', nullable: false })
   dtLevantamento!: string;
 
-  @Column({ name: 'ID_ORGANIZACAO', nullable: false })
+  @Column({ name: 'ID_ORGANIZACAO', type: 'int', nullable: false })
   idOrganizacao!: number;
 
   @ManyToOne(() => Organizacao)
   @JoinColumn({ name: 'ID_ORGANIZACAO' })
   organizacao!: Organizacao;
 
-  @Column({ name: 'ID_USUARIO_CRIACAO', nullable: false })
+  @Column({ name: 'ID_USUARIO_CRIACAO', type: 'int', nullable: false })
   idUsuarioCriacao!: number;
 
   @ManyToOne(() => Usuario)
