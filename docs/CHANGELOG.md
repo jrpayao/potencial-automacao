@@ -1,5 +1,13 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31] — feat(layout)
+- AdminLayoutComponent: shell com sidebar 256px + header 64px + body scrollavel
+- SidebarComponent: menu com icones Material, items condicionais por perfil, routerLinkActive, botao Sair
+- HeaderComponent: toolbar com titulo, avatar iniciais, dropdown menu
+- Rotas completas: /login, /admin com children lazy-loaded, roleGuard
+- 6 stub components para features pendentes (dashboard, processos, wizard, resultado, usuarios, organizacoes)
+- Tasks cobertas: T26, T27, T28
+
 ## [2026-03-31] — feat(frontend-auth)
 - Angular Material instalado com tema custom (paleta azul, fonte Inter)
 - SCSS variables: $primary, $primary-dark, $surface, $success, $warning, $danger
