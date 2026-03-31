@@ -1,5 +1,15 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31] — feat(frontend-auth)
+- Angular Material instalado com tema custom (paleta azul, fonte Inter)
+- SCSS variables: $primary, $primary-dark, $surface, $success, $warning, $danger
+- AuthService com signals (isAuthenticated, currentUser), login/refresh/logout
+- HttpInterceptor: Bearer token + refresh automatico em 401
+- Guards: authGuard, noAuthGuard, roleGuard
+- LoginComponent: form reativo, card centralizado, gradiente azul, toggle senha
+- Rotas configuradas com lazy loading e guards
+- Tasks cobertas: T22, T23, T24, T25
+
 ## [2026-03-30 23:07] — feat(dashboard-pdf)
 - DashboardModule: GET /api/dashboard/ranking (JOIN processos+avaliacoes, paginado, tenant scoped), GET /api/dashboard/resumo (contagem por status)
 - PdfService: export PDF com pdfmake (6 secoes: identificacao, tecnica, negocio, fatores, riscos, resultado)
