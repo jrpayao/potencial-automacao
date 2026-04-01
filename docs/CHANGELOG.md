@@ -1,5 +1,19 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31] — feat(usuarios-organizacoes)
+- UsuariosService: listar, criar, atualizar, desativar
+- ListaUsuariosComponent: mat-table com badges por perfil/status, filtro por perfil, dialog criar/editar
+- OrganizacoesService: listar, criar, atualizar
+- ListaOrganizacoesComponent: mat-table, dialog criar/editar com validacao slug
+- Testes unitarios: AuthService (isAuthenticated, logout), calcularIPA (casos edge)
+- Tasks cobertas: T44, T45, T46
+
+## [2026-03-31] — feat(resultado)
+- ResultadoComponent: identificacao, memoria de calculo (IT/IN/IPA com pesos), badge IPA Final, riscos
+- RadarChartComponent: Chart.js radar 6 eixos (2 datasets IT/IN), escala 0-5, afterNextRender
+- Botoes acao: Editar (wizard?edit=id), Exportar PDF (download blob), Voltar
+- Tasks cobertas: T41, T42, T43
+
 ## [2026-03-31 22:30] — feat(wizard)
 - AvaliacaoService: criar, atualizar, rascunho, buscarPorId, exportarPdf
 - WizardComponent: MatStepper hibrido 6 steps, layout 70/30 com preview lateral
