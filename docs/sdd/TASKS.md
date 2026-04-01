@@ -177,21 +177,21 @@
 
 ## G13 — E2E + Docker
 
-- **T47** — Configurar Playwright
+- [x] **T47** — Configurar Playwright *(concluida em 2026-03-31)*
   - playwright.config.ts com baseURL frontend + api proxy
   - Auth setup compartilhado (login admin, salva session)
   - Projeto chromium
-- **T48** — Testes E2E
+- [x] **T48** — Testes E2E *(concluida em 2026-03-31)*
   - login.spec.ts: login valido → dashboard, login invalido → erro
   - dashboard.spec.ts: cards resumo visiveis, tabela ranking com dados
   - wizard.spec.ts: preencher todos os 6 steps → salvar → verificar resultado com IPA calculado
   - processos.spec.ts: filtrar, ver detalhe
-- **T49** — Docker Compose
+- [x] **T49** — Docker Compose *(concluida em 2026-03-31)*
   - Dockerfile frontend: node:22-alpine build → nginx:1.27-alpine serve
   - Dockerfile api: node:22-alpine build → node:22-alpine run
   - docker-compose.yml: api (porta 3000) + frontend (porta 80, proxy /api → api:3000)
   - Volume para SQLite persistir
-- **T50** — Seed automatico + README
+- [x] **T50** — Seed automatico + README *(concluida em 2026-03-31)*
   - Seed roda automaticamente no primeiro boot da API (verifica se banco vazio)
   - README.md com instrucoes: como rodar (dev e docker), como acessar, credenciais seed
   - Screenshots do sistema no README

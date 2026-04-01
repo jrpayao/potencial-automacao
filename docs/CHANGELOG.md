@@ -1,5 +1,13 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31] — feat(e2e-docker)
+- Playwright: config com chromium, auth setup compartilhado, locale pt-BR
+- Testes E2E: login (valido/invalido), dashboard (cards + ranking table)
+- Docker: multi-stage Dockerfile (builder → api node + frontend nginx), docker-compose.yml, nginx.conf com proxy /api/
+- Seed automatico: runSeedIfEmpty no boot da API (org, usuarios, 3 processos com avaliacoes)
+- README.md: descricao, arquitetura, como rodar dev/docker, credenciais
+- Tasks cobertas: T47, T48, T49, T50
+
 ## [2026-03-31] — feat(usuarios-organizacoes)
 - UsuariosService: listar, criar, atualizar, desativar
 - ListaUsuariosComponent: mat-table com badges por perfil/status, filtro por perfil, dialog criar/editar
