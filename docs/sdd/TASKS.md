@@ -44,55 +44,26 @@
 
 ## G5 — Backend: Dashboard + PDF
 
-- **T19** — Endpoints Dashboard *(concluida em 2026-03-30 23:07)*
-- **T20** — Export PDF *(concluida em 2026-03-30 23:07)*
-- **T21** — Testes E2E do backend *(concluida em 2026-03-30 23:07)*
+- [x] **T19** — Endpoints Dashboard *(concluida em 2026-03-30 23:07)*
+- [x] **T20** — Export PDF *(concluida em 2026-03-30 23:07)*
+- [x] **T21** — Testes E2E do backend *(concluida em 2026-03-30 23:07)*
 
 ---
 
 ## G6 — Frontend: Scaffold + Auth
 
-- **T22** — Instalar Angular Material + configurar tema
-  - `nx g @angular/material:ng-add --project=frontend`
-  - Tema custom com paleta azul (similar ao design)
-  - Fontes: Inter (Google Fonts) como principal
-  - SCSS variables: cores do design
-- **T23** — Criar AuthService
-  - login(email, senha) → salva tokens no localStorage
-  - refresh() → renova access token
-  - logout() → limpa tokens, redireciona para /login
-  - isAuthenticated signal
-  - currentUser signal
-  - HttpInterceptor para injetar Authorization header
-- **T24** — Criar Guards
-  - authGuard: redireciona para /login se nao autenticado
-  - noAuthGuard: redireciona para /admin/dashboard se ja autenticado
-  - roleGuard: verifica perfil minimo
-- **T25** — Criar LoginComponent
-  - Form reativo: email + senha
-  - Validacao: email obrigatorio + formato, senha obrigatoria
-  - Botao "Entrar" → authService.login() → redirect dashboard
-  - Mensagem de erro em caso de credenciais invalidas
-  - Layout: tela cheia com card centralizado
+- [x] **T22** — Instalar Angular Material + configurar tema *(concluida em 2026-03-31 00:30)*
+- [x] **T23** — Criar AuthService *(concluida em 2026-03-31 00:30)*
+- [x] **T24** — Criar Guards *(concluida em 2026-03-31 00:30)*
+- [x] **T25** — Criar LoginComponent *(concluida em 2026-03-31 00:30)*
 
 ---
 
 ## G7 — Frontend: Layout (Sidebar + Header)
 
-- **T26** — Criar AdminLayoutComponent
-  - Shell: sidebar fixa esquerda + header fixo topo + body scrollavel
-  - Router outlet no body
-- **T27** — Criar SidebarComponent
-  - Menu items: Dashboard, Processos, Usuarios (admin), Organizacoes (superadmin)
-  - Icones Material Symbols: dashboard, assignment, group, business
-  - Item ativo destacado
-  - Botao "Sair" na parte inferior
-  - Responsivo: colapsavel em mobile
-- **T28** — Criar HeaderComponent + Rotas
-  - Titulo da pagina atual
-  - Avatar do usuario + nome + menu dropdown (perfil, sair)
-  - app.routes.ts: /login (noAuthGuard) + /admin (authGuard, AdminLayout) com children lazy-loaded
-  - admin.routes.ts: dashboard, processos, avaliacoes/nova, avaliacoes/:id, usuarios, organizacoes
+- [x] **T26** — Criar AdminLayoutComponent *(concluida em 2026-03-31 10:30)*
+- [x] **T27** — Criar SidebarComponent *(concluida em 2026-03-31 10:30)*
+- [x] **T28** — Criar HeaderComponent + Rotas *(concluida em 2026-03-31 10:30)*
 
 ---
 

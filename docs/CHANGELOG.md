@@ -1,11 +1,11 @@
 # CHANGELOG — Sistema IPA
 
-## [2026-03-31] — feat(layout)
+## [2026-03-31 10:30] — feat(layout)
 - AdminLayoutComponent: shell com sidebar 256px + header 64px + body scrollavel
 - SidebarComponent: menu com icones Material, items condicionais por perfil, routerLinkActive, botao Sair
-- HeaderComponent: toolbar com titulo, avatar iniciais, dropdown menu
-- Rotas completas: /login, /admin com children lazy-loaded, roleGuard
-- 6 stub components para features pendentes (dashboard, processos, wizard, resultado, usuarios, organizacoes)
+- HeaderComponent: toolbar com titulo, avatar iniciais, dropdown menu com Sair
+- Rotas completas: /login (noAuthGuard), /admin (authGuard) com 6 children lazy-loaded, roleGuard
+- 6 stub components criados (dashboard, processos, wizard, resultado, usuarios, organizacoes)
 - Tasks cobertas: T26, T27, T28
 
 ## [2026-03-31] — feat(frontend-auth)
