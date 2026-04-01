@@ -21,7 +21,7 @@ interface JwtUser {
   organizacaoId: number;
 }
 
-@Controller('api/dashboard')
+@Controller('dashboard')
 @UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
 @Roles(Perfil.VISUALIZADOR)
 export class DashboardController {

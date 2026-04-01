@@ -25,7 +25,7 @@ interface JwtUser {
   organizacaoId: number;
 }
 
-@Controller('api/usuarios')
+@Controller('usuarios')
 @UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
 @Roles(Perfil.ADMIN)
 export class UsuariosController {

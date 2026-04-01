@@ -15,7 +15,7 @@ import { RolesGuard } from '../auth/roles.guard.js';
 import { Roles } from '../auth/roles.decorator.js';
 import { OrganizacoesService } from './organizacoes.service.js';
 
-@Controller('api/organizacoes')
+@Controller('organizacoes')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles(Perfil.SUPERADMIN)
 export class OrganizacoesController {

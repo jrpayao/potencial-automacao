@@ -1,27 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import type { TDocumentDefinitions, Content } from 'pdfmake/build/pdfmake';
 import { Avaliacao } from './avaliacao.entity.js';
 
-// pdfmake server-side usage requires dynamic import
 // eslint-disable-next-line @typescript-eslint/no-require-imports
-const PdfPrinter = require('pdfmake/src/printer');
-
-const FONTS = {
-  Helvetica: {
-    normal: 'Helvetica',
-    bold: 'Helvetica-Bold',
-    italics: 'Helvetica-Oblique',
-    bolditalics: 'Helvetica-BoldOblique',
-  },
-};
+const pdfMake = require('pdfmake/build/pdfmake');
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const pdfFonts = require('pdfmake/build/vfs_fonts');
+pdfMake.vfs = pdfFonts.pdfMake?.vfs ?? pdfFonts.vfs ?? pdfFonts;
 
 @Injectable()
 export class PdfService {
   async gerarPdf(avaliacao: Avaliacao): Promise<Buffer> {
     const processo = avaliacao.processo;
 
-    const docDefinition: TDocumentDefinitions = {
-      defaultStyle: { font: 'Helvetica', fontSize: 10 },
+    const docDefinition: Record<string, unknown> = {
+      defaultStyle: { fontSize: 10 },
       pageMargins: [40, 60, 40, 40],
       header: {
         text: 'IPA — Índice de Potencial de Automação',
@@ -38,7 +30,7 @@ export class PdfService {
           bold: true,
           alignment: 'center',
           margin: [0, 0, 0, 20],
-        } as Content,
+        },
 
         // Seção 1: Identificação do Processo
         this.sectionTitle('1. Identificação do Processo'),
@@ -57,7 +49,7 @@ export class PdfService {
           },
           layout: 'lightHorizontalLines',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Seção 2: Dimensão Técnica
         this.sectionTitle('2. Dimensão Técnica (IT)'),
@@ -89,7 +81,7 @@ export class PdfService {
           },
           layout: 'lightHorizontalLines',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Seção 3: Dimensão Negócio
         this.sectionTitle('3. Dimensão Negócio (IN)'),
@@ -136,7 +128,7 @@ export class PdfService {
           },
           layout: 'lightHorizontalLines',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Seção 4: Fatores
         this.sectionTitle('4. Fatores de Ajuste'),
@@ -163,14 +155,14 @@ export class PdfService {
           },
           layout: 'lightHorizontalLines',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Seção 5: Riscos
         this.sectionTitle('5. Riscos e Contingência'),
         {
           text: avaliacao.deRiscosContingencia || 'Nenhum risco ou contingência informado.',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Seção 6: Resultado Final
         this.sectionTitle('6. Resultado Final — Memória de Cálculo'),
@@ -205,7 +197,7 @@ export class PdfService {
           },
           layout: 'lightHorizontalLines',
           margin: [0, 0, 0, 15],
-        } as Content,
+        },
 
         // Rodapé informativo
         {
@@ -214,23 +206,21 @@ export class PdfService {
           color: '#888888',
           alignment: 'right',
           margin: [0, 20, 0, 0],
-        } as Content,
+        },
       ],
     };
 
-    const printer = new PdfPrinter(FONTS);
-    const pdfDoc = printer.createPdfKitDocument(docDefinition);
-
     return new Promise<Buffer>((resolve, reject) => {
-      const chunks: Buffer[] = [];
-      pdfDoc.on('data', (chunk: Buffer) => chunks.push(chunk));
-      pdfDoc.on('end', () => resolve(Buffer.concat(chunks)));
-      pdfDoc.on('error', (err: Error) => reject(err));
-      pdfDoc.end();
+      const pdfDoc = pdfMake.createPdf(docDefinition);
+      pdfDoc.getBuffer((buffer: Buffer) => {
+        resolve(Buffer.from(buffer));
+      }, (err: Error) => {
+        reject(err);
+      });
     });
   }
 
-  private sectionTitle(text: string): Content {
+  private sectionTitle(text: string): Record<string, unknown> {
     return {
       text,
       fontSize: 13,

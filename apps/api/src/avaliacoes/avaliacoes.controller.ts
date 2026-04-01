@@ -27,7 +27,7 @@ interface JwtUser {
   organizacaoId: number;
 }
 
-@Controller('api/avaliacoes')
+@Controller('avaliacoes')
 @UseGuards(JwtAuthGuard, RolesGuard, TenantGuard)
 @Roles(Perfil.ANALISTA)
 export class AvaliacoesController {
