@@ -86,13 +86,13 @@
 
 ## G9 — Frontend: Processos
 
-- **T32** — Criar ProcessosService
+- [x] **T32** — Criar ProcessosService *(concluida em 2026-03-31 22:18)*
   - listar(filtros) → Observable lista paginada
   - buscarPorId(id) → Observable processo
   - criar(dto) → Observable processo criado
   - atualizar(id, dto) → Observable
   - arquivar(id) → Observable
-- **T33** — Criar ListaProcessosComponent
+- [x] **T33** — Criar ListaProcessosComponent *(concluida em 2026-03-31 22:18)*
   - Filtros: area (text), status (select), periodo (date range)
   - Tabela Material: Nome, Area, Dono, Status, IPA Final, Data
   - Botao "+ Nova Avaliacao" → navega para wizard

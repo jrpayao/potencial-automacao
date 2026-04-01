@@ -1,5 +1,10 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31 22:20] — feat(processos)
+- ProcessosService: listar (com filtros), buscarPorId, criar, atualizar, arquivar
+- ListaProcessosComponent: filtros (area, status, periodo), mat-table com 7 colunas, badges coloridos por status, paginacao, botao Nova Avaliacao, botao Ver por linha
+- Tasks cobertas: T32, T33
+
 ## [2026-03-31 22:10] — feat(dashboard)
 - DashboardService: getRanking (paginado), getResumo (contagens por status)
 - DashboardComponent: 4 cards resumo (Total, Prioridade Alta, Backlog, Descarte) com grid responsivo
