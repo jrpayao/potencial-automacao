@@ -1,5 +1,11 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31 22:10] — feat(dashboard)
+- DashboardService: getRanking (paginado), getResumo (contagens por status)
+- DashboardComponent: 4 cards resumo (Total, Prioridade Alta, Backlog, Descarte) com grid responsivo
+- RankingTableComponent: mat-table com posicao, nome, area, IPA Final, badge status colorido, paginacao, clique navega para resultado
+- Tasks cobertas: T29, T30, T31
+
 ## [2026-03-31 10:30] — feat(layout)
 - AdminLayoutComponent: shell com sidebar 256px + header 64px + body scrollavel
 - SidebarComponent: menu com icones Material, items condicionais por perfil, routerLinkActive, botao Sair

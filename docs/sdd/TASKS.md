@@ -69,14 +69,14 @@
 
 ## G8 — Frontend: Dashboard
 
-- **T29** — Criar DashboardService
+- [x] **T29** — Criar DashboardService *(concluida em 2026-03-31 22:10)*
   - getRanking(page, limit) → Observable ranking
   - getResumo() → Observable { total, prioridadeAlta, backlog, descarte }
-- **T30** — Criar DashboardComponent
+- [x] **T30** — Criar DashboardComponent *(concluida em 2026-03-31 22:10)*
   - 4 cards resumo: Total Processos, Prioridade Alta (verde), Backlog (amarelo), Descarte (vermelho)
   - Cada card com icone + numero + label
-- **T31** — Criar RankingTableComponent
-  - Tabela Material com colunas: Posicao, Nome do Processo, IT, IN, IPA Final, Status
+- [x] **T31** — Criar RankingTableComponent *(concluida em 2026-03-31 22:10)*
+  - Tabela Material com colunas: Posicao, Nome do Processo, Area, IPA Final, Status
   - Status com badge colorido (verde/amarelo/vermelho)
   - Ordenado por IPA Final desc
   - Paginacao
