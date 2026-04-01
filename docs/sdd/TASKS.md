@@ -102,34 +102,34 @@
 
 ## G10 — Frontend: Wizard Avaliacao
 
-- **T34** — Criar AvaliacaoService
+- [x] **T34** — Criar AvaliacaoService *(concluida em 2026-03-31 22:25)*
   - criarAvaliacao(dto) → Observable avaliacao com IPA calculado
   - atualizarAvaliacao(id, dto) → Observable
   - salvarRascunho(id, dto) → Observable
   - buscarPorId(id) → Observable
   - exportarPdf(id) → Observable Blob
-- **T35** — Criar WizardComponent (container)
+- [x] **T35** — Criar WizardComponent (container) *(concluida em 2026-03-31 22:25)*
   - MatStepper com linear=false
   - 6 steps como child components
   - FormGroup pai com subgroups por step
   - Navegacao: proximo/anterior + barra clicavel
   - Botao "Calcular e Salvar" no ultimo step (habilitado quando todos validos)
-- **T36** — Criar StepIdentificacaoComponent
+- [x] **T36** — Criar StepIdentificacaoComponent *(concluida em 2026-03-31 22:25)*
   - Campos: nome do processo, area, departamento, dono, solicitante, data do levantamento
   - Validacao: nome e area obrigatorios
-- **T37** — Criar StepTecnicaComponent
+- [x] **T37** — Criar StepTecnicaComponent *(concluida em 2026-03-31 22:25)*
   - 3 criterios: Seguranca e Acessos, Estabilidade do Legado, Estruturacao dos Dados
   - Cada criterio: slider ou radio 0-5 + descritores objetivos + campo justificativa (textarea)
   - Descritores carregados da metodologia (constante na lib shared)
-- **T38** — Criar StepNegocioComponent
+- [x] **T38** — Criar StepNegocioComponent *(concluida em 2026-03-31 22:25)*
   - 3 blocos: Gestao de Risco (1 nota), Impacto no Cidadao (3 sub-notas), Eficiencia Operacional (2 sub-notas)
   - Cada nota: radio 0-5 + descritores + justificativa por bloco
   - Descritores carregados da metodologia
-- **T39** — Criar StepImpedimentoComponent + StepUrgenciaComponent + StepRiscosComponent
+- [x] **T39** — Criar StepImpedimentoComponent + StepUrgenciaComponent + StepRiscosComponent *(concluida em 2026-03-31 22:25)*
   - Impedimento: radio com 5 opcoes (1.00, 0.80, 0.50, 0.20, 0.00) + descricao + justificativa
   - Urgencia: radio com 4 opcoes (1.20, 1.10, 1.00, 0.90) + descricao + justificativa
   - Riscos: tabela editavel com botao "+ Adicionar Risco" (campos: risco, protocolo contingencia)
-- **T40** — Criar IpaPreviewComponent
+- [x] **T40** — Criar IpaPreviewComponent *(concluida em 2026-03-31 22:25)*
   - Painel lateral fixo (visivel a partir do Step 2)
   - Usa calcularIPA() da lib shared em tempo real
   - Exibe: IT, IN, IPA Base, FI, FU, IPA Final, Status (badge colorido)

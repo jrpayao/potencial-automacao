@@ -1,5 +1,17 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-03-31 22:30] — feat(wizard)
+- AvaliacaoService: criar, atualizar, rascunho, buscarPorId, exportarPdf
+- WizardComponent: MatStepper hibrido 6 steps, layout 70/30 com preview lateral
+- StepIdentificacaoComponent: nome, area, departamento, dono, solicitante, data
+- StepTecnicaComponent: 3 criterios (Seguranca, Estabilidade, Estruturacao) com radio 0-5 + descritores + justificativa
+- StepNegocioComponent: Gestao de Risco, Impacto no Cidadao (3 sub), Eficiencia (2 sub)
+- StepImpedimentoComponent: radio 5 opcoes FI + justificativa
+- StepUrgenciaComponent: radio 4 opcoes FU + justificativa
+- StepRiscosComponent: tabela editavel risco/contingencia
+- IpaPreviewComponent: calculo reativo em tempo real (IT, IN, IPA Base/Final, badge status)
+- Tasks cobertas: T34, T35, T36, T37, T38, T39, T40
+
 ## [2026-03-31 22:20] — feat(processos)
 - ProcessosService: listar (com filtros), buscarPorId, criar, atualizar, arquivar
 - ListaProcessosComponent: filtros (area, status, periodo), mat-table com 7 colunas, badges coloridos por status, paginacao, botao Nova Avaliacao, botao Ver por linha
