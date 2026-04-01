@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#43474f",
+              "tertiary": "#371400",
+              "on-primary-fixed-variant": "#1f4876",
+              "surface-dim": "#d9dadb",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#a4c9fe",
+              "outline": "#737780",
+              "on-tertiary-fixed-variant": "#6f3812",
+              "surface-variant": "#e1e3e4",
+              "secondary": "#575a8c",
+              "error": "#ba1a1a",
+              "on-tertiary-container": "#d58a5d",
+              "secondary-fixed-dim": "#bfc2fb",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-surface": "#2e3132",
+              "on-surface": "#191c1d",
+              "secondary-fixed": "#e0e0ff",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f0f1f2",
+              "surface": "#f8f9fa",
+              "primary": "#001f3d",
+              "on-secondary-container": "#4d5081",
+              "inverse-primary": "#a4c9fe",
+              "surface-container": "#edeeef",
+              "on-primary": "#ffffff",
+              "secondary-container": "#c2c5fe",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#ffdbc9",
+              "surface-container-low": "#f3f4f5",
+              "on-secondary-fixed": "#131645",
+              "surface-tint": "#3a608f",
+              "on-secondary-fixed-variant": "#3f4273",
+              "on-primary-fixed": "#001c39",
+              "tertiary-fixed-dim": "#ffb68c",
+              "tertiary-container": "#572501",
+              "surface-bright": "#f8f9fa",
+              "primary-container": "#003461",
+              "surface-container-high": "#e7e8e9",
+              "outline-variant": "#c3c6d0",
+              "on-primary-container": "#799ed1",
+              "background": "#f8f9fa",
+              "error-container": "#ffdad6",
+              "on-tertiary-fixed": "#321200",
+              "primary-fixed": "#d3e3ff",
+              "on-background": "#191c1d",
+              "on-secondary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; }
+        .glass-header { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .tonal-sidebar { background-color: #000033; }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #003461;
+            cursor: pointer;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #003461;
+        }
+    </style>
+</head>
+<body class="antialiased text-on-surface flex flex-col h-screen overflow-hidden">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full w-64 tonal-sidebar flex flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<h1 class="text-white font-bold tracking-tight text-xl">Arquitetura</h1>
+<p class="text-slate-400 text-xs font-medium uppercase tracking-widest mt-1">Portal de Automação</p>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="fingerprint">fingerprint</span>
+<span class="text-sm font-medium">Identificação</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span class="text-sm font-medium">Técnica</span>
+</div>
+<div class="bg-white/10 text-white rounded-lg mx-2 my-1 px-4 py-3 font-semibold flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span class="text-sm">Negócio</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="block">block</span>
+<span class="text-sm font-medium">Impedimento</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="priority_high">priority_high</span>
+<span class="text-sm font-medium">Urgência</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+<span class="text-sm font-medium">Riscos</span>
+</div>
+</nav>
+<div class="px-6 mt-auto flex items-center gap-3 pt-6 border-t border-white/10">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white font-bold">JD</div>
+<div>
+<p class="text-white text-xs font-bold leading-none">Analista IPA</p>
+<p class="text-slate-400 text-[10px] mt-1">Sênior</p>
+</div>
+</div>
+</aside>
+<!-- TopNavBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-256px)] h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-40 border-b border-slate-200/50">
+<div class="flex items-center gap-6">
+<span class="text-[#003461] font-bold text-lg">Avaliação de Processos IPA</span>
+<nav class="hidden md:flex items-center gap-8 text-sm font-medium">
+<a class="text-slate-500 hover:text-slate-800" href="#">Dashboard</a>
+<a class="text-[#003461] border-b-2 border-[#003461] pb-1" href="#">Processos</a>
+<a class="text-slate-500 hover:text-slate-800" href="#">Relatórios</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<button class="hover:bg-slate-50 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-slate-600" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-slate-50 rounded-full p-2 transition-all">
+<span class="material-symbols-outlined text-slate-600" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200 mx-2"></div>
+<div class="flex items-center gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="professional analyst profile photo in corporate attire smiling with neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-fun00bBXSTGQ959ykb_hQ6cs1zSi0GwBxezHID1U8S7_Irsd44mmj9HM3NRHX1UC4SLVOs3ZFZH6oDqtS7olowpEnDnOvD7Olr-yZrfHQDk6NMTAbGHDYRLDc5aOJ66HuegQx1F-tRuG8dGckiqyY0yWYDhpaE-p_yohJnRoGAox2RISsjM8uqSTfmm0fo-EqSh2nYLv39PX38VJEYtgujdSw6SnOfcC1VDG9xyBZmhN9OuPT7IhJOVfkGFnWo4CS0oLsIqsUgh-"/>
+<span class="text-slate-700 font-semibold text-sm">João Silva</span>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="pt-24 pb-12 px-12 min-h-screen flex-1 overflow-y-auto no-scrollbar pl-64">
+<div class="max-w-7xl mx-auto flex gap-8">
+<!-- Left Column (70%) -->
+<div class="w-[70%] space-y-8">
+<!-- Stepper -->
+<div class="flex items-center justify-between mb-12 relative">
+<div class="absolute top-1/2 left-0 w-full h-[2px] bg-slate-200 -translate-y-1/2 z-0"></div>
+<div class="z-10 flex flex-col items-center gap-2 group">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">1</div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Identificação</span>
+</div>
+<div class="z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold">2</div>
+<span class="text-[10px] font-bold text-primary uppercase tracking-tighter">Técnica</span>
+</div>
+<div class="z-10 flex flex-col items-center gap-2">
+<div class="w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center font-extrabold ring-4 ring-white shadow-lg shadow-primary/20 scale-110">3</div>
+<span class="text-[11px] font-extrabold text-primary uppercase tracking-tighter">Negócio</span>
+</div>
+<div class="z-10 flex flex-col items-center gap-2">
+<div class="w-10 h-10 rounded-full bg-white border-2 border-slate-200 text-slate-400 flex items-center justify-center font-bold">4</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Resumo</span>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<h2 class="text-4xl font-extrabold tracking-tight text-primary">Avaliação de Negócio</h2>
+<p class="text-slate-500 text-body-md max-w-2xl">Mapeamento do potencial de valor e impacto estratégico da automação sob a perspectiva de governança, cidadão e ganhos operacionais.</p>
+</div>
+<!-- Bloco 1: Gestão de Risco e Compliance -->
+<section class="bg-white rounded-xl p-8 shadow-sm surface_container_low border border-slate-100/50">
+<div class="flex items-start justify-between mb-8">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary-container" data-icon="security" data-weight="fill" style="font-variation-settings: 'FILL' 1;">security</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">Gestão de Risco e Compliance</h3>
+<p class="text-sm text-slate-500">Avaliação de riscos jurídicos, financeiros e de integridade de dados.</p>
+</div>
+</div>
+<div class="bg-primary-container text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">Peso 50%</div>
+</div>
+<div class="space-y-6">
+<div>
+<div class="flex justify-between items-center mb-4">
+<span class="text-sm font-semibold text-slate-700">Nível de Risco</span>
+<span class="text-2xl font-black text-primary">4.0</span>
+</div>
+<input class="w-full h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" step="1" type="range" value="4"/>
+<div class="flex justify-between mt-3 px-1">
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-error">0</span>
+<span class="text-[9px] text-slate-400 uppercase">Risco Crítico</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-slate-400">1</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-slate-400">2</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-slate-400">3</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-slate-400">4</span>
+</div>
+<div class="flex flex-col items-center">
+<span class="text-[10px] font-bold text-success">5</span>
+<span class="text-[9px] text-slate-400 uppercase">Risco Zero</span>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Justificativa da Avaliação</label>
+<textarea class="w-full bg-slate-50 border-none rounded-xl text-sm p-4 ring-1 ring-slate-200 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="Descreva os fatores de risco considerados..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Bloco 2: Impacto no Cidadão / SLA -->
+<section class="bg-white rounded-xl p-8 shadow-sm surface_container_low border border-slate-100/50">
+<div class="flex items-start justify-between mb-8">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-secondary-container/20 rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="groups" data-weight="fill" style="font-variation-settings: 'FILL' 1;">groups</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">Impacto no Cidadão / SLA</h3>
+<p class="text-sm text-slate-500">Melhoria na prestação de serviço e experiência do usuário final.</p>
+</div>
+</div>
+<div class="bg-primary-container text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">Peso 30%</div>
+</div>
+<div class="grid grid-cols-1 gap-8">
+<div class="space-y-8">
+<div class="flex items-center gap-8">
+<div class="flex-1">
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700">Redução de SLA</label>
+<span class="text-sm font-bold text-primary">3/5</span>
+</div>
+<input class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" type="range" value="3"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700">Abrangência</label>
+<span class="text-sm font-bold text-primary">5/5</span>
+</div>
+<input class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" type="range" value="5"/>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700">Experiência</label>
+<span class="text-sm font-bold text-primary">4/5</span>
+</div>
+<input class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" type="range" value="4"/>
+</div>
+</div>
+</div>
+<div class="pt-4">
+<label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Justificativa da Avaliação</label>
+<textarea class="w-full bg-slate-50 border-none rounded-xl text-sm p-4 ring-1 ring-slate-200 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="Explique como o cidadão será beneficiado..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Bloco 3: Eficiência Operacional -->
+<section class="bg-white rounded-xl p-8 shadow-sm surface_container_low border border-slate-100/50">
+<div class="flex items-start justify-between mb-8">
+<div class="flex items-center gap-4">
+<div class="p-3 bg-success/10 rounded-lg">
+<span class="material-symbols-outlined text-[#22c55e]" data-icon="rocket_launch" data-weight="fill" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<div>
+<h3 class="text-xl font-bold text-primary">Eficiência Operacional</h3>
+<p class="text-sm text-slate-500">Volume transacional e liberação de força de trabalho (FTE).</p>
+</div>
+</div>
+<div class="bg-primary-container text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm">Peso 20%</div>
+</div>
+<div class="grid grid-cols-2 gap-8">
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700">Volume Mensal</label>
+<span class="text-sm font-bold text-primary">2/5</span>
+</div>
+<input class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" type="range" value="2"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-2">
+<label class="text-sm font-semibold text-slate-700">FTE Liberado</label>
+<span class="text-sm font-bold text-primary">4/5</span>
+</div>
+<input class="w-full h-1.5 bg-slate-100 rounded-lg appearance-none cursor-pointer accent-primary" max="5" min="0" type="range" value="4"/>
+</div>
+<div class="col-span-2">
+<label class="text-[11px] font-bold text-slate-400 uppercase tracking-widest block mb-2">Justificativa da Avaliação</label>
+<textarea class="w-full bg-slate-50 border-none rounded-xl text-sm p-4 ring-1 ring-slate-200 focus:ring-2 focus:ring-primary transition-all outline-none" placeholder="Demonstre o retorno sobre eficiência esperado..." rows="3"></textarea>
+</div>
+</div>
+</section>
+<!-- Footer Buttons -->
+</div>
+<!-- Right Column (30%) - Sticky Preview -->
+<div class="w-[30%]">
+<div class="sticky top-24 space-y-6">
+<div class="bg-white rounded-2xl shadow-xl shadow-slate-200/50 border border-slate-100 p-8 overflow-hidden relative">
+<!-- Decorative Top Accent -->
+<div class="absolute top-0 left-0 w-full h-1.5 bg-primary-container"></div>
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-bold text-primary text-lg">Preview IPA</h4>
+<span class="bg-[#eab308]/10 text-[#eab308] px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border border-[#eab308]/20">Backlog</span>
+</div>
+<div class="space-y-5">
+<div class="flex justify-between items-center group">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-tight">IT (Índice Técnico)</span>
+<span class="font-mono text-sm font-bold text-slate-800 bg-slate-50 px-2 py-0.5 rounded">0.78</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-tight">IN (Índice Negócio)</span>
+<span class="font-mono text-sm font-bold text-slate-800 bg-slate-50 px-2 py-0.5 rounded">0.84</span>
+</div>
+<div class="h-[1px] bg-slate-100 w-full"></div>
+<div class="flex justify-between items-center">
+<span class="text-xs font-black text-primary uppercase tracking-tight">IPA Base</span>
+<span class="font-mono text-lg font-black text-primary">81.0%</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-tight">FI (Fator Impedimento)</span>
+<span class="font-mono text-sm font-bold text-error">- 0.0</span>
+</div>
+<div class="flex justify-between items-center group">
+<span class="text-xs font-semibold text-slate-500 uppercase tracking-tight">FU (Fator Urgência)</span>
+<span class="font-mono text-sm font-bold text-success">+ 0.05</span>
+</div>
+<div class="mt-8 pt-6 border-t-2 border-dashed border-slate-200">
+<p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-1">Resultado Projetado</p>
+<div class="flex items-baseline gap-2">
+<span class="text-5xl font-black text-primary-container tracking-tighter">86.0</span>
+<span class="text-xl font-bold text-primary-container/60">%</span>
+</div>
+<div class="mt-4 flex items-center gap-2 text-success">
+<span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+<span class="text-[10px] font-bold uppercase">Potencial Alto</span>
+</div>
+</div>
+</div>
+<div class="mt-8">
+<button class="w-full py-3 rounded-lg bg-surface-container text-primary text-xs font-bold hover:bg-slate-100 transition-colors flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-lg" data-icon="visibility">visibility</span>
+                                Detalhes do Cálculo
+                            </button>
+</div>
+</div>
+<!-- Context Card -->
+<div class="bg-primary-container text-white/90 rounded-2xl p-6 shadow-lg shadow-primary/10">
+<div class="flex items-center gap-3 mb-3">
+<span class="material-symbols-outlined text-on-primary-container" data-icon="lightbulb" data-weight="fill" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h5 class="font-bold text-sm text-white">Dica Técnica</h5>
+</div>
+<p class="text-[11px] leading-relaxed opacity-80">A dimensão de negócio é o principal driver de priorização. Foque em documentar detalhadamente o benefício para o cidadão para fortalecer o case da automação.</p>
+</div>
+</div>
+</div>
+</div>
+</main><footer class="h-16 bg-white/95 backdrop-blur-md border-t border-slate-100 px-12 py-4 flex items-center justify-between shrink-0 sticky bottom-0 z-50">
+<button class="flex items-center gap-2 text-slate-600 font-bold text-sm hover:text-primary transition-colors px-4 py-2">
+<span class="material-symbols-outlined" data-icon="chevron_left">chevron_left</span>
+        Anterior
+    </button>
+<div class="flex items-center gap-4">
+<span class="text-xs text-slate-400 font-medium italic">Dados salvos automaticamente às 14:32</span>
+<button class="bg-primary text-white px-8 py-3 rounded-lg font-bold text-sm shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center gap-2">
+            Próximo
+            <span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</footer>
+</body></html>

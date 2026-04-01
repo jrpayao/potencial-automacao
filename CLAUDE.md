@@ -117,10 +117,34 @@ Ao concluir cada GRUPO de features:
 2. Navegar por todo o app (fluxo completo do usuario)
 3. Salvar em `docs/evolucao/videos/e2e-grupo{N}-{data}.webm`
 
-## Referencias Visuais
+## Referencias Visuais (Google Stitch)
 
-Se existirem telas de referencia (Figma ou imagens), estarao em `docs/figma/`.
+As telas de referencia estao em `docs/stitch/`. Cada pasta contem:
+- `screen.png` — screenshot da tela
+- `code.html` — HTML de referencia gerado pelo Stitch
 
-- Antes de criar qualquer componente visual, verificar se ha referencia em `docs/figma/`
-- Replicar cores, espacamentos, icones e layout fielmente a referencia
-- Se precisar de detalhe que nao esta claro, perguntar
+### Mapa de Telas
+
+| Pasta | Tela | Componente Angular |
+|---|---|---|
+| `login_ipa/` | Login | LoginComponent |
+| `dashboard_ipa/` | Dashboard (cards + ranking) | DashboardComponent |
+| `processos_ipa/` | Lista de Processos (filtros + tabela) | ListaProcessosComponent |
+| `wizard_etapa_1_identifica_o/` | Wizard Step 1 — Identificacao | StepIdentificacaoComponent |
+| `nova_avalia_o_ipa/` | Wizard Step 2 — Tecnica | StepTecnicaComponent |
+| `wizard_etapa_3_neg_cio/` | Wizard Step 3 — Negocio | StepNegocioComponent |
+| `wizard_etapa_3_neg_cio_footer_corrigido/` | Wizard Step 3 — Negocio (footer) | StepNegocioComponent |
+| `wizard_etapa_4_impedimento/` | Wizard Step 4 — Impedimento | StepImpedimentoComponent |
+| `wizard_etapa_5_urg_ncia/` | Wizard Step 5 — Urgencia | StepUrgenciaComponent |
+| `wizard_etapa_6_riscos/` | Wizard Step 6 — Riscos | StepRiscosComponent |
+| `resultado_da_avalia_o_ipa/` | Resultado (calculo + radar) | ResultadoComponent |
+| `usu_rios_ipa/` | Gestao de Usuarios | ListaUsuariosComponent |
+| `organiza_es_ipa/` | Gestao de Organizacoes | ListaOrganizacoesComponent |
+
+### Regras de Fidelidade Visual
+
+- **OBRIGATORIO**: antes de implementar/refatorar qualquer componente, LER o `screen.png` E o `code.html` da pasta correspondente
+- Replicar fielmente: cores, espacamentos, icones, layout, tipografia, badges, cards
+- O wizard usa sidebar vertical escura + stepper horizontal + preview IPA lateral
+- Se o Stitch tiver um detalhe visual que o SPEC nao menciona, o Stitch manda (visual source of truth)
+- Se precisar de detalhe que nao esta claro na imagem, perguntar

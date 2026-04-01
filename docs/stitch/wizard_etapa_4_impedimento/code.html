@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Wizard IPA - Etapa 4: Fator de Impedimento</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-surface-variant": "#43474f",
+              "tertiary": "#371400",
+              "on-primary-fixed-variant": "#1f4876",
+              "surface-dim": "#d9dadb",
+              "surface-container-lowest": "#ffffff",
+              "on-tertiary": "#ffffff",
+              "primary-fixed-dim": "#a4c9fe",
+              "outline": "#737780",
+              "on-tertiary-fixed-variant": "#6f3812",
+              "surface-variant": "#e1e3e4",
+              "secondary": "#575a8c",
+              "error": "#ba1a1a",
+              "on-tertiary-container": "#d58a5d",
+              "secondary-fixed-dim": "#bfc2fb",
+              "surface-container-highest": "#e1e3e4",
+              "inverse-surface": "#2e3132",
+              "on-surface": "#191c1d",
+              "secondary-fixed": "#e0e0ff",
+              "on-error-container": "#93000a",
+              "inverse-on-surface": "#f0f1f2",
+              "surface": "#f8f9fa",
+              "primary": "#001f3d",
+              "on-secondary-container": "#4d5081",
+              "inverse-primary": "#a4c9fe",
+              "surface-container": "#edeeef",
+              "on-primary": "#ffffff",
+              "secondary-container": "#c2c5fe",
+              "on-error": "#ffffff",
+              "tertiary-fixed": "#ffdbc9",
+              "surface-container-low": "#f3f4f5",
+              "on-secondary-fixed": "#131645",
+              "surface-tint": "#3a608f",
+              "on-secondary-fixed-variant": "#3f4273",
+              "on-primary-fixed": "#001c39",
+              "tertiary-fixed-dim": "#ffb68c",
+              "tertiary-container": "#572501",
+              "surface-bright": "#f8f9fa",
+              "primary-container": "#003461",
+              "surface-container-high": "#e7e8e9",
+              "outline-variant": "#c3c6d0",
+              "on-primary-container": "#799ed1",
+              "background": "#f8f9fa",
+              "error-container": "#ffdad6",
+              "on-tertiary-fixed": "#321200",
+              "primary-fixed": "#d3e3ff",
+              "on-background": "#191c1d",
+              "on-secondary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .tonal-layering {
+            background: linear-gradient(180deg, #f8f9fa 0%, #f3f4f5 100%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #c3c6d0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="bg-surface font-body text-on-surface antialiased overflow-hidden h-screen flex">
+<!-- SideNavBar (Authority: JSON) -->
+<aside class="fixed left-0 top-0 h-full w-64 bg-[#000033] flex flex-col py-6 font-['Inter'] antialiased">
+<div class="px-6 mb-8">
+<h1 class="text-white font-bold tracking-tight text-xl">Arquitetura</h1>
+<p class="text-slate-400 text-xs">Portal de Automação</p>
+</div>
+<nav class="flex-1">
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="fingerprint">fingerprint</span>
+<span>Identificação</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="settings_suggest">settings_suggest</span>
+<span>Técnica</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="account_balance">account_balance</span>
+<span>Negócio</span>
+</div>
+<div class="bg-white/10 text-white rounded-lg mx-2 my-1 px-4 py-3 font-semibold flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="block" style="font-variation-settings: 'FILL' 1;">block</span>
+<span>Impedimento</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="priority_high">priority_high</span>
+<span>Urgência</span>
+</div>
+<div class="text-slate-400 hover:text-white transition-colors duration-200 px-4 py-3 mx-2 flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="warning">warning</span>
+<span>Riscos</span>
+</div>
+</nav>
+<div class="mt-auto px-4">
+<div class="flex items-center gap-3 p-3 bg-white/5 rounded-xl">
+<img alt="User profile" class="w-10 h-10 rounded-full border border-white/10" data-alt="Professional portrait of a male business analyst with a confident expression in a studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmG-qkbRWiEK7rucrcMCdXteGbG1bUKrv2rRmsPRu3hm5hNqT1UikpaQ5N-a6OAGA1-LNMS2D7NaOWMEZkFwfwVfDX1qnAmY2eTx8d8wjcJlAdtDD2lVUc_jm6QxJMHQ7CKdaaI4jIePogQsOpri5tzxpRLr9gOnWyQhuWlmbDkwNl0txmNkevhPx9AM_2A1ryLA7ZUf0kiQ2E_F11lTnOyZm_nRts8yf0HUCd79nqtQZcQyYxHXZ3NOPSbjz6yirspkrfIwCk53iM"/>
+<div class="overflow-hidden">
+<p class="text-white text-sm font-medium truncate">Analista Master</p>
+<p class="text-slate-500 text-xs truncate">Coordenação de RPA</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="ml-64 flex-1 flex flex-col h-screen relative bg-surface">
+<!-- TopNavBar (Authority: JSON) -->
+<header class="fixed top-0 right-0 w-[calc(100%-256px)] h-16 bg-white/80 backdrop-blur-xl flex items-center justify-between px-8 z-20 border-b border-slate-200/50 shadow-sm font-['Inter'] text-sm font-medium">
+<div class="flex items-center gap-6">
+<span class="text-[#003461] font-bold text-lg">Avaliação de Processos IPA</span>
+<nav class="hidden md:flex items-center gap-8 ml-8">
+<a class="text-slate-500 hover:text-slate-800 transition-all duration-300" href="#">Dashboard</a>
+<a class="text-[#003461] border-b-2 border-[#003461] pb-1 transition-all duration-300" href="#">Processos</a>
+<a class="text-slate-500 hover:text-slate-800 transition-all duration-300" href="#">Relatórios</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="hover:bg-slate-50 rounded-full p-2 text-slate-600">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="hover:bg-slate-50 rounded-full p-2 text-slate-600">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+<div class="h-8 w-px bg-slate-200 mx-2"></div>
+<img alt="Foto do Analista" class="w-8 h-8 rounded-full object-cover" data-alt="Close-up profile photo of a male analyst wearing formal attire" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAcPnU0tubgroJGxdz9-o5bEfst2dgu-iWI-ys3QB9ENUQBZAYC-zIB5hke2rMGmS7eIHXX9qAewFIdXWeyQsF0jBsfSAruJU1oc3GZfjJwFTnkPaeF5T9q4rhTXbIWV58ZsdNOPVy4ssNgonNk446BMCoM4HpvMP8WL9-JdmLYvtRBP7BuFxP3kUmjWaRVnmhlOiUGPDFKIlSBNoU-xUehFUZ1nsSEr6bW593IhVS7FuGBcapUVPks3RnA3w52DQISleDk7GPDJZtY"/>
+</div>
+</header>
+<!-- Page Content Layout -->
+<div class="mt-16 flex-1 overflow-y-auto custom-scrollbar flex p-8 gap-8">
+<!-- Left Column: Form Section -->
+<section class="flex-[1.8] flex flex-col gap-8 pb-32">
+<!-- Stepper Horizontal -->
+<div class="flex items-center w-full px-2">
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold mb-2">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Identificação</span>
+</div>
+<div class="h-px bg-primary-container flex-1 mb-8 opacity-20"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold mb-2">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Técnica</span>
+</div>
+<div class="h-px bg-primary-container flex-1 mb-8 opacity-20"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-8 h-8 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center text-xs font-bold mb-2">
+<span class="material-symbols-outlined text-sm" data-icon="check">check</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Negócio</span>
+</div>
+<div class="h-px bg-primary flex-1 mb-8"></div>
+<div class="flex flex-col items-center flex-1">
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center text-sm font-bold mb-2 shadow-lg ring-4 ring-primary/10">
+                            4
+                        </div>
+<span class="text-[10px] uppercase tracking-wider text-primary font-extrabold">Impedimento</span>
+</div>
+<div class="h-px bg-slate-200 flex-1 mb-8"></div>
+<div class="flex flex-col items-center flex-1 opacity-40">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface-variant flex items-center justify-center text-xs font-bold mb-2">
+                            5
+                        </div>
+<span class="text-[10px] uppercase tracking-wider text-slate-500 font-bold">Urgência</span>
+</div>
+</div>
+<!-- Form Title Section -->
+<div>
+<h2 class="text-4xl font-extrabold text-primary tracking-tight mb-2">Fator de Impedimento</h2>
+<p class="text-on-surface-variant max-w-2xl leading-relaxed">Avalie o grau de restrição normativa, técnica ou processual que pode impactar a viabilidade imediata da implementação da automação.</p>
+</div>
+<!-- Radio Cards Group -->
+<div class="grid grid-cols-1 gap-3">
+<!-- Option 1.00 -->
+<label class="group relative flex items-center p-5 cursor-pointer rounded-xl bg-surface-container-lowest hover:bg-surface-container transition-all duration-300 ring-1 ring-outline-variant/15 hover:ring-primary/20">
+<input checked="" class="w-5 h-5 text-primary focus:ring-primary border-slate-300" name="impedimento" type="radio"/>
+<div class="ml-4 flex flex-col">
+<span class="text-lg font-bold text-primary tracking-tight">1.00 — Nenhum impedimento</span>
+<span class="text-sm text-slate-500">Processo livre para automação imediata sem barreiras externas.</span>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-success/60 text-3xl" data-icon="check_circle">check_circle</span>
+</div>
+</label>
+<!-- Option 0.80 -->
+<label class="group relative flex items-center p-5 cursor-pointer rounded-xl bg-surface-container-lowest hover:bg-surface-container transition-all duration-300 ring-1 ring-outline-variant/15 hover:ring-primary/20">
+<input class="w-5 h-5 text-primary focus:ring-primary border-slate-300" name="impedimento" type="radio"/>
+<div class="ml-4 flex flex-col">
+<span class="text-lg font-bold text-primary tracking-tight">0.80 — Restrição leve (supervisão)</span>
+<span class="text-sm text-slate-500">Exige revisão humana pontual ou validação de logs.</span>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary/40 text-3xl" data-icon="visibility">visibility</span>
+</div>
+</label>
+<!-- Option 0.50 -->
+<label class="group relative flex items-center p-5 cursor-pointer rounded-xl bg-surface-container-lowest hover:bg-surface-container transition-all duration-300 ring-1 ring-outline-variant/15 hover:ring-primary/20">
+<input class="w-5 h-5 text-primary focus:ring-primary border-slate-300" name="impedimento" type="radio"/>
+<div class="ml-4 flex flex-col">
+<span class="text-lg font-bold text-primary tracking-tight">0.50 — Restrição moderada (parcial)</span>
+<span class="text-sm text-slate-500">Dependência de sistemas legados instáveis ou dados não estruturados.</span>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary/40 text-3xl" data-icon="architecture">architecture</span>
+</div>
+</label>
+<!-- Option 0.20 -->
+<label class="group relative flex items-center p-5 cursor-pointer rounded-xl bg-surface-container-lowest hover:bg-surface-container transition-all duration-300 ring-1 ring-outline-variant/15 hover:ring-primary/20">
+<input class="w-5 h-5 text-primary focus:ring-primary border-slate-300" name="impedimento" type="radio"/>
+<div class="ml-4 flex flex-col">
+<span class="text-lg font-bold text-primary tracking-tight">0.20 — Restrição severa (mudança normativa)</span>
+<span class="text-sm text-slate-500">Aguardando alteração em portaria ou regra de negócio interna.</span>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-slate-300 group-hover:text-primary/40 text-3xl" data-icon="gavel">gavel</span>
+</div>
+</label>
+<!-- Option 0.00 -->
+<label class="group relative flex items-center p-5 cursor-pointer rounded-xl bg-surface-container-lowest hover:bg-surface-container transition-all duration-300 ring-1 ring-outline-variant/15 hover:ring-primary/20">
+<input class="w-5 h-5 text-primary focus:ring-primary border-slate-300" name="impedimento" type="radio"/>
+<div class="ml-4 flex flex-col">
+<span class="text-lg font-bold text-primary tracking-tight">0.00 — Impedimento absoluto (vedação legal)</span>
+<span class="text-sm text-slate-500">Proibição explícita por lei ou sigilo absoluto inatingível por bot.</span>
+</div>
+<div class="ml-auto">
+<span class="material-symbols-outlined text-error/60 text-3xl" data-icon="block">block</span>
+</div>
+</label>
+</div>
+<!-- Justification -->
+<div class="flex flex-col gap-3">
+<label class="text-sm font-bold text-primary uppercase tracking-widest px-1">Justificativa do Fator</label>
+<textarea class="w-full p-4 rounded-xl bg-white ring-1 ring-outline-variant/30 focus:ring-2 focus:ring-primary focus:outline-none transition-all duration-200 placeholder:text-slate-400" placeholder="Descreva detalhadamente os motivos técnicos ou legais que sustentam a pontuação escolhida..." rows="4"></textarea>
+<p class="text-xs text-slate-500 italic">Mínimo de 50 caracteres para garantir o rastro de auditoria.</p>
+</div>
+</section>
+<!-- Right Column: Sticky Preview -->
+<aside class="flex-1">
+<div class="sticky top-0 bg-surface-container-low rounded-2xl p-6 ring-1 ring-outline-variant/10 shadow-xl shadow-slate-200/50">
+<div class="flex items-center justify-between mb-6">
+<h3 class="text-xl font-extrabold text-primary">Preview IPA</h3>
+<span class="px-3 py-1 bg-[#eab308]/10 text-[#eab308] text-[10px] font-black uppercase tracking-widest rounded-full ring-1 ring-[#eab308]/30">BACKLOG</span>
+</div>
+<div class="space-y-6">
+<!-- Metric Card -->
+<div class="bg-white rounded-xl p-4 shadow-sm border-l-4 border-[#003461]">
+<div class="flex justify-between items-center mb-1">
+<span class="text-[10px] text-slate-500 font-bold uppercase tracking-wide">Potencial de Automação</span>
+<span class="text-lg font-black text-primary">84%</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[84%]"></div>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div class="bg-white p-3 rounded-lg ring-1 ring-slate-100">
+<span class="block text-[9px] text-slate-400 font-bold uppercase">Complexidade</span>
+<span class="text-sm font-bold text-primary">Média</span>
+</div>
+<div class="bg-white p-3 rounded-lg ring-1 ring-slate-100">
+<span class="block text-[9px] text-slate-400 font-bold uppercase">Impacto Financeiro</span>
+<span class="text-sm font-bold text-primary">Alto</span>
+</div>
+</div>
+<div class="pt-4 border-t border-slate-200">
+<p class="text-[11px] text-slate-400 mb-3 font-medium">RESUMO DA ETAPA</p>
+<div class="space-y-2">
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Maturidade Técnica</span>
+<span class="font-bold text-success">0.92</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Valor de Negócio</span>
+<span class="font-bold text-primary">0.75</span>
+</div>
+<div class="flex justify-between text-xs">
+<span class="text-slate-500">Impedimento (Atual)</span>
+<span class="font-bold text-on-surface-variant italic">Aguardando...</span>
+</div>
+</div>
+</div>
+<!-- Data Visualization Mock -->
+<div class="mt-4 rounded-xl overflow-hidden bg-slate-900 aspect-video relative flex items-center justify-center">
+<div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 16px 16px;"></div>
+<div class="relative z-10 text-center">
+<span class="material-symbols-outlined text-white/40 text-4xl mb-2" data-icon="analytics">analytics</span>
+<p class="text-[10px] text-white/50 font-medium">Cálculo em tempo real ativado</p>
+</div>
+</div>
+</div>
+</div>
+</aside>
+</div>
+<!-- Footer Navigation -->
+<footer class="fixed bottom-0 right-0 w-[calc(100%-256px)] bg-white/90 backdrop-blur-md px-8 py-4 flex justify-between items-center z-30 border-t border-slate-100">
+<button class="flex items-center gap-2 px-6 py-2.5 rounded-xl border border-slate-300 text-slate-600 font-bold text-sm hover:bg-slate-50 transition-all active:scale-95">
+<span class="material-symbols-outlined text-sm" data-icon="arrow_back">arrow_back</span>
+                Anterior
+            </button>
+<div class="flex items-center gap-4">
+<p class="text-[10px] text-slate-400 font-bold uppercase tracking-tighter">Progresso: 65% concluído</p>
+<button class="flex items-center gap-2 px-8 py-2.5 rounded-xl bg-primary text-white font-bold text-sm shadow-lg shadow-primary/20 hover:brightness-110 transition-all active:scale-95">
+                    Próximo
+                    <span class="material-symbols-outlined text-sm" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+</footer>
+</main>
+</body></html>
