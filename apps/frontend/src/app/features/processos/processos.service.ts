@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from '../../../environments/environment';
 
 export interface ProcessoItem {
@@ -45,19 +45,73 @@ export class ProcessosService {
       if (filtros.page) params = params.set('page', filtros.page.toString());
       if (filtros.limit) params = params.set('limit', filtros.limit.toString());
     }
-    return this.http.get<ProcessoListResult>(`${this.apiUrl}/processos`, { params });
+    return this.http.get<any[]>(`${this.apiUrl}/processos`, { params }).pipe(
+      map((rawList) => {
+        const mappedData: ProcessoItem[] = rawList.map((item) => ({
+          id: item.idProcesso,
+          noProcesso: item.noProcesso,
+          noArea: item.noArea || 'Geral',
+          noDono: item.noDonoProcesso || 'Não informado',
+          coStatus: item.coSituacao,
+          vrIpaFinal: item.avaliacao?.vrIpaFinal ?? null,
+          dtLevantamento: item.dtLevantamento,
+          idAvaliacao: item.avaliacao?.idAvaliacao,
+        }));
+
+        return {
+          data: mappedData,
+          total: mappedData.length,
+          page: filtros?.page || 1,
+          limit: filtros?.limit || 10,
+        };
+      })
+    );
+
   }
 
   buscarPorId(id: number): Observable<ProcessoItem> {
-    return this.http.get<ProcessoItem>(`${this.apiUrl}/processos/${id}`);
+    return this.http.get<any>(`${this.apiUrl}/processos/${id}`).pipe(
+      map((item) => ({
+        id: item.idProcesso,
+        noProcesso: item.noProcesso,
+        noArea: item.noArea || 'Geral',
+        noDono: item.noDonoProcesso || 'Não informado',
+        coStatus: item.coSituacao,
+        vrIpaFinal: item.avaliacao?.vrIpaFinal ?? null,
+        dtLevantamento: item.dtLevantamento,
+        idAvaliacao: item.avaliacao?.idAvaliacao,
+      })),
+    );
   }
 
   criar(dto: any): Observable<ProcessoItem> {
-    return this.http.post<ProcessoItem>(`${this.apiUrl}/processos`, dto);
+    return this.http.post<any>(`${this.apiUrl}/processos`, dto).pipe(
+      map((item) => ({
+        id: item.idProcesso,
+        noProcesso: item.noProcesso,
+        noArea: item.noArea || 'Geral',
+        noDono: item.noDonoProcesso || 'Não informado',
+        coStatus: item.coSituacao,
+        vrIpaFinal: item.avaliacao?.vrIpaFinal ?? null,
+        dtLevantamento: item.dtLevantamento,
+        idAvaliacao: item.avaliacao?.idAvaliacao,
+      })),
+    );
   }
 
   atualizar(id: number, dto: any): Observable<ProcessoItem> {
-    return this.http.patch<ProcessoItem>(`${this.apiUrl}/processos/${id}`, dto);
+    return this.http.patch<any>(`${this.apiUrl}/processos/${id}`, dto).pipe(
+      map((item) => ({
+        id: item.idProcesso,
+        noProcesso: item.noProcesso,
+        noArea: item.noArea || 'Geral',
+        noDono: item.noDonoProcesso || 'Não informado',
+        coStatus: item.coSituacao,
+        vrIpaFinal: item.avaliacao?.vrIpaFinal ?? null,
+        dtLevantamento: item.dtLevantamento,
+        idAvaliacao: item.avaliacao?.idAvaliacao,
+      })),
+    );
   }
 
   arquivar(id: number): Observable<void> {

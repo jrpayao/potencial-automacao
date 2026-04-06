@@ -1,0 +1,126 @@
+<div class="page-container animate-fade-in">
+  <!-- Page Header Componentizado com Busca Integrada -->
+  <app-page-header
+    title="Gestão de Processos"
+    description="Visualize e gerencie todos os processos e avaliações de potencial de automação."
+    [breadcrumbs]="breadcrumbs"
+    [showSearch]="true"
+    searchPlaceholder="Pesquisar por nome ou área..."
+    (search)="onSearch($event)"
+  >
+    <button actions class="btn-stitch-primary" (click)="novaAvaliacao()">
+      <span class="material-symbols-outlined">add_circle</span>
+      Nova Avaliação
+    </button>
+  </app-page-header>
+
+  <!-- Filters Section -->
+  <section class="filters-section stitch-card">
+    <div class="section-header">
+      <span class="material-symbols-outlined">filter_list</span>
+      <h3>Filtros Avançados</h3>
+    </div>
+    <div class="filters-grid">
+      <div class="stitch-input-group">
+        <label>Status da Avaliação</label>
+        <select [(ngModel)]="filtroStatus" (ngModelChange)="onFiltroChange()">
+          <option value="">Todos os Status</option>
+          <option value="rascunho">Rascunho</option>
+          <option value="avaliado">Avaliado</option>
+          <option value="arquivado">Arquivado</option>
+        </select>
+      </div>
+
+      <div class="stitch-input-group">
+        <label>Data Início</label>
+        <input
+          type="date"
+          [(ngModel)]="filtroDataInicio"
+          (ngModelChange)="onFiltroChange()"
+        />
+      </div>
+
+      <div class="stitch-input-group">
+        <label>Data Fim</label>
+        <input
+          type="date"
+          [(ngModel)]="filtroDataFim"
+          (ngModelChange)="onFiltroChange()"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Table Section -->
+  <section class="table-section stitch-card no-padding">
+    <div class="table-scroll">
+      <table class="stitch-table">
+        <thead>
+          <tr>
+            <th>Nome do Processo</th>
+            <th>Área Resp.</th>
+            <th>Proprietário</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">IPA Final</th>
+            <th class="text-center">Data</th>
+            <th class="text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of items(); track row.id) {
+            <tr class="clickable-row" (click)="verProcesso(row)">
+              <td>
+                <div class="name-cell">
+                  <span class="primary-text">{{ row.noProcesso }}</span>
+                  <span class="secondary-text">#{{ row.id }}</span>
+                </div>
+              </td>
+              <td><span class="area-tag">{{ row.noArea }}</span></td>
+              <td><span class="owner-text">{{ row.noDono }}</span></td>
+              <td class="text-center">
+                <app-status-badge [status]="row.coStatus" />
+              </td>
+              <td class="text-center">
+                @if (row.vrIpaFinal != null) {
+                  <div class="ipa-indicator">
+                    <div class="ipa-pill" [style.--ipa-color]="ipaColor(row.vrIpaFinal)">
+                      {{ row.vrIpaFinal | number: '1.2-2' }}
+                    </div>
+                    <div class="mini-progress">
+                      <div class="fill" [style.width.%]="(row.vrIpaFinal / 10) * 100" [style.background-color]="ipaColor(row.vrIpaFinal)"></div>
+                    </div>
+                  </div>
+                } @else {
+                  <span class="empty-val">—</span>
+                }
+              </td>
+              <td class="text-center">
+                <span class="date-text">{{ row.dtLevantamento | date: 'dd/MM/yyyy' }}</span>
+              </td>
+              <td class="text-right">
+                <button type="button" class="icon-btn-stitch" (click)="verProcesso(row); $event.stopPropagation()">
+                  <span class="material-symbols-outlined">trending_flat</span>
+                </button>
+              </td>
+            </tr>
+          } @empty {
+            <tr>
+              <td colspan="7" class="empty-state">
+                <span class="material-symbols-outlined">search_off</span>
+                <p>Nenhum processo localizado com os filtros aplicados.</p>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginator Compartilhado -->
+    <app-custom-paginator
+      [totalItems]="totalItems()"
+      [pageSize]="pageSize()"
+      [currentPage]="currentPage()"
+      (pageChange)="onPageChange($event)"
+    />
+  </section>
+</div>
