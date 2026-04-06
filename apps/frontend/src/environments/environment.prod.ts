@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: '/api',
+  apiUrl: 'http://ipa-api.payao.tech/api',
   useMocks: false,
 };
