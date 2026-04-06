@@ -7,6 +7,7 @@ import { environment } from '../../../environments/environment';
 export interface UpdateUsuarioDto {
   nome?: string;
   email?: string;
+  senha?: string;
   perfil?: string;
   organizacaoId?: number;
 }

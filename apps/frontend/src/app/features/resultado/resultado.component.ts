@@ -4,23 +4,13 @@ import {
   OnInit,
   signal,
   inject,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AvaliacaoService } from '../avaliacao-wizard/avaliacao.service';
 import { RadarChartComponent, RadarChartData } from './radar-chart.component';
 import { IAvaliacao } from '@ipa/shared';
-import { Pipe, PipeTransform } from '@angular/core';
-
-@Pipe({
-  name: 'any',
-  standalone: true
-})
-export class AnyPipe implements PipeTransform {
-  transform(value: any): any {
-    return value;
-  }
-}
 
 @Component({
   selector: 'app-resultado',
@@ -29,7 +19,6 @@ export class AnyPipe implements PipeTransform {
   imports: [
     CommonModule,
     RadarChartComponent,
-    AnyPipe
   ],
   template: `
     <div class="resultado-page">
@@ -116,19 +105,19 @@ export class AnyPipe implements PipeTransform {
                 <div class="info-list">
                   <div class="info-row">
                     <span class="info-label">Processo</span>
-                    <span class="info-value">{{ (avaliacao() | any)?.processo?.noProcesso || '—' }}</span>
+                    <span class="info-value">{{ avaliacao()?.processo?.noProcesso || '—' }}</span>
                   </div>
                   <div class="info-row">
                     <span class="info-label">Área / Depto</span>
                     <span class="info-value">
-                      {{ (avaliacao() | any)?.processo?.noArea || '—' }} 
-                      @if ((avaliacao() | any)?.processo?.noDepartamento) { / {{ (avaliacao() | any)?.processo?.noDepartamento }} }
+                      {{ avaliacao()?.processo?.noArea || '—' }}
+                      @if (avaliacao()?.processo?.noDepartamento) { / {{ avaliacao()?.processo?.noDepartamento }} }
                     </span>
                   </div>
                   <div class="info-row">
                     <span class="info-label">Responsável</span>
                     <span class="info-value">
-                      {{ (avaliacao() | any)?.processo?.noDonoProcesso || (avaliacao() | any)?.processo?.noDono || '—' }}
+                      {{ avaliacao()?.processo?.noDonoProcesso || avaliacao()?.processo?.noDono || '—' }}
                     </span>
                   </div>
                   <div class="info-row">
@@ -529,6 +518,38 @@ export class ResultadoComponent implements OnInit {
   readonly carregando = signal(true);
   readonly erro = signal<string | null>(null);
 
+  readonly badgeClass = computed((): string => {
+    const ipa = this.avaliacao()?.ipaFinal ?? 0;
+    if (ipa >= 4) return 'alto';
+    if (ipa >= 2.5) return 'medio';
+    return 'baixo';
+  });
+
+  readonly classificacaoTexto = computed((): string => {
+    const cls = this.badgeClass();
+    if (cls === 'alto') return 'Alto Potencial';
+    if (cls === 'medio') return 'Médio Potencial';
+    return 'Baixo Potencial';
+  });
+
+  readonly radarData = computed((): RadarChartData | null => {
+    const av = this.avaliacao();
+    if (!av) return null;
+    return {
+      tecnica: [av.notaSegurancaAcessos, av.notaEstabilidadeLegado, av.notaEstruturacaoDados],
+      negocio: [av.notaGestaoRisco, av.notaExperienciaCidadao, av.notaFteLiberado],
+    };
+  });
+
+  readonly riscos = computed((): string[] => {
+    const riscos = this.avaliacao()?.riscosContingencia;
+    if (!riscos || riscos.trim() === '') return [];
+    return riscos
+      .split('\n')
+      .map((r) => r.trim())
+      .filter((r) => r.length > 0);
+  });
+
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (!id) {
@@ -549,38 +570,6 @@ export class ResultadoComponent implements OnInit {
     });
   }
 
-  badgeClass(): string {
-    const ipa = this.avaliacao()?.ipaFinal ?? 0;
-    if (ipa >= 4) return 'alto';
-    if (ipa >= 2.5) return 'medio';
-    return 'baixo';
-  }
-
-  classificacaoTexto(): string {
-    const cls = this.badgeClass();
-    if (cls === 'alto') return 'Alto Potencial';
-    if (cls === 'medio') return 'Médio Potencial';
-    return 'Baixo Potencial';
-  }
-
-  radarData(): RadarChartData | null {
-    const av = this.avaliacao();
-    if (!av) return null;
-    return {
-      tecnica: [av.notaSegurancaAcessos, av.notaEstabilidadeLegado, av.notaEstruturacaoDados],
-      negocio: [av.notaGestaoRisco, av.notaExperienciaCidadao, av.notaFteLiberado],
-    };
-  }
-
-  riscos(): string[] {
-    const riscos = this.avaliacao()?.riscosContingencia;
-    if (!riscos || riscos.trim() === '') return [];
-    return riscos
-      .split('\n')
-      .map((r) => r.trim())
-      .filter((r) => r.length > 0);
-  }
-
   editar(): void {
     const id = this.avaliacao()?.id;
     if (id) {
@@ -599,6 +588,9 @@ export class ResultadoComponent implements OnInit {
         a.download = `avaliacao-ipa-${id}.pdf`;
         a.click();
         URL.revokeObjectURL(url);
+      },
+      error: () => {
+        this.erro.set('Não foi possível gerar o PDF. Tente novamente.');
       },
     });
   }

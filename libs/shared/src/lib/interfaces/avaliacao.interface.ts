@@ -45,4 +45,12 @@ export interface IAvaliacao {
   organizacaoId: number;
   criadoEm: string;
   atualizadoEm: string;
+
+  processo?: {
+    noProcesso?: string;
+    noArea?: string;
+    noDepartamento?: string;
+    noDonoProcesso?: string | null;
+    noDono?: string | null;
+  };
 }

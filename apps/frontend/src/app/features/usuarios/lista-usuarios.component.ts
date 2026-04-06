@@ -129,7 +129,7 @@ export class ListaUsuariosComponent implements OnInit {
       };
       // Opcionalmente enviar senha se preenchida
       if (rawVal.senha) {
-        (dto as any).senha = rawVal.senha;
+        dto.senha = rawVal.senha;
       }
 
       this.usuariosService.atualizar(editando.id, dto).subscribe({
@@ -167,12 +167,14 @@ export class ListaUsuariosComponent implements OnInit {
   desativar(id: number): void {
     this.usuariosService.alterarSituacao(id, SituacaoUsuario.INATIVO).subscribe({
       next: () => this.carregar(),
+      error: () => this.carregar(),
     });
   }
 
   ativar(id: number): void {
     this.usuariosService.alterarSituacao(id, SituacaoUsuario.ATIVO).subscribe({
       next: () => this.carregar(),
+      error: () => this.carregar(),
     });
   }
 }
