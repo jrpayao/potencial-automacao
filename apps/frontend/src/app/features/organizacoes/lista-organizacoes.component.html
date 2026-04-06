@@ -1,0 +1,151 @@
+<div class="page-container animate-fade-in">
+  <!-- Page Header Conponentizado com Busca Instantânea -->
+  <app-page-header
+    title="Gestão de Organizações"
+    description="Gerencie as unidades e órgãos registrados no sistema."
+    [showSearch]="true"
+    searchPlaceholder="Buscar por nome ou slug..."
+    (search)="onSearch($event)"
+  >
+    <button actions class="btn-stitch-primary" (click)="toggleFormulario()" [class.btn-danger]="mostrarFormulario()">
+      <span class="material-symbols-outlined">
+        {{ mostrarFormulario() ? 'close' : 'corporate_fare' }}
+      </span>
+      {{ mostrarFormulario() ? 'Cancelar' : 'Nova Organização' }}
+    </button>
+  </app-page-header>
+
+  <!-- Form Section (Collapse) -->
+  @if (mostrarFormulario()) {
+    <section class="form-section stitch-card">
+      <header class="section-header">
+        <h2 class="section-title">
+          {{ organizacaoEditando() ? 'Editar Organização' : 'Cadastrar Nova Organização' }}
+        </h2>
+      </header>
+      
+      <form [formGroup]="form" (ngSubmit)="salvar()" class="stitch-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nome">Nome da Organização</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">domain</span>
+              <input id="nome" type="text" formControlName="nome" placeholder="Ex: Ministerio da Gestao">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="slug">Identificador (Slug)</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">link</span>
+              <input id="slug" type="text" formControlName="slug" placeholder="ex: mgi-gestao">
+            </div>
+            <small class="field-hint">Apenas letras minúsculas, números e hífens.</small>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn-save" 
+            [disabled]="form.invalid || salvando()"
+          >
+            @if (salvando()) {
+              <div class="spinner-small"></div>
+              Salvando...
+            } @else {
+              <span class="material-symbols-outlined">save</span>
+              {{ organizacaoEditando() ? 'Atualizar Dados' : 'Salvar Organização' }}
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <!-- Data Display Section -->
+  @if (carregando()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando lista de organizações...</p>
+    </div>
+  } @else {
+    <main class="list-section stitch-card no-padding">
+      <div class="table-wrapper">
+        <table class="stitch-table">
+          <thead>
+            <tr>
+              <th>Organização</th>
+              <th class="text-center">Identificador</th>
+              <th class="text-center">Status</th>
+              <th class="text-center">Criado em</th>
+              <th class="text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (o of filteredOrganizacoes(); track o.id) {
+              <tr [class.inactive]="o.situacao === 'I'">
+                <td>
+                  <div class="org-cell">
+                    <div class="avatar-org">
+                      <span class="material-symbols-outlined">account_balance</span>
+                    </div>
+                    <div class="org-info">
+                      <span class="org-name">{{ o.nome }}</span>
+                      <span class="org-id">#{{ o.id }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td class="text-center">
+                  <span class="slug-tag">{{ o.slug }}</span>
+                </td>
+                <td class="text-center">
+                  <app-status-badge [status]="o.situacao === 'A' ? 'ativo' : 'inativo'" />
+                </td>
+                <td class="text-center">
+                  <span class="date-text">{{ o.criadoEm | date:'dd/MM/yyyy' }}</span>
+                </td>
+                <td class="text-right">
+                  <div class="row-actions">
+                    <button 
+                      class="btn-icon-action edit" 
+                      (click)="editar(o)"
+                      title="Editar Organização"
+                    >
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+
+                    @if (o.situacao === 'A') {
+                      <button 
+                        class="btn-icon-action delete" 
+                        (click)="arquivar(o.id)"
+                        title="Arquivar Organização"
+                      >
+                        <span class="material-symbols-outlined">archive</span>
+                      </button>
+                    } @else {
+                      <button 
+                        class="btn-icon-action activate" 
+                        (click)="ativar(o.id)"
+                        title="Ativar Organização"
+                      >
+                        <span class="material-symbols-outlined">unarchive</span>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="empty-row">
+                  <span class="material-symbols-outlined">domain_disabled</span>
+                  <p>Nenhuma organização encontrada.</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </main>
+  }
+</div>

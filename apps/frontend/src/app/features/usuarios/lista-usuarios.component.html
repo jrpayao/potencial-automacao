@@ -1,0 +1,174 @@
+<div class="page-container animate-fade-in">
+  <!-- Page Header Conponentizado com Busca Instantânea -->
+  <app-page-header
+    title="Gestão de Usuários"
+    description="Administre os acessos e perfis dos usuários do sistema."
+    [showSearch]="true"
+    searchPlaceholder="Buscar por nome ou e-mail..."
+    (search)="onSearch($event)"
+  >
+    <button actions class="btn-stitch-primary" (click)="toggleFormulario()" [class.btn-danger]="mostrarFormulario()">
+      <span class="material-symbols-outlined">
+        {{ mostrarFormulario() ? 'close' : 'person_add' }}
+      </span>
+      {{ mostrarFormulario() ? 'Cancelar' : 'Novo Usuário' }}
+    </button>
+  </app-page-header>
+
+  <!-- Form Section (Collapse) -->
+  @if (mostrarFormulario()) {
+    <section class="form-section stitch-card">
+      <header class="section-header">
+        <h2 class="section-title">
+          {{ usuarioEditando() ? 'Editar Usuário' : 'Cadastrar Novo Usuário' }}
+        </h2>
+      </header>
+      
+      <form [formGroup]="form" (ngSubmit)="salvar()" class="stitch-form">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="nome">Nome Completo</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">person</span>
+              <input id="nome" type="text" formControlName="nome" placeholder="Ex: João Silva">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="email">E-mail Corporativo</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">mail</span>
+              <input id="email" type="email" formControlName="email" placeholder="email@empresa.com">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="senha">Senha {{ usuarioEditando() ? '(opcional na edição)' : 'Inicial' }}</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">lock</span>
+              <input id="senha" type="password" formControlName="senha" placeholder="Mínimo 6 caracteres">
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="perfil">Perfil de Acesso</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">shield</span>
+              <select id="perfil" formControlName="perfil">
+                @for (p of perfis; track p) {
+                  <option [value]="p">{{ p }}</option>
+                }
+              </select>
+            </div>
+          </div>
+
+          <div class="form-field">
+            <label for="organizacaoId">ID Organização</label>
+            <div class="input-wrapper">
+              <span class="material-symbols-outlined input-icon">corporate_fare</span>
+              <input id="organizacaoId" type="number" formControlName="organizacaoId" placeholder="ID numérico">
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button 
+            type="submit" 
+            class="btn-save" 
+            [disabled]="form.invalid || salvando()"
+          >
+            @if (salvando()) {
+              <div class="spinner-small"></div>
+              Salvando...
+            } @else {
+              <span class="material-symbols-outlined">save</span>
+              {{ usuarioEditando() ? 'Atualizar Dados' : 'Salvar Usuário' }}
+            }
+          </button>
+        </div>
+      </form>
+    </section>
+  }
+
+  <!-- Data Display Section -->
+  @if (carregando()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Carregando lista de usuários...</p>
+    </div>
+  } @else {
+    <main class="list-section stitch-card no-padding">
+      <div class="table-wrapper">
+        <table class="stitch-table">
+          <thead>
+            <tr>
+              <th>Usuário</th>
+              <th>E-mail</th>
+              <th class="text-center">Perfil</th>
+              <th class="text-center">Status</th>
+              <th class="text-right">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (u of filteredUsuarios(); track u.id) {
+              <tr [class.inactive]="u.situacao === Situacao.INATIVO">
+                <td>
+                  <div class="user-cell">
+                    <div class="avatar-mini">{{ u.nome.charAt(0) }}</div>
+                    <div class="user-info">
+                      <span class="user-name">{{ u.nome }}</span>
+                      <span class="user-id">#{{ u.id }}</span>
+                    </div>
+                  </div>
+                </td>
+                <td><span class="email-text">{{ u.email }}</span></td>
+                <td class="text-center">
+                  <app-status-badge [status]="u.perfil" />
+                </td>
+                <td class="text-center">
+                  <app-status-badge [status]="u.situacao === Situacao.ATIVO ? 'ativo' : 'inativo'" />
+                </td>
+                <td class="text-right">
+                  <div class="row-actions">
+                    <button 
+                      class="btn-icon-action edit" 
+                      (click)="editar(u)"
+                      title="Editar Dados"
+                    >
+                      <span class="material-symbols-outlined">edit</span>
+                    </button>
+
+                    @if (u.situacao === Situacao.ATIVO) {
+                      <button 
+                        class="btn-icon-action delete" 
+                        (click)="desativar(u.id)"
+                        title="Desativar Usuário"
+                      >
+                        <span class="material-symbols-outlined">person_off</span>
+                      </button>
+                    } @else {
+                      <button 
+                        class="btn-icon-action activate" 
+                        (click)="ativar(u.id)"
+                        title="Reativar Usuário"
+                      >
+                        <span class="material-symbols-outlined">person_check</span>
+                      </button>
+                    }
+                  </div>
+                </td>
+              </tr>
+            } @empty {
+              <tr>
+                <td colspan="5" class="empty-row">
+                  <span class="material-symbols-outlined">group_off</span>
+                  <p>Nenhum usuário encontrado com este critério.</p>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </main>
+  }
+</div>

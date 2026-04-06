@@ -4,262 +4,58 @@ import {
   OnInit,
   signal,
   inject,
+  computed,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { MatTableModule } from '@angular/material/table';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatCardModule } from '@angular/material/card';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { IUsuario, Perfil } from '@ipa/shared';
-import { UsuariosService } from './usuarios.service';
+import { IUsuario, Perfil, SituacaoUsuario } from '@ipa/shared';
+import { UsuariosService, UpdateUsuarioDto } from './usuarios.service';
+import { PageHeaderComponent } from '../../shared/components/page-header/page-header.component';
+import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 
 @Component({
   selector: 'app-lista-usuarios',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatTableModule,
-    MatButtonModule,
-    MatIconModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
+    PageHeaderComponent,
+    StatusBadgeComponent,
   ],
-  styles: `
-    .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 24px;
-    }
-
-    .page-title {
-      font-size: 22px;
-      font-weight: 700;
-      color: #333;
-      margin: 0;
-    }
-
-    .table-container {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-    }
-
-    .badge {
-      display: inline-block;
-      padding: 2px 10px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: capitalize;
-    }
-
-    .badge-superadmin { background: #7b1fa2; color: white; }
-    .badge-admin { background: #1565c0; color: white; }
-    .badge-analista { background: #00695c; color: white; }
-    .badge-visualizador { background: #546e7a; color: white; }
-
-    .status-ativo {
-      color: #2e7d32;
-      font-weight: 600;
-      font-size: 13px;
-    }
-
-    .status-inativo {
-      color: #757575;
-      font-weight: 600;
-      font-size: 13px;
-    }
-
-    .form-card {
-      margin-bottom: 24px;
-      border: 1px solid #e0e0e0;
-    }
-
-    .form-title {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 16px;
-    }
-
-    .form-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-    }
-
-    .form-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .loading-wrapper {
-      display: flex;
-      justify-content: center;
-      padding: 60px 0;
-    }
-
-    mat-form-field {
-      width: 100%;
-    }
-  `,
-  template: `
-    <div style="padding: 24px; max-width: 1100px; margin: 0 auto;">
-
-      <div class="page-header">
-        <h1 class="page-title">Usuarios</h1>
-        <button mat-raised-button color="primary" (click)="toggleFormulario()">
-          <mat-icon>{{ mostrarFormulario() ? 'close' : 'add' }}</mat-icon>
-          {{ mostrarFormulario() ? 'Cancelar' : '+ Novo Usuario' }}
-        </button>
-      </div>
-
-      @if (mostrarFormulario()) {
-        <mat-card class="form-card">
-          <mat-card-content>
-            <p class="form-title">Novo Usuario</p>
-            <form [formGroup]="form" (ngSubmit)="salvar()">
-              <div class="form-row">
-                <mat-form-field appearance="outline">
-                  <mat-label>Nome</mat-label>
-                  <input matInput formControlName="nome" placeholder="Nome completo">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Email</mat-label>
-                  <input matInput formControlName="email" type="email" placeholder="email@exemplo.com">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Senha</mat-label>
-                  <input matInput formControlName="senha" type="password" placeholder="Senha inicial">
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Perfil</mat-label>
-                  <mat-select formControlName="perfil">
-                    @for (p of perfis; track p) {
-                      <mat-option [value]="p">{{ p }}</mat-option>
-                    }
-                  </mat-select>
-                </mat-form-field>
-
-                <mat-form-field appearance="outline">
-                  <mat-label>Organizacao ID</mat-label>
-                  <input matInput formControlName="organizacaoId" type="number" placeholder="ID da organizacao">
-                </mat-form-field>
-              </div>
-
-              <div class="form-actions">
-                <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid || salvando()">
-                  @if (salvando()) {
-                    <mat-spinner diameter="18" style="display:inline-block;"></mat-spinner>
-                  } @else {
-                    Salvar
-                  }
-                </button>
-                <button mat-stroked-button type="button" (click)="toggleFormulario()">Cancelar</button>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
-      }
-
-      @if (carregando()) {
-        <div class="loading-wrapper">
-          <mat-spinner diameter="48"></mat-spinner>
-        </div>
-      } @else {
-        <mat-card>
-          <mat-card-content class="table-container">
-            <table mat-table [dataSource]="usuarios()">
-
-              <ng-container matColumnDef="nome">
-                <th mat-header-cell *matHeaderCellDef>Nome</th>
-                <td mat-cell *matCellDef="let u">{{ u.nome }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="email">
-                <th mat-header-cell *matHeaderCellDef>Email</th>
-                <td mat-cell *matCellDef="let u">{{ u.email }}</td>
-              </ng-container>
-
-              <ng-container matColumnDef="perfil">
-                <th mat-header-cell *matHeaderCellDef>Perfil</th>
-                <td mat-cell *matCellDef="let u">
-                  <span class="badge" [class]="'badge-' + u.perfil">{{ u.perfil }}</span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="situacao">
-                <th mat-header-cell *matHeaderCellDef>Status</th>
-                <td mat-cell *matCellDef="let u">
-                  <span [class]="u.situacao === 'A' ? 'status-ativo' : 'status-inativo'">
-                    {{ u.situacao === 'A' ? 'Ativo' : 'Inativo' }}
-                  </span>
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="acoes">
-                <th mat-header-cell *matHeaderCellDef>Acoes</th>
-                <td mat-cell *matCellDef="let u">
-                  @if (u.situacao === 'A') {
-                    <button mat-icon-button color="warn"
-                      matTooltip="Desativar usuario"
-                      (click)="desativar(u.id)">
-                      <mat-icon>person_off</mat-icon>
-                    </button>
-                  }
-                </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="colunas"></tr>
-              <tr mat-row *matRowDef="let row; columns: colunas;"></tr>
-
-              <tr class="mat-row" *matNoDataRow>
-                <td class="mat-cell" [attr.colspan]="colunas.length" style="text-align:center; padding:32px; color:#999;">
-                  Nenhum usuario encontrado.
-                </td>
-              </tr>
-            </table>
-          </mat-card-content>
-        </mat-card>
-      }
-
-    </div>
-  `,
+  templateUrl: './lista-usuarios.component.html',
+  styleUrls: ['./lista-usuarios.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListaUsuariosComponent implements OnInit {
   private readonly usuariosService = inject(UsuariosService);
   private readonly fb = inject(FormBuilder);
 
   readonly usuarios = signal<IUsuario[]>([]);
+  readonly searchProp = signal('');
   readonly carregando = signal(true);
   readonly salvando = signal(false);
   readonly mostrarFormulario = signal(false);
+  readonly usuarioEditando = signal<IUsuario | null>(null);
 
-  readonly colunas = ['nome', 'email', 'perfil', 'situacao', 'acoes'];
   readonly perfis = Object.values(Perfil);
+  readonly Situacao = SituacaoUsuario;
+
+  // Busca em memória (Client-side search)
+  readonly filteredUsuarios = computed(() => {
+    const q = this.searchProp().toLowerCase().trim();
+    const list = this.usuarios();
+    if (!q) return list;
+    
+    return list.filter(u => 
+      u.nome.toLowerCase().includes(q) || 
+      u.email.toLowerCase().includes(q)
+    );
+  });
 
   readonly form = this.fb.group({
     nome: ['', Validators.required],
     email: ['', [Validators.required, Validators.email]],
-    senha: ['', [Validators.required, Validators.minLength(6)]],
+    senha: ['', [Validators.minLength(6)]], // Senha opcional na edição
     perfil: [Perfil.ANALISTA, Validators.required],
     organizacaoId: [null as number | null, Validators.required],
   });
@@ -281,43 +77,102 @@ export class ListaUsuariosComponent implements OnInit {
     });
   }
 
+  onSearch(term: string): void {
+    this.searchProp.set(term);
+  }
+
   toggleFormulario(): void {
-    this.mostrarFormulario.update((v) => !v);
-    if (!this.mostrarFormulario()) {
-      this.form.reset({ perfil: Perfil.ANALISTA });
+    if (this.mostrarFormulario()) {
+      this.cancelarEdicao();
+    } else {
+      this.mostrarFormulario.set(true);
     }
+  }
+
+  editar(u: IUsuario): void {
+    this.usuarioEditando.set(u);
+    this.mostrarFormulario.set(true);
+    this.form.patchValue({
+      nome: u.nome,
+      email: u.email,
+      perfil: u.perfil,
+      organizacaoId: u.organizacaoId,
+      senha: '', // Não carregamos a senha atual
+    });
+    // Na edição, a senha não é obrigatória
+    this.form.get('senha')?.setValidators([Validators.minLength(6)]);
+    this.form.get('senha')?.updateValueAndValidity();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  cancelarEdicao(): void {
+    this.usuarioEditando.set(null);
+    this.mostrarFormulario.set(false);
+    this.form.reset({ perfil: Perfil.ANALISTA });
+    this.form.get('senha')?.setValidators([Validators.required, Validators.minLength(6)]);
+    this.form.get('senha')?.updateValueAndValidity();
   }
 
   salvar(): void {
     if (this.form.invalid) return;
     this.salvando.set(true);
-    const dto = this.form.getRawValue() as {
-      nome: string;
-      email: string;
-      senha: string;
-      perfil: Perfil;
-      organizacaoId: number;
-    };
-    this.usuariosService.criar(dto).subscribe({
-      next: (novo) => {
-        this.usuarios.update((lista) => [...lista, novo]);
+    
+    const rawVal = this.form.getRawValue();
+    const editando = this.usuarioEditando();
+
+    if (editando) {
+      const dto: UpdateUsuarioDto = {
+        nome: rawVal.nome || undefined,
+        email: rawVal.email || undefined,
+        perfil: rawVal.perfil || undefined,
+        organizacaoId: rawVal.organizacaoId || undefined,
+      };
+      // Opcionalmente enviar senha se preenchida
+      if (rawVal.senha) {
+        (dto as any).senha = rawVal.senha;
+      }
+
+      this.usuariosService.atualizar(editando.id, dto).subscribe({
+        next: (atualizado) => {
+          this.usuarios.update((lista) => 
+            lista.map((u) => u.id === editando.id ? atualizado : u)
+          );
+          this.finalizarAcao();
+        },
+        error: () => this.salvando.set(false),
+      });
+    } else {
+      // Criar novo (aqui senha é obrigatória se não for rascunho, mas o validador cuida)
+      if (!rawVal.senha) {
+        this.form.get('senha')?.setErrors({ required: true });
         this.salvando.set(false);
-        this.mostrarFormulario.set(false);
-        this.form.reset({ perfil: Perfil.ANALISTA });
-      },
-      error: () => {
-        this.salvando.set(false);
-      },
-    });
+        return;
+      }
+
+      this.usuariosService.criar(rawVal as any).subscribe({
+        next: (novo) => {
+          this.usuarios.update((lista) => [...lista, novo]);
+          this.finalizarAcao();
+        },
+        error: () => this.salvando.set(false),
+      });
+    }
+  }
+
+  private finalizarAcao(): void {
+    this.salvando.set(false);
+    this.cancelarEdicao();
   }
 
   desativar(id: number): void {
-    this.usuariosService.desativar(id).subscribe({
-      next: (atualizado) => {
-        this.usuarios.update((lista) =>
-          lista.map((u) => (u.id === id ? atualizado : u)),
-        );
-      },
+    this.usuariosService.alterarSituacao(id, SituacaoUsuario.INATIVO).subscribe({
+      next: () => this.carregar(),
+    });
+  }
+
+  ativar(id: number): void {
+    this.usuariosService.alterarSituacao(id, SituacaoUsuario.ATIVO).subscribe({
+      next: () => this.carregar(),
     });
   }
 }
