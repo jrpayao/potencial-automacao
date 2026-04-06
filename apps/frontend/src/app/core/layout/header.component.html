@@ -1,0 +1,42 @@
+<header class="header">
+  <div class="breadcrumb">
+    <span class="system-name">Sistema IPA</span>
+    <span class="separator">/</span>
+    <span class="page-context">Portal de Avaliação</span>
+  </div>
+
+  <div class="header-right">
+    <nav class="top-nav">
+      <a routerLink="/admin/dashboard" routerLinkActive="active" class="top-link">Dashboard</a>
+      <a routerLink="/admin/processos" routerLinkActive="active" class="top-link">Processos</a>
+    </nav>
+
+    <div class="user-profile-container">
+      <div class="user-profile" (click)="toggleMenu()">
+        <div class="user-avatar">{{ initials() }}</div>
+        <div class="user-info-text">
+          <span class="user-name">{{ userName() }}</span>
+          <span class="user-role">{{ userRoleLabel() }}</span>
+        </div>
+        <span class="material-symbols-outlined dropdown-icon" [style.transform]="isMenuOpen() ? 'rotate(180deg)' : 'none'">expand_more</span>
+      </div>
+
+      <!-- User Dropdown Menu -->
+      @if (isMenuOpen()) {
+        <div class="user-dropdown-menu animate-fade-in shadow-lg">
+          <div class="dropdown-header">
+            <span class="user-full-name">{{ userName() }}</span>
+            <span class="user-role-badge badge-role">{{ userRoleLabel() }}</span>
+          </div>
+          <div class="divider"></div>
+          <button class="dropdown-item" (click)="onLogout()">
+            <span class="material-symbols-outlined">logout</span>
+            <span>Sair do Sistema</span>
+          </button>
+        </div>
+        <!-- Backdrop to close menu -->
+        <div class="menu-backdrop" (click)="toggleMenu()"></div>
+      }
+    </div>
+  </div>
+</header>

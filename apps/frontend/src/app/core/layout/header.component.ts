@@ -1,83 +1,35 @@
-import { Component, ChangeDetectionStrategy, computed } from '@angular/core';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
-import { MatMenuModule } from '@angular/material/menu';
+import { Component, ChangeDetectionStrategy, computed, inject, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../auth/auth.service';
+import { Perfil } from '@ipa/shared';
 
 @Component({
   selector: 'app-header',
   standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive],
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MatToolbarModule, MatIconModule, MatButtonModule, MatMenuModule],
-  template: `
-    <mat-toolbar class="header-toolbar">
-      <span class="header-title">Sistema IPA</span>
-      <span class="spacer"></span>
-
-      <button mat-button [matMenuTriggerFor]="userMenu" class="user-button">
-        <div class="avatar">{{ initials() }}</div>
-        <span class="user-name">{{ userName() }}</span>
-        <mat-icon>arrow_drop_down</mat-icon>
-      </button>
-
-      <mat-menu #userMenu="matMenu">
-        <button mat-menu-item (click)="onLogout()">
-          <mat-icon>logout</mat-icon>
-          <span>Sair</span>
-        </button>
-      </mat-menu>
-    </mat-toolbar>
-  `,
-  styles: `
-    .header-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      height: 64px;
-      background-color: #ffffff;
-      color: #1a1a2e;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
-    .header-title {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .spacer {
-      flex: 1;
-    }
-
-    .user-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .avatar {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background-color: #003461;
-      color: white;
-      font-size: 14px;
-      font-weight: 600;
-    }
-
-    .user-name {
-      font-size: 14px;
-      font-weight: 500;
-    }
-  `,
 })
 export class HeaderComponent {
-  private readonly authService: AuthService;
+  private readonly authService = inject(AuthService);
 
-  readonly userName = computed(() => this.authService.currentUser()?.nome ?? 'Usuario');
+  readonly isMenuOpen = signal(false);
+
+  readonly userName = computed(() => this.authService.currentUser()?.nome ?? 'Usuário');
+
+  readonly userRoleLabel = computed(() => {
+    const role = this.authService.userPerfil();
+    if (!role) return 'Visualizador';
+    const labels: Record<string, string> = {
+      [Perfil.SUPERADMIN]: 'Superadmin',
+      [Perfil.ADMIN]: 'Administrador',
+      [Perfil.ANALISTA]: 'Analista',
+      [Perfil.VISUALIZADOR]: 'Visualizador'
+    };
+    return labels[role] || role;
+  });
 
   readonly initials = computed(() => {
     const nome = this.authService.currentUser()?.nome ?? '';
@@ -87,8 +39,8 @@ export class HeaderComponent {
     return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
   });
 
-  constructor(authService: AuthService) {
-    this.authService = authService;
+  toggleMenu(): void {
+    this.isMenuOpen.update(v => !v);
   }
 
   onLogout(): void {
