@@ -1,27 +1,32 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  inject,
-  signal,
-  ViewChild,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy, OnInit, signal, inject, computed } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, FormArray, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { MatStepperModule, MatStepper } from '@angular/material/stepper';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { FatorImpedimento, FatorUrgencia, CreateAvaliacaoDto } from '@ipa/shared';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { firstValueFrom } from 'rxjs';
+import {
+  CreateProcessoDto,
+  DraftAvaliacaoDto,
+  FatorImpedimento,
+  FatorUrgencia,
+} from '@ipa/shared';
 
 import { AvaliacaoService } from './avaliacao.service';
-import { StepIdentificacaoComponent } from './step-identificacao.component';
-import { StepTecnicaComponent } from './step-tecnica.component';
-import { StepNegocioComponent } from './step-negocio.component';
-import { StepImpedimentoComponent } from './step-impedimento.component';
-import { StepUrgenciaComponent } from './step-urgencia.component';
-import { StepRiscosComponent } from './step-riscos.component';
-import { IpaPreviewComponent } from './ipa-preview.component';
+import { ProcessosService } from '../processos/processos.service';
+
+// Novos caminhos dos componentes organizados
+import { StepIdentificacaoComponent } from './steps/identificacao/step-identificacao.component';
+import { StepTecnicaComponent } from './steps/tecnica/step-tecnica.component';
+import { StepNegocioComponent } from './steps/negocio/step-negocio.component';
+import { StepImpedimentoComponent } from './steps/impedimento/step-impedimento.component';
+import { StepUrgenciaComponent } from './steps/urgencia/step-urgencia.component';
+import { StepRiscosComponent } from './steps/riscos/step-riscos.component';
+import { IpaPreviewComponent } from './components/ipa-preview/ipa-preview.component';
+
+interface StepDef {
+  label: string;
+  abbrev: string;
+  icon: string;
+}
 
 @Component({
   selector: 'app-wizard',
@@ -30,10 +35,6 @@ import { IpaPreviewComponent } from './ipa-preview.component';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatStepperModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSnackBarModule,
     StepIdentificacaoComponent,
     StepTecnicaComponent,
     StepNegocioComponent,
@@ -42,266 +43,424 @@ import { IpaPreviewComponent } from './ipa-preview.component';
     StepRiscosComponent,
     IpaPreviewComponent,
   ],
-  template: `
-    <div class="wizard-layout">
-      <div class="stepper-panel">
-        <h1>Nova Avaliacao IPA</h1>
-
-        <mat-stepper #stepper [linear]="false" [selectedIndex]="currentStep()">
-          <mat-step [stepControl]="identificacaoGroup" label="Identificacao">
-            <app-step-identificacao [form]="identificacaoGroup" />
-            <div class="step-actions">
-              <button mat-flat-button color="primary" matStepperNext>Proximo</button>
-            </div>
-          </mat-step>
-
-          <mat-step [stepControl]="tecnicaGroup" label="Tecnica">
-            <app-step-tecnica [form]="tecnicaGroup" />
-            <div class="step-actions">
-              <button mat-stroked-button matStepperPrevious>Anterior</button>
-              <button mat-flat-button color="primary" matStepperNext>Proximo</button>
-            </div>
-          </mat-step>
-
-          <mat-step [stepControl]="negocioGroup" label="Negocio">
-            <app-step-negocio [form]="negocioGroup" />
-            <div class="step-actions">
-              <button mat-stroked-button matStepperPrevious>Anterior</button>
-              <button mat-flat-button color="primary" matStepperNext>Proximo</button>
-            </div>
-          </mat-step>
-
-          <mat-step [stepControl]="impedimentoGroup" label="Impedimento">
-            <app-step-impedimento [form]="impedimentoGroup" />
-            <div class="step-actions">
-              <button mat-stroked-button matStepperPrevious>Anterior</button>
-              <button mat-flat-button color="primary" matStepperNext>Proximo</button>
-            </div>
-          </mat-step>
-
-          <mat-step [stepControl]="urgenciaGroup" label="Urgencia">
-            <app-step-urgencia [form]="urgenciaGroup" />
-            <div class="step-actions">
-              <button mat-stroked-button matStepperPrevious>Anterior</button>
-              <button mat-flat-button color="primary" matStepperNext>Proximo</button>
-            </div>
-          </mat-step>
-
-          <mat-step label="Riscos e Finalizar">
-            <app-step-riscos [formArray]="riscosArray" />
-            <div class="step-actions">
-              <button mat-stroked-button matStepperPrevious>Anterior</button>
-              <button
-                mat-flat-button
-                color="accent"
-                (click)="salvar()"
-                [disabled]="salvando() || !podeCalcular()"
-                type="button"
-              >
-                @if (salvando()) {
-                  Salvando...
-                } @else {
-                  Calcular e Salvar
-                }
-              </button>
-            </div>
-          </mat-step>
-        </mat-stepper>
-      </div>
-
-      <div class="preview-panel" [class.visible]="currentStep() >= 1">
-        <app-ipa-preview [form]="allFieldsGroup" />
-      </div>
-    </div>
-  `,
-  styles: `
-    .wizard-layout {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 24px;
-      padding: 24px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    @media (min-width: 960px) {
-      .wizard-layout {
-        grid-template-columns: 70% 30%;
-      }
-    }
-    h1 {
-      margin: 0 0 24px;
-      color: #333;
-    }
-    .stepper-panel {
-      min-width: 0;
-    }
-    .preview-panel {
-      display: none;
-    }
-    .preview-panel.visible {
-      display: block;
-    }
-    .step-actions {
-      display: flex;
-      gap: 12px;
-      margin-top: 24px;
-      justify-content: flex-end;
-    }
-  `,
+  templateUrl: './wizard.component.html',
+  styleUrls: ['./wizard.component.scss'],
 })
-export class WizardComponent {
-  @ViewChild('stepper') stepper!: MatStepper;
-
+export class WizardComponent implements OnInit {
   private readonly avaliacaoService = inject(AvaliacaoService);
+  private readonly processosService = inject(ProcessosService);
+  private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
+
+  readonly carregandoDados = signal(false);
 
   readonly currentStep = signal(0);
   readonly salvando = signal(false);
+  readonly salvandoRascunho = signal(false);
+  readonly processoId = signal<number | null>(null);
+  readonly feedbackMensagem = signal<string | null>(null);
+  readonly feedbackTipo = signal<'sucesso' | 'erro' | 'info'>('info');
+  private feedbackTimeout: ReturnType<typeof setTimeout> | null = null;
 
-  // Step 1 — Identificacao
+  readonly steps: StepDef[] = [
+    { label: 'Identificação', abbrev: 'Identif.', icon: 'fingerprint' },
+    { label: 'Técnica', abbrev: 'Técnica', icon: 'settings_suggest' },
+    { label: 'Negócio', abbrev: 'Negócio', icon: 'business_center' },
+    { label: 'Impedimento', abbrev: 'Imped.', icon: 'block' },
+    { label: 'Urgência', abbrev: 'Urgênc.', icon: 'notification_important' },
+    { label: 'Riscos', abbrev: 'Riscos', icon: 'warning' },
+  ];
+
+  // Forms definition
   readonly identificacaoGroup = new FormGroup({
     nome: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
     area: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    departamento: new FormControl('', { nonNullable: true }),
+    departamento: new FormControl(''),
     donoProcesso: new FormControl('', { nonNullable: true, validators: [Validators.required] }),
-    solicitante: new FormControl('', { nonNullable: true }),
-    dataLevantamento: new FormControl<Date | null>(null, { validators: [Validators.required] }),
+    solicitante: new FormControl(''),
+    dataLevantamento: new FormControl(new Date().toISOString().slice(0, 10)),
   });
 
-  // Step 2 — Tecnica
   readonly tecnicaGroup = new FormGroup({
-    notaSegurancaAcessos: new FormControl<number | null>(null, {
-      validators: [Validators.required],
-    }),
-    justifSegurancaAcessos: new FormControl('', { nonNullable: true }),
-    notaEstabilidadeLegado: new FormControl<number | null>(null, {
-      validators: [Validators.required],
-    }),
-    justifEstabilidadeLegado: new FormControl('', { nonNullable: true }),
-    notaEstruturacaoDados: new FormControl<number | null>(null, {
-      validators: [Validators.required],
-    }),
-    justifEstruturacaoDados: new FormControl('', { nonNullable: true }),
+    notaSegurancaAcessos: new FormControl<number | null>(null, Validators.required),
+    justifSegurancaAcessos: new FormControl(''),
+    notaEstabilidadeLegado: new FormControl<number | null>(null, Validators.required),
+    justifEstabilidadeLegado: new FormControl(''),
+    notaEstruturacaoDados: new FormControl<number | null>(null, Validators.required),
+    justifEstruturacaoDados: new FormControl(''),
   });
 
-  // Step 3 — Negocio
   readonly negocioGroup = new FormGroup({
-    notaGestaoRisco: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    justifGestaoRisco: new FormControl('', { nonNullable: true }),
-    notaReducaoSla: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    notaAbrangencia: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    notaExperienciaCidadao: new FormControl<number | null>(null, {
-      validators: [Validators.required],
-    }),
-    justifImpactoCidadao: new FormControl('', { nonNullable: true }),
-    notaVolumeMensal: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    notaFteLiberado: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    justifEficiencia: new FormControl('', { nonNullable: true }),
+    notaGestaoRisco: new FormControl<number | null>(null, Validators.required),
+    justifGestaoRisco: new FormControl(''),
+    notaReducaoSla: new FormControl<number | null>(null, Validators.required),
+    justifImpactoCidadao: new FormControl(''),
+    notaAbrangencia: new FormControl<number | null>(null, Validators.required),
+    notaExperienciaCidadao: new FormControl<number | null>(null, Validators.required),
+    notaVolumeMensal: new FormControl<number | null>(null, Validators.required),
+    justifEficiencia: new FormControl(''),
+    notaFteLiberado: new FormControl<number | null>(null, Validators.required),
   });
 
-  // Step 4 — Impedimento
   readonly impedimentoGroup = new FormGroup({
-    fatorImpedimento: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    justifImpedimento: new FormControl('', { nonNullable: true }),
+    fatorImpedimento: new FormControl<number>(1, Validators.required),
+    justifImpedimento: new FormControl(''),
   });
 
-  // Step 5 — Urgencia
   readonly urgenciaGroup = new FormGroup({
-    fatorUrgencia: new FormControl<number | null>(null, { validators: [Validators.required] }),
-    justifUrgencia: new FormControl('', { nonNullable: true }),
+    fatorUrgencia: new FormControl<number>(1, Validators.required),
+    justifUrgencia: new FormControl(''),
   });
 
-  // Step 6 — Riscos
   readonly riscosArray = new FormArray<FormGroup>([]);
-
-  // Combined form group for preview calculations (flat controls)
-  readonly allFieldsGroup = new FormGroup({
-    // Tecnica
-    notaSegurancaAcessos: this.tecnicaGroup.controls.notaSegurancaAcessos,
-    notaEstabilidadeLegado: this.tecnicaGroup.controls.notaEstabilidadeLegado,
-    notaEstruturacaoDados: this.tecnicaGroup.controls.notaEstruturacaoDados,
-    // Negocio
-    notaGestaoRisco: this.negocioGroup.controls.notaGestaoRisco,
-    notaReducaoSla: this.negocioGroup.controls.notaReducaoSla,
-    notaAbrangencia: this.negocioGroup.controls.notaAbrangencia,
-    notaExperienciaCidadao: this.negocioGroup.controls.notaExperienciaCidadao,
-    notaVolumeMensal: this.negocioGroup.controls.notaVolumeMensal,
-    notaFteLiberado: this.negocioGroup.controls.notaFteLiberado,
-    // Fatores
-    fatorImpedimento: this.impedimentoGroup.controls.fatorImpedimento,
-    fatorUrgencia: this.urgenciaGroup.controls.fatorUrgencia,
+  readonly riscosGroup = new FormGroup({
+    riscos: this.riscosArray,
   });
 
-  constructor() {
-    // Nao temos como escutar o step change do MatStepper via signal diretamente,
-    // entao usamos um interval check ou podemos usar selectionChange
+  readonly allFieldsGroup = new FormGroup({
+    identificacao: this.identificacaoGroup,
+    tecnica: this.tecnicaGroup,
+    negocio: this.negocioGroup,
+    impedimento: this.impedimentoGroup,
+    urgencia: this.urgenciaGroup,
+    riscos: this.riscosGroup,
+  });
+
+  readonly progressPercent = computed(() => {
+    return ((this.currentStep() + 1) / this.steps.length) * 100;
+  });
+
+  ngOnInit(): void {
+    const params = this.route.snapshot.queryParamMap;
+    const processoIdParam = params.get('processoId');
+    const editParam = params.get('edit');
+
+    if (editParam) {
+      this.carregarAvaliacao(Number(editParam));
+    } else if (processoIdParam) {
+      this.carregarProcessoComRascunho(Number(processoIdParam));
+    }
   }
 
-  podeCalcular(): boolean {
+  private async carregarAvaliacao(avaliacaoId: number): Promise<void> {
+    this.carregandoDados.set(true);
+    try {
+      const av = await firstValueFrom(this.avaliacaoService.buscarPorId(avaliacaoId));
+      this.processoId.set(av.processoId);
+
+      if ((av as any).processo) {
+        this.preencherIdentificacao((av as any).processo);
+      }
+      this.preencherDraft(av);
+    } catch (err) {
+      console.error('Erro ao carregar avaliação para edição:', err);
+      this.showFeedback('erro', 'Não foi possível carregar a avaliação.');
+    } finally {
+      this.carregandoDados.set(false);
+    }
+  }
+
+  private async carregarProcessoComRascunho(processoId: number): Promise<void> {
+    this.carregandoDados.set(true);
+    try {
+      this.processoId.set(processoId);
+
+      const processo = await firstValueFrom(this.processosService.buscarPorId(processoId));
+      this.identificacaoGroup.patchValue({
+        nome: processo.noProcesso ?? '',
+        area: processo.noArea ?? '',
+        donoProcesso: processo.noDono ?? '',
+        dataLevantamento: processo.dtLevantamento ?? new Date().toISOString().slice(0, 10),
+      });
+
+      try {
+        const draft = await firstValueFrom(this.avaliacaoService.buscarRascunho(processoId));
+        if (draft && Object.keys(draft).length > 0) {
+          this.preencherDraft(draft);
+        }
+      } catch {
+        // Sem rascunho salvo — não é erro
+      }
+    } catch (err) {
+      console.error('Erro ao carregar processo:', err);
+      this.showFeedback('erro', 'Não foi possível carregar os dados do processo.');
+    } finally {
+      this.carregandoDados.set(false);
+    }
+  }
+
+  private preencherIdentificacao(processo: any): void {
+    this.identificacaoGroup.patchValue({
+      nome: processo.noProcesso ?? '',
+      area: processo.noArea ?? '',
+      departamento: processo.noDepartamento ?? '',
+      donoProcesso: processo.noDonoProcesso ?? '',
+      solicitante: processo.noSolicitante ?? '',
+      dataLevantamento: processo.dtLevantamento ?? '',
+    });
+  }
+
+  private preencherDraft(draft: DraftAvaliacaoDto | any): void {
+    if (draft.notaSegurancaAcessos != null || draft.justifSegurancaAcessos) {
+      this.tecnicaGroup.patchValue({
+        notaSegurancaAcessos: draft.notaSegurancaAcessos ?? null,
+        justifSegurancaAcessos: draft.justifSegurancaAcessos ?? '',
+        notaEstabilidadeLegado: draft.notaEstabilidadeLegado ?? null,
+        justifEstabilidadeLegado: draft.justifEstabilidadeLegado ?? '',
+        notaEstruturacaoDados: draft.notaEstruturacaoDados ?? null,
+        justifEstruturacaoDados: draft.justifEstruturacaoDados ?? '',
+      });
+    }
+
+    if (draft.notaGestaoRisco != null || draft.justifGestaoRisco) {
+      this.negocioGroup.patchValue({
+        notaGestaoRisco: draft.notaGestaoRisco ?? null,
+        justifGestaoRisco: draft.justifGestaoRisco ?? '',
+        notaReducaoSla: draft.notaReducaoSla ?? null,
+        justifImpactoCidadao: draft.justifImpactoCidadao ?? '',
+        notaAbrangencia: draft.notaAbrangencia ?? null,
+        notaExperienciaCidadao: draft.notaExperienciaCidadao ?? null,
+        notaVolumeMensal: draft.notaVolumeMensal ?? null,
+        justifEficiencia: draft.justifEficiencia ?? '',
+        notaFteLiberado: draft.notaFteLiberado ?? null,
+      });
+    }
+
+    if (draft.fatorImpedimento != null) {
+      this.impedimentoGroup.patchValue({
+        fatorImpedimento: Number(draft.fatorImpedimento),
+        justifImpedimento: draft.justifImpedimento ?? '',
+      });
+    }
+
+    if (draft.fatorUrgencia != null) {
+      this.urgenciaGroup.patchValue({
+        fatorUrgencia: Number(draft.fatorUrgencia),
+        justifUrgencia: draft.justifUrgencia ?? '',
+      });
+    }
+
+    if (draft.riscosContingencia) {
+      const linhas = draft.riscosContingencia.split('\n').filter((l: string) => l.trim());
+      this.riscosArray.clear();
+      for (const linha of linhas) {
+        const [risco, contingencia] = linha.split('|').map((s: string) => s.trim());
+        this.riscosArray.push(
+          new FormGroup({
+            risco: new FormControl(risco || ''),
+            contingencia: new FormControl(contingencia || ''),
+          }),
+        );
+      }
+    }
+  }
+
+  goToStep(step: number): void {
+    if (step < 0 || step >= this.steps.length) return;
+    this.currentStep.set(step);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  async nextStep(): Promise<void> {
+    const nextStep = this.currentStep() + 1;
+    if (nextStep < this.steps.length) {
+      this.salvandoRascunho.set(true);
+      try {
+        const processoId = await this.upsertIdentificacaoProcesso();
+        this.processoId.set(processoId);
+
+        if (this.currentStep() > 0) {
+          await firstValueFrom(
+            this.avaliacaoService.salvarRascunho(
+              processoId,
+              this.buildDraftDto(),
+            ),
+          );
+          this.showFeedback('sucesso', 'Rascunho salvo automaticamente.');
+        }
+
+        this.currentStep.set(nextStep);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } catch (err) {
+        console.error('Erro ao salvar rascunho ao avançar etapa:', err);
+        this.showFeedback(
+          'erro',
+          'Não foi possível salvar o rascunho. Verifique sua conexão e tente novamente.',
+        );
+      } finally {
+        this.salvandoRascunho.set(false);
+      }
+    }
+  }
+
+  prevStep(): void {
+    const prevStep = this.currentStep() - 1;
+    if (prevStep >= 0) {
+      this.currentStep.set(prevStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }
+
+  readonly podeCalcular = computed(() => {
     return (
-      this.identificacaoGroup.valid &&
       this.tecnicaGroup.valid &&
       this.negocioGroup.valid &&
       this.impedimentoGroup.valid &&
       this.urgenciaGroup.valid
     );
-  }
+  });
 
-  salvar(): void {
+  async salvar(): Promise<void> {
     if (!this.podeCalcular()) return;
 
     this.salvando.set(true);
+    try {
+      const processoId = await this.upsertIdentificacaoProcesso();
+      this.processoId.set(processoId);
 
-    // identificacaoGroup values used for processo context (future)
+      const avaliacao = await firstValueFrom(
+        this.avaliacaoService.finalizarPorProcesso(
+          processoId,
+          this.buildDraftDto(),
+        ),
+      );
+
+      const avaliacaoId = this.extractAvaliacaoId(avaliacao);
+      if (!avaliacaoId) {
+        throw new Error('ID da avaliação não retornado na finalização');
+      }
+
+      this.showFeedback('sucesso', 'Avaliação final salva com sucesso.');
+      await this.router.navigate(['/admin/avaliacoes', avaliacaoId]);
+    } catch (err) {
+      console.error('Erro ao salvar total da avaliação:', err);
+      this.showFeedback(
+        'erro',
+        'Erro ao salvar total da avaliação. Revise os campos obrigatórios.',
+      );
+    } finally {
+      this.salvando.set(false);
+    }
+  }
+
+  async salvarRascunho(): Promise<void> {
+    this.salvandoRascunho.set(true);
+    try {
+      const processoId = await this.upsertIdentificacaoProcesso();
+      this.processoId.set(processoId);
+      await firstValueFrom(
+        this.avaliacaoService.salvarRascunho(processoId, this.buildDraftDto()),
+      );
+      this.showFeedback('sucesso', 'Rascunho salvo com sucesso.');
+    } catch (err) {
+      console.error('Erro ao salvar rascunho:', err);
+      this.showFeedback(
+        'erro',
+        'Erro ao salvar rascunho. Tente novamente em instantes.',
+      );
+    } finally {
+      this.salvandoRascunho.set(false);
+    }
+  }
+
+  private async upsertIdentificacaoProcesso(): Promise<number> {
+    const identificacao = this.identificacaoGroup.getRawValue();
+    const createProcessoDto: CreateProcessoDto = {
+      nome: identificacao.nome,
+      area: identificacao.area,
+      departamento: identificacao.departamento || undefined,
+      donoProcesso: identificacao.donoProcesso,
+      solicitante: identificacao.solicitante || undefined,
+      dataLevantamento:
+        identificacao.dataLevantamento || new Date().toISOString().slice(0, 10),
+    };
+
+    const existingProcessoId = this.processoId();
+    if (existingProcessoId) {
+      await firstValueFrom(
+        this.processosService.atualizar(existingProcessoId, createProcessoDto),
+      );
+      return existingProcessoId;
+    }
+
+    const processo = await firstValueFrom(
+      this.processosService.criar(createProcessoDto),
+    );
+    const createdId = this.extractProcessoId(processo);
+    if (!createdId) {
+      throw new Error('Não foi possível identificar o ID do processo criado');
+    }
+    return createdId;
+  }
+
+  private buildDraftDto(): DraftAvaliacaoDto {
     const tec = this.tecnicaGroup.getRawValue();
     const neg = this.negocioGroup.getRawValue();
     const imp = this.impedimentoGroup.getRawValue();
     const urg = this.urgenciaGroup.getRawValue();
-    const riscos = this.riscosArray.getRawValue();
 
-    const riscosTexto = riscos
-      .filter((r) => r['risco'] || r['contingencia'])
+    const riscosTexto = this.riscosArray.controls
+      .map((c) => c.getRawValue())
       .map((r) => `${r['risco']} | ${r['contingencia']}`)
       .join('\n');
 
-    const dto: CreateAvaliacaoDto = {
-      processoId: 0, // sera definido pelo backend ou contexto
-      notaSegurancaAcessos: tec.notaSegurancaAcessos!,
-      justifSegurancaAcessos: tec.justifSegurancaAcessos,
-      notaEstabilidadeLegado: tec.notaEstabilidadeLegado!,
-      justifEstabilidadeLegado: tec.justifEstabilidadeLegado,
-      notaEstruturacaoDados: tec.notaEstruturacaoDados!,
-      justifEstruturacaoDados: tec.justifEstruturacaoDados,
-      notaGestaoRisco: neg.notaGestaoRisco!,
-      justifGestaoRisco: neg.justifGestaoRisco,
-      notaReducaoSla: neg.notaReducaoSla!,
-      notaAbrangencia: neg.notaAbrangencia!,
-      notaExperienciaCidadao: neg.notaExperienciaCidadao!,
-      justifImpactoCidadao: neg.justifImpactoCidadao,
-      notaVolumeMensal: neg.notaVolumeMensal!,
-      notaFteLiberado: neg.notaFteLiberado!,
-      justifEficiencia: neg.justifEficiencia,
-      fatorImpedimento: imp.fatorImpedimento! as unknown as FatorImpedimento,
-      justifImpedimento: imp.justifImpedimento,
-      fatorUrgencia: urg.fatorUrgencia! as unknown as FatorUrgencia,
-      justifUrgencia: urg.justifUrgencia,
+    return {
+      notaSegurancaAcessos: tec.notaSegurancaAcessos ?? undefined,
+      justifSegurancaAcessos: this.nonEmpty(tec.justifSegurancaAcessos),
+      notaEstabilidadeLegado: tec.notaEstabilidadeLegado ?? undefined,
+      justifEstabilidadeLegado: this.nonEmpty(tec.justifEstabilidadeLegado),
+      notaEstruturacaoDados: tec.notaEstruturacaoDados ?? undefined,
+      justifEstruturacaoDados: this.nonEmpty(tec.justifEstruturacaoDados),
+      notaGestaoRisco: neg.notaGestaoRisco ?? undefined,
+      justifGestaoRisco: this.nonEmpty(neg.justifGestaoRisco),
+      notaReducaoSla: neg.notaReducaoSla ?? undefined,
+      justifImpactoCidadao: this.nonEmpty(neg.justifImpactoCidadao),
+      notaAbrangencia: neg.notaAbrangencia ?? undefined,
+      notaExperienciaCidadao: neg.notaExperienciaCidadao ?? undefined,
+      notaVolumeMensal: neg.notaVolumeMensal ?? undefined,
+      justifEficiencia: this.nonEmpty(neg.justifEficiencia),
+      notaFteLiberado: neg.notaFteLiberado ?? undefined,
+      fatorImpedimento: (imp.fatorImpedimento ?? undefined) as
+        | FatorImpedimento
+        | undefined,
+      justifImpedimento: this.nonEmpty(imp.justifImpedimento),
+      fatorUrgencia: (urg.fatorUrgencia ?? undefined) as
+        | FatorUrgencia
+        | undefined,
+      justifUrgencia: this.nonEmpty(urg.justifUrgencia),
       riscosContingencia: riscosTexto || undefined,
     };
+  }
 
-    this.avaliacaoService.criarAvaliacao(dto).subscribe({
-      next: (avaliacao) => {
-        this.salvando.set(false);
-        this.snackBar.open('Avaliacao salva com sucesso!', 'Fechar', { duration: 3000 });
-        this.router.navigate(['/admin/avaliacoes', avaliacao.id]);
-      },
-      error: (err) => {
-        this.salvando.set(false);
-        this.snackBar.open('Erro ao salvar avaliacao. Tente novamente.', 'Fechar', {
-          duration: 5000,
-        });
-        console.error('Erro ao salvar avaliacao:', err);
-      },
-    });
+  private nonEmpty(value: string | null | undefined): string | undefined {
+    const normalized = value?.trim();
+    return normalized ? normalized : undefined;
+  }
+
+  private showFeedback(
+    tipo: 'sucesso' | 'erro' | 'info',
+    mensagem: string,
+  ): void {
+    this.feedbackTipo.set(tipo);
+    this.feedbackMensagem.set(mensagem);
+
+    if (this.feedbackTimeout) {
+      clearTimeout(this.feedbackTimeout);
+    }
+
+    this.feedbackTimeout = setTimeout(() => {
+      this.feedbackMensagem.set(null);
+      this.feedbackTimeout = null;
+    }, 3200);
+  }
+
+  private extractProcessoId(processo: unknown): number | null {
+    const candidato = processo as { id?: number; idProcesso?: number };
+    return candidato.id ?? candidato.idProcesso ?? null;
+  }
+
+  private extractAvaliacaoId(avaliacao: unknown): number | null {
+    const candidato = avaliacao as { id?: number; idAvaliacao?: number };
+    return candidato.id ?? candidato.idAvaliacao ?? null;
   }
 }

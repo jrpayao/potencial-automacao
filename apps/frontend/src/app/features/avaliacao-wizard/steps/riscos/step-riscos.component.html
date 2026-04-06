@@ -1,0 +1,63 @@
+<div class="step-container">
+  <header class="step-header">
+    <h2 class="step-title">Riscos e Contingência</h2>
+    <p class="step-description">
+      Identifique os riscos operacionais, técnicos ou de negócio e defina os protocolos de contingência.
+    </p>
+  </header>
+
+  <div class="riscos-manager">
+    <div class="riscos-table">
+      <div class="table-header">
+        <div class="header-cell">Identificação do Risco</div>
+        <div class="header-cell">Protocolo de Contingência</div>
+        <div class="header-cell actions">Ações</div>
+      </div>
+
+      <div class="table-body">
+        @for (riscoGroup of (riscos.controls | asFormGroupArray); track riscoGroup; let i = $index) {
+          <div [formGroup]="riscoGroup" class="table-row">
+            <div class="cell">
+              <input
+                type="text"
+                formControlName="risco"
+                class="input-control"
+                placeholder="Ex: Indisponibilidade de API"
+              />
+            </div>
+            <div class="cell">
+              <input
+                type="text"
+                formControlName="contingencia"
+                class="input-control"
+                placeholder="Ex: Processamento manual temporário"
+              />
+            </div>
+            <div class="cell actions">
+              <button
+                type="button"
+                class="btn-icon btn-remove"
+                (click)="removerRisco(i)"
+                title="Remover Risco"
+              >
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+            </div>
+          </div>
+        }
+
+        @if (riscos.length === 0) {
+          <div class="empty-state">
+            <span class="material-symbols-outlined empty-icon">assignment_late</span>
+            <p>Nenhum risco registrado. Adicione o primeiro para prosseguir.</p>
+          </div>
+        }
+      </div>
+    </div>
+
+    <button type="button" class="btn-add" (click)="adicionarRisco()">
+      <span class="material-symbols-outlined">add</span>
+      Adicionar Novo Risco
+    </button>
+  </div>
+</div>

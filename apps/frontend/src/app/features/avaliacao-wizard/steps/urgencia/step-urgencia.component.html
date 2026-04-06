@@ -1,0 +1,40 @@
+<div class="step-container" [formGroup]="form()">
+  <header class="step-header">
+    <h2 class="step-title">Fator de Urgência (FU)</h2>
+    <p class="step-description">
+      O Fator de Urgência amplifica ou atenua o IPA com base em prazos
+      regulatórios, demandas estratégicas ou pressão temporal.
+    </p>
+  </header>
+
+  <section class="criterio-card">
+    <div class="options-grid">
+      @for (opt of opcoes; track opt.value) {
+        <label class="option-item" [class.selected]="form().get('fatorUrgencia')?.value === opt.value">
+          <input
+            type="radio"
+            name="fatorUrgencia"
+            [value]="opt.value"
+            formControlName="fatorUrgencia"
+            class="radio-input"
+          />
+          <div class="option-content">
+            <span class="option-value">{{ opt.value | number:'1.1-1' }}</span>
+            <span class="option-text">{{ opt.label }}</span>
+          </div>
+        </label>
+      }
+    </div>
+
+    <div class="justificativa-field">
+      <label for="justifUrgencia" class="field-label">Justificativa da Urgência</label>
+      <textarea
+        id="justifUrgencia"
+        formControlName="justifUrgencia"
+        class="textarea-control"
+        placeholder="Descreva os motivos da priorização..."
+        rows="3"
+      ></textarea>
+    </div>
+  </section>
+</div>

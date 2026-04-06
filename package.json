@@ -9,7 +9,10 @@
     "build:api": "NX_IGNORE_UNSUPPORTED_TS_SETUP=true nx build api",
     "build:shared": "NX_IGNORE_UNSUPPORTED_TS_SETUP=true nx build shared",
     "build:all": "NX_IGNORE_UNSUPPORTED_TS_SETUP=true nx run-many -t build",
-    "seed": "npx tsx --tsconfig apps/api/tsconfig.seed.json apps/api/src/database/seed.ts"
+    "seed": "npx tsx --tsconfig apps/api/tsconfig.seed.json apps/api/src/database/seed.ts",
+    "deploy:frontend": "CAPROVER_MACHINE=captain-01 bash scripts/caprover-deploy.sh frontend",
+    "deploy:api": "CAPROVER_MACHINE=captain-01 bash scripts/caprover-deploy.sh api",
+    "deploy:all": "CAPROVER_MACHINE=captain-01 bash scripts/caprover-deploy.sh all"
   },
   "private": true,
   "devDependencies": {

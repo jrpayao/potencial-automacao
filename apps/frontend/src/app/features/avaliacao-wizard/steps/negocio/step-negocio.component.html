@@ -1,0 +1,53 @@
+<div class="step-container" [formGroup]="form()">
+  <header class="step-header">
+    <h2 class="step-title">Dimensão de Negócio (IN)</h2>
+    <p class="step-description">Avalie o impacto estratégico, social e a eficiência operacional da automação.</p>
+  </header>
+
+  <div class="blocos-list">
+    @for (bloco of blocos; track bloco.titulo) {
+      <section class="bloco-card">
+        <header class="bloco-header">
+          <h3 class="bloco-title">{{ bloco.titulo }}</h3>
+        </header>
+
+        <div class="criterios-container">
+          @for (sub of bloco.subCriterios; track sub.control) {
+            <div class="sub-criterio">
+              <label class="sub-label">{{ sub.label }}</label>
+              
+              <div class="options-grid">
+                @for (desc of sub.descriptors; track desc.value) {
+                  <label class="option-item" [class.selected]="form().get(sub.control)?.value === desc.value">
+                    <input
+                      type="radio"
+                      [name]="sub.control"
+                      [value]="desc.value"
+                      [formControlName]="sub.control"
+                      class="radio-input"
+                    />
+                    <div class="option-content">
+                      <span class="option-value">{{ desc.value }}</span>
+                      <span class="option-text">{{ desc.label }}</span>
+                    </div>
+                  </label>
+                }
+              </div>
+            </div>
+          }
+
+          <div class="justificativa-field">
+            <label [for]="bloco.controlJustif" class="field-label">Justificativa / Observações ({{ bloco.titulo }})</label>
+            <textarea
+              [id]="bloco.controlJustif"
+              [formControlName]="bloco.controlJustif"
+              class="textarea-control"
+              placeholder="Descreva o impacto esperado..."
+              rows="2"
+            ></textarea>
+          </div>
+        </div>
+      </section>
+    }
+  </div>
+</div>

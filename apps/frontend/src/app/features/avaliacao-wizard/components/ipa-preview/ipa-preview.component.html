@@ -1,0 +1,77 @@
+<div class="preview-container">
+  <div class="preview-card">
+    <!-- Header Card -->
+    <div class="preview-header">
+      <h3 class="preview-title">
+        <span class="material-symbols-outlined">analytics</span>
+        Preview IPA
+      </h3>
+      <p class="preview-subtitle">Índice de Potencial de Automação</p>
+    </div>
+
+    <div class="preview-body">
+      <!-- Gauge -->
+      <div class="gauge-section">
+        <div class="gauge-container">
+          <svg class="gauge-svg" viewBox="0 0 128 128">
+            <circle
+              class="gauge-track"
+              cx="64"
+              cy="64"
+              r="56"
+            ></circle>
+            <circle
+              class="gauge-progress"
+              cx="64"
+              cy="64"
+              r="56"
+              [style.stroke-dashoffset]="dashOffset()"
+              [style.stroke]="statusColor()"
+            ></circle>
+          </svg>
+          <div class="gauge-content">
+            <span class="gauge-value">{{ percentValue() | number: '1.0-0' }}%</span>
+          </div>
+        </div>
+        <p class="gauge-label">{{ statusLabel() }}</p>
+      </div>
+
+      <!-- Metrics List -->
+      <div class="metrics-list">
+        <div class="metric-item">
+          <div class="metric-info">
+            <span class="dot" [style.background-color]="statusColor()"></span>
+            <span class="metric-name">IPA Final</span>
+          </div>
+          <span class="metric-value-bold">{{ resultado().ipaFinal | number: '1.2-2' }}</span>
+        </div>
+        
+        <div class="metric-item">
+          <div class="metric-info">
+            <span class="dot tecnico"></span>
+            <span class="metric-name">Índice Técnico (IT)</span>
+          </div>
+          <span class="metric-value">{{ it() | number: '1.2-2' }}</span>
+        </div>
+
+        <div class="metric-item">
+          <div class="metric-info">
+            <span class="dot negocio"></span>
+            <span class="metric-name">Índice Negócio (IN)</span>
+          </div>
+          <span class="metric-value">{{ in_() | number: '1.2-2' }}</span>
+        </div>
+      </div>
+
+      <!-- Footer/Hint -->
+      <div class="preview-footer">
+        <div class="info-box">
+          <span class="material-symbols-outlined text-sm">info</span>
+          <p class="info-text">
+            O cálculo do IPA será atualizado em tempo real conforme você avança nas etapas.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

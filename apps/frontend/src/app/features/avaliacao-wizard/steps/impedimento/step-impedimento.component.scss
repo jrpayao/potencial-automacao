@@ -1,0 +1,142 @@
+.step-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.step-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.step-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-container, #003461);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.step-description {
+  font-size: 14px;
+  color: #71717a;
+  margin: 0;
+  max-width: 600px;
+}
+
+.criterio-card {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.option-item {
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #e2e8f0;
+  background-color: white;
+  border-radius: 12px;
+  padding: 16px 20px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+
+  &:hover {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+  }
+
+  &.selected {
+    border-color: var(--primary-container, #003461);
+    background-color: #f0f7ff;
+    box-shadow: 0 4px 12px rgba(0, 52, 97, 0.05);
+  }
+}
+
+.radio-input {
+  position: absolute;
+  opacity: 0;
+}
+
+.option-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.option-value {
+  width: 44px;
+  height: 32px;
+  border-radius: 8px;
+  background-color: #f1f5f9;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 800;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.selected .option-value {
+  background-color: var(--primary-container, #003461);
+  color: white;
+}
+
+.option-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.selected .option-text {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.justificativa-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-top: 1px solid #e2e8f0;
+  padding-top: 24px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8;
+}
+
+.textarea-control {
+  width: 100%;
+  background-color: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 14px;
+  color: #1e293b;
+  resize: vertical;
+  transition: all 0.2s;
+  font-family: inherit;
+
+  &:focus {
+    outline: none;
+    border-color: var(--primary-container, #003461);
+    box-shadow: 0 0 0 4px rgba(0, 52, 97, 0.05);
+  }
+}

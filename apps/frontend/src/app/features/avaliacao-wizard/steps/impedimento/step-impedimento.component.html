@@ -1,0 +1,40 @@
+<div class="step-container" [formGroup]="form()">
+  <header class="step-header">
+    <h2 class="step-title">Fator de Impedimento (FI)</h2>
+    <p class="step-description">
+      O Fator de Impedimento reduz o IPA quando existem barreiras legais,
+      técnicas ou organizacionais que dificultam a automação.
+    </p>
+  </header>
+
+  <section class="criterio-card">
+    <div class="options-grid">
+      @for (opt of opcoes; track opt.value) {
+        <label class="option-item" [class.selected]="form().get('fatorImpedimento')?.value === opt.value">
+          <input
+            type="radio"
+            name="fatorImpedimento"
+            [value]="opt.value"
+            formControlName="fatorImpedimento"
+            class="radio-input"
+          />
+          <div class="option-content">
+            <span class="option-value">{{ opt.value | number:'1.1-1' }}</span>
+            <span class="option-text">{{ opt.label }}</span>
+          </div>
+        </label>
+      }
+    </div>
+
+    <div class="justificativa-field">
+      <label for="justifImpedimento" class="field-label">Justificativa do Impedimento</label>
+      <textarea
+        id="justifImpedimento"
+        formControlName="justifImpedimento"
+        class="textarea-control"
+        placeholder="Descreva as barreiras identificadas..."
+        rows="3"
+      ></textarea>
+    </div>
+  </section>
+</div>

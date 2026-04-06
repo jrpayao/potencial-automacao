@@ -1,0 +1,46 @@
+<div class="step-container" [formGroup]="form()">
+  <header class="step-header">
+    <h2 class="step-title">Dimensão Técnica (IT)</h2>
+    <p class="step-description">Avalie a viabilidade técnica da automação considerando acessos, estabilidade e dados.</p>
+  </header>
+
+  <div class="criterios-list">
+    @for (criterio of criterios; track criterio.controlNota) {
+      <section class="criterio-card">
+        <div class="criterio-header">
+          <h3 class="criterio-label">{{ criterio.label }}</h3>
+          <p class="criterio-sublabel">{{ criterio.sublabel }}</p>
+        </div>
+
+        <div class="options-grid">
+          @for (desc of criterio.descriptors; track desc.value) {
+            <label class="option-item" [class.selected]="form().get(criterio.controlNota)?.value === desc.value">
+              <input
+                type="radio"
+                [name]="criterio.controlNota"
+                [value]="desc.value"
+                [formControlName]="criterio.controlNota"
+                class="radio-input"
+              />
+              <div class="option-content">
+                <span class="option-value">{{ desc.value }}</span>
+                <span class="option-text">{{ desc.label }}</span>
+              </div>
+            </label>
+          }
+        </div>
+
+        <div class="justificativa-field">
+          <label [for]="criterio.controlJustif" class="field-label">Justificativa / Observações</label>
+          <textarea
+            [id]="criterio.controlJustif"
+            [formControlName]="criterio.controlJustif"
+            class="textarea-control"
+            placeholder="Descreva brevemente o motivo da nota..."
+            rows="2"
+          ></textarea>
+        </div>
+      </section>
+    }
+  </div>
+</div>

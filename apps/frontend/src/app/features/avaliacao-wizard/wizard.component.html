@@ -1,0 +1,133 @@
+<div class="wizard-wrapper animate-fade-in">
+  <!-- Horizontal Stepper -->
+  <header class="stepper-section">
+    <div class="stepper-container">
+      <div class="stepper-track"></div>
+      <div class="stepper-progress" [style.width.%]="progressPercent()"></div>
+      
+      @for (step of steps; track step.label; let i = $index) {
+        <div 
+          class="step-node" 
+          [class.active]="i === currentStep()"
+          [class.done]="i < currentStep()"
+          (click)="goToStep(i)"
+        >
+          <div class="step-circle">
+            @if (i < currentStep()) {
+              <span class="material-symbols-outlined check-icon">check</span>
+            } @else {
+              {{ i + 1 }}
+            }
+          </div>
+          <span class="step-label">{{ step.label }}</span>
+        </div>
+      }
+    </div>
+  </header>
+
+  <!-- Main Content Grid -->
+  <main class="wizard-content">
+    <div class="wizard-main">
+      <div class="form-card stitch-card">
+        @if (carregandoDados()) {
+          <div class="loading-overlay">
+            <div class="spinner"></div>
+            <p>Carregando dados...</p>
+          </div>
+        }
+        <!-- Step Content -->
+        <div class="step-content">
+          @if (currentStep() === 0) {
+            <app-step-identificacao [form]="identificacaoGroup" />
+          }
+          @if (currentStep() === 1) {
+            <app-step-tecnica [form]="tecnicaGroup" />
+          }
+          @if (currentStep() === 2) {
+            <app-step-negocio [form]="negocioGroup" />
+          }
+          @if (currentStep() === 3) {
+            <app-step-impedimento [form]="impedimentoGroup" />
+          }
+          @if (currentStep() === 4) {
+            <app-step-urgencia [form]="urgenciaGroup" />
+          }
+          @if (currentStep() === 5) {
+            <app-step-riscos [formArray]="riscosArray" />
+          }
+        </div>
+
+        @if (feedbackMensagem()) {
+          <div class="feedback-banner" [class]="feedbackTipo()">
+            <span class="material-symbols-outlined">
+              {{
+                feedbackTipo() === 'erro'
+                  ? 'error'
+                  : feedbackTipo() === 'sucesso'
+                    ? 'check_circle'
+                    : 'info'
+              }}
+            </span>
+            <span>{{ feedbackMensagem() }}</span>
+          </div>
+        }
+
+        <!-- Navigation Footer -->
+        <footer class="wizard-footer">
+          <button 
+            class="btn-back" 
+            type="button" 
+            (click)="prevStep()" 
+            [disabled]="currentStep() === 0"
+          >
+            <span class="material-symbols-outlined">arrow_back</span>
+            Anterior
+          </button>
+
+          <div class="progress-info">
+            Passo {{ currentStep() + 1 }} de {{ steps.length }}
+          </div>
+
+          @if (currentStep() < 5) {
+            <button 
+              class="btn-next" 
+              type="button" 
+              (click)="nextStep()"
+              [disabled]="salvando() || salvandoRascunho()"
+            >
+              {{ salvandoRascunho() ? 'Salvando rascunho...' : 'Próximo' }}
+              <span class="material-symbols-outlined">arrow_forward</span>
+            </button>
+          } @else {
+            <div class="final-actions">
+              <button
+                class="btn-draft"
+                type="button"
+                (click)="salvarRascunho()"
+                [disabled]="salvando() || salvandoRascunho()"
+              >
+                <span class="material-symbols-outlined">draft</span>
+                {{ salvandoRascunho() ? 'Salvando rascunho...' : 'Salvar rascunho' }}
+              </button>
+
+              <button 
+                class="btn-save" 
+                type="button" 
+                (click)="salvar()"
+                [disabled]="salvando() || salvandoRascunho() || !podeCalcular()"
+              >
+                <span class="material-symbols-outlined">save</span>
+                {{ salvando() ? 'Salvando total...' : 'Salvar total' }}
+              </button>
+            </div>
+          }
+        </footer>
+      </div>
+    </div>
+
+    <!-- Sidebar Preview -->
+    <aside class="wizard-preview">
+      <app-ipa-preview [form]="allFieldsGroup" />
+    </aside>
+  </main>
+</div>

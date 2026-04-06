@@ -1,0 +1,82 @@
+<div [formGroup]="form()" class="step-container">
+  <header class="step-header">
+    <h2 class="step-title">Informações Gerais do Processo</h2>
+    <p class="step-description">Inicie o levantamento preenchendo os dados básicos de identificação da automação.</p>
+  </header>
+
+  <div class="form-grid">
+    <!-- Nome do Processo -->
+    <div class="form-field full-width">
+      <label for="nome" class="field-label">Nome do Processo</label>
+      <input
+        id="nome"
+        type="text"
+        formControlName="nome"
+        class="input-control"
+        placeholder="Ex: Solicitação de Abono de Permanência"
+        [class.invalid]="isInvalid('nome')"
+      />
+      @if (isInvalid('nome')) {
+        <span class="error-message">Nome do processo é obrigatório</span>
+      }
+    </div>
+
+    <!-- Área -->
+    <div class="form-field">
+      <label for="area" class="field-label">Área / Departamento</label>
+      <input
+        id="area"
+        type="text"
+        formControlName="area"
+        class="input-control"
+        placeholder="Ex: Recursos Humanos"
+        [class.invalid]="isInvalid('area')"
+      />
+      @if (isInvalid('area')) {
+        <span class="error-message">Área é obrigatória</span>
+      }
+    </div>
+
+    <!-- Dono do Processo -->
+    <div class="form-field">
+      <label for="donoProcesso" class="field-label">Responsável (Dono do Processo)</label>
+      <input
+        id="donoProcesso"
+        type="text"
+        formControlName="donoProcesso"
+        class="input-control"
+        placeholder="Nome do Gestor"
+        [class.invalid]="isInvalid('donoProcesso')"
+      />
+      @if (isInvalid('donoProcesso')) {
+        <span class="error-message">Responsável é obrigatório</span>
+      }
+    </div>
+
+    <!-- Solicitante -->
+    <div class="form-field">
+      <label for="solicitante" class="field-label">Solicitante</label>
+      <input
+        id="solicitante"
+        type="text"
+        formControlName="solicitante"
+        class="input-control"
+        placeholder="Quem demandou o levantamento"
+      />
+    </div>
+
+    <!-- Data -->
+    <div class="form-field">
+      <label for="dataLevantamento" class="field-label">Data do Levantamento</label>
+      <div class="input-wrapper">
+        <input
+          id="dataLevantamento"
+          type="date"
+          formControlName="dataLevantamento"
+          class="input-control date-input"
+        />
+        <span class="material-symbols-outlined calendar-icon">calendar_today</span>
+      </div>
+    </div>
+  </div>
+</div>
