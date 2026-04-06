@@ -7,7 +7,6 @@ import { provideRouter } from '@angular/router';
 import {
   provideHttpClient,
   withInterceptors,
-  withInterceptorsFromDi,
 } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { appRoutes } from './app.routes';
@@ -20,7 +19,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(appRoutes),
     provideHttpClient(
       withInterceptors([authInterceptor]),
-      withInterceptorsFromDi(),
     ),
     provideAnimationsAsync(),
   ],

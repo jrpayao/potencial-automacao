@@ -50,12 +50,11 @@
               placeholder="••••••••"
               [class.input-error]="senhaControl.touched && senhaControl.invalid"
             />
-            <button 
-              class="toggle-password" 
-              type="button" 
+            <button
+              class="toggle-password"
+              type="button"
               (click)="hidePassword.set(!hidePassword())"
               tabindex="-1"
-              type="button"
             >
               <span class="material-symbols-outlined">
                 {{ hidePassword() ? 'visibility' : 'visibility_off' }}

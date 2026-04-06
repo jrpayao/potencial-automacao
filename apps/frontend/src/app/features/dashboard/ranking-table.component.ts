@@ -1,7 +1,6 @@
 import {
   Component,
   ChangeDetectionStrategy,
-  computed,
   inject,
   signal,
   OnInit,
@@ -28,10 +27,6 @@ export class RankingTableComponent implements OnInit {
   readonly totalItems = signal(0);
   readonly currentPage = signal(1);
   readonly pageSize = signal(20);
-
-  readonly filteredItems = computed(() => {
-    return this.items();
-  });
 
   ngOnInit(): void {
     this.carregarDados();

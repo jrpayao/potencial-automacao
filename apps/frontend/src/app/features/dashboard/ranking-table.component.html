@@ -14,7 +14,7 @@
         </tr>
       </thead>
       <tbody>
-        @for (row of filteredItems(); track row.idProcesso) {
+        @for (row of items(); track row.idProcesso) {
           <tr class="table-row" (click)="verDetalhes(row)">
             <td class="primary-col">
               <div class="proc-info">

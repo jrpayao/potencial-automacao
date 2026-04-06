@@ -8,7 +8,7 @@ import {
 import { CommonModule, DecimalPipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ProcessosService, ProcessoItem } from './processos.service';
+import { ProcessosService, ProcessoItem, ProcessoFiltros } from './processos.service';
 import { PageHeaderComponent, Breadcrumb } from '../../shared/components/page-header/page-header.component';
 import { StatusBadgeComponent } from '../../shared/components/status-badge/status-badge.component';
 import { CustomPaginatorComponent, PageChangeEvent } from '../../shared/components/custom-paginator/custom-paginator.component';
@@ -55,7 +55,7 @@ export class ListaProcessosComponent implements OnInit {
   }
 
   carregar(): void {
-    const params: any = {
+    const params: ProcessoFiltros = {
       page: this.currentPage(),
       limit: this.pageSize(),
       area: this.query(), // Mapeando query para area no backend (simplificação p/ essa versão)

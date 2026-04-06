@@ -1,6 +1,8 @@
 import {
   Component,
   ChangeDetectionStrategy,
+  DestroyRef,
+  inject,
   input,
   output,
   signal,
@@ -9,6 +11,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
@@ -22,13 +25,13 @@ import { Subject, debounceTime, distinctUntilChanged } from 'rxjs';
 export class SearchInputComponent {
   placeholder = input<string>('Pesquisar...');
   initialValue = input<string>('', { alias: 'value' });
-  debounceMs = input<number>(300);
-  
+
   search = output<string>();
-  
+
   value = signal('');
   isFocused = signal(false);
-  
+
+  private readonly destroyRef = inject(DestroyRef);
   private searchSubject = new Subject<string>();
   private inputElement = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
@@ -41,11 +44,10 @@ export class SearchInputComponent {
 
     // Lógica de debounce para emissão da busca
     this.searchSubject.pipe(
-      debounceTime(this.debounceMs()),
-      distinctUntilChanged()
-    ).subscribe(val => {
-      this.search.emit(val);
-    });
+      debounceTime(300),
+      distinctUntilChanged(),
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(val => this.search.emit(val));
   }
 
   onInput(val: string): void {
