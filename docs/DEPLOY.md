@@ -61,6 +61,7 @@ Acesse o painel do CapRover (`captain.seudominio.com.br`) e crie dois apps:
 
 1. **Create New App** > Nome: `ipa-frontend`
 2. Apos criar, va em **HTTP Settings**:
+   - **Container HTTP Port** = **80** (o nginx da imagem escuta na porta 80; outro valor gera **502** no browser)
    - Ative **"Enable HTTPS"**
    - Ative **"Force HTTPS"**
    - (Opcional) Adicione o dominio customizado `seudominio.com.br`
@@ -84,19 +85,15 @@ bash scripts/caprover-deploy.sh frontend
 Variaveis opcionais: `CAPROVER_BRANCH` (padrao `main`; use `master` se o repo ainda usar),
 `CAPROVER_API_APP` / `CAPROVER_FRONTEND_APP` se os nomes dos apps no CapRover forem diferentes.
 
+O script gera um **tar** com `git archive` e injeta o `captain-definition` correto. Deploy **so com**
+`caprover deploy -b main` **sem** esse passo **nao** envia `captain-definition` (ele esta no `.gitignore`),
+e o CapRover cai no `Dockerfile` raiz — build errado e **502** no frontend.
+
 ### Deploy manual (sem script)
 
-```bash
-# API (ajuste -n e -b ao seu caso)
-cp captain-definition.api captain-definition
-caprover deploy -n captain-01 -a ipa-api -b main
-rm captain-definition
-
-# Frontend
-cp captain-definition.frontend captain-definition
-caprover deploy -n captain-01 -a ipa-frontend -b main
-rm captain-definition
-```
+Prefira `bash scripts/caprover-deploy.sh`. Se for manual, use **tar** (como o script) ou inclua
+`captain-definition` versionado no Git; nao basta copiar `captain-definition` localmente antes de
+`caprover deploy -b main`.
 
 ## 3. Configurar dominio customizado (opcional)
 
@@ -197,6 +194,13 @@ docker push registry.seudominio.com.br/ipa-api
 ```
 
 Depois use "Deploy from Image" no painel do CapRover.
+
+### Navegador mostra NGINX 502 no frontend
+
+1. **Porta do container:** no app `ipa-frontend`, **HTTP Settings** > **Container HTTP Port** = **80**.
+2. **Dockerfile errado:** o build precisa usar `Dockerfile.caprover.frontend` (via `captain-definition`).
+   Use o script de deploy acima; deploy por branch sem injetar `captain-definition` no tarball usa o
+   `Dockerfile` raiz e a imagem nginx fica incorreta para o CapRover.
 
 ### Let's Encrypt nao gera certificado
 

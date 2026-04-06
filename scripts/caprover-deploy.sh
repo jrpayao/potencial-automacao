@@ -20,6 +20,9 @@ usage() {
   echo "  CAPROVER_API_APP       Nome do app da API no CapRover (padrao: ipa-api)"
   echo "  CAPROVER_FRONTEND_APP  Nome do app do frontend no CapRover (padrao: ipa-frontend)"
   echo "  CAPROVER_BRANCH        Branch git a publicar (padrao: main)"
+  echo ""
+  echo "Nota: o deploy empacota com 'git archive' (somente arquivos versionados) e injeta"
+  echo "      o captain-definition correto. Alteracoes nao commitadas nao vao para o servidor."
   exit 1
 }
 
@@ -47,15 +50,27 @@ check_machine() {
 deploy_app() {
   local app_name="$1"
   local captain_file="$2"
+  (
+    set -e
+    tmpdir="$(mktemp -d)"
+    trap 'rm -rf "$tmpdir"' EXIT
 
-  echo "==> Preparando deploy de: $app_name (maquina: $MACHINE, branch: $BRANCH)"
+    echo "==> Preparando deploy de: $app_name (maquina: $MACHINE, branch: $BRANCH)"
 
-  cp "$captain_file" captain-definition
-  caprover deploy -n "$MACHINE" -a "$app_name" -b "$BRANCH"
-  rm -f captain-definition
+    # O CapRover usa `git archive` no branch: arquivos gitignored (ex.: captain-definition
+    # copiado na mao) NAO entram no tarball. Sem captain-definition no servidor, o build
+    # cai no Dockerfile raiz (nginx.conf / etapa errada) -> 502 no browser.
+    git archive --format=tar -o "$tmpdir/repo.tar" "$BRANCH"
+    mkdir -p "$tmpdir/extract"
+    (cd "$tmpdir/extract" && tar xf "$tmpdir/repo.tar")
+    cp "$captain_file" "$tmpdir/extract/captain-definition"
+    (cd "$tmpdir/extract" && tar -cf "$tmpdir/deploy.tar" .)
 
-  echo "==> Deploy de $app_name concluido!"
-  echo ""
+    caprover deploy -n "$MACHINE" -a "$app_name" -t "$tmpdir/deploy.tar"
+
+    echo "==> Deploy de $app_name concluido!"
+    echo ""
+  )
 }
 
 TARGET="${1:-all}"
