@@ -197,10 +197,19 @@ Depois use "Deploy from Image" no painel do CapRover.
 
 ### Navegador mostra NGINX 502 no frontend
 
-1. **Porta do container:** no app `ipa-frontend`, **HTTP Settings** > **Container HTTP Port** = **80**.
-2. **Dockerfile errado:** o build precisa usar `Dockerfile.caprover.frontend` (via `captain-definition`).
-   Use o script de deploy acima; deploy por branch sem injetar `captain-definition` no tarball usa o
-   `Dockerfile` raiz e a imagem nginx fica incorreta para o CapRover.
+A tela azul **"NGINX 502"** do CapRover quase sempre significa: o **proxy do CapRover nao consegue falar
+com o container** (porta errada) ou o **container caiu** (nginx nao sobe).
+
+1. **Porta HTTP do app (principal):** Apps > `ipa-frontend` > **HTTP Settings** (ou **App Configs**).
+   O campo costuma chamar **Container HTTP Port**, **HTTP Port** ou **App Port**. Deve ser **80**
+   (a imagem nginx escuta em 80). Se estiver **3000** ou outro valor, o CapRover encaminha para a
+   porta errada e da **502**. Ajuste, **Save & Update** e use **Save & Restart** / reinicie o app.
+2. **Logs do container:** no mesmo app, abra **App Logs**. Se o nginx nao iniciar, ha erro de config.
+3. **Dockerfile correto:** o build precisa usar `Dockerfile.caprover.frontend` (via `captain-definition`
+   no tarball). Use `bash scripts/caprover-deploy.sh frontend`.
+4. **Nome interno da API:** em `nginx.caprover.conf` o upstream e `srv-captain--ipa-api`. O nome do
+   app da API no CapRover tem de ser exatamente **`ipa-api`** (com esse hifen). Se for outro nome,
+   altere o `set $ipa_api_host ...` no arquivo ou renomeie o app.
 
 ### Let's Encrypt nao gera certificado
 
