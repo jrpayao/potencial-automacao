@@ -1,5 +1,26 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-04-06] — test(frontend): testes unitarios Resultado, Usuarios e Organizacoes
+
+### Implementado
+- `resultado.component.spec.ts`: 8 testes (badgeClass alto/medio/baixo, classificacaoTexto, radarData, riscos)
+- `lista-usuarios.component.spec.ts`: 7 testes (carregar, filtrar nome/email, carregando signal, perfis)
+- `lista-organizacoes.component.spec.ts`: 7 testes (carregar, filtrar nome/slug, carregando, arquivar local)
+- `app.spec.ts`: corrigido boilerplate quebrado (NxWelcome removido, 2 testes validos)
+- RadarChartComponent mockado nos testes para evitar erro de canvas Chart.js
+- Total: 24/24 testes passando
+
+### Arquivos criados/modificados
+- `apps/frontend/src/app/features/resultado/resultado.component.spec.ts` (novo)
+- `apps/frontend/src/app/features/usuarios/lista-usuarios.component.spec.ts` (novo)
+- `apps/frontend/src/app/features/organizacoes/lista-organizacoes.component.spec.ts` (novo)
+- `apps/frontend/src/app/app.spec.ts` (corrigido)
+- `docs/sdd/TASKS.md` (T46 marcada como concluida)
+
+### Tasks cobertas: T46
+
+---
+
 ## [2026-04-06] — feat(frontend): completar implementação e design Stitch (100%)
 
 ### Implementado

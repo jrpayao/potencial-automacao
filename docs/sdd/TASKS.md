@@ -167,11 +167,11 @@
   - Tabela: Nome, Slug, Status, Data Criacao
   - Dialog para criar/editar
   - Visivel apenas para superadmin
-- **T46** — Testes unitarios frontend
-  - Vitest: AuthService (login, logout, isAuthenticated)
-  - Vitest: calcularIPA (importado da lib shared)
-  - Vitest: WizardComponent (navegacao entre steps)
-  - Vitest: DashboardComponent (renderiza cards e tabela)
+- [x] **T46** — Testes unitarios frontend *(concluida em 2026-04-06 20:13)*
+  - Vitest: ResultadoComponent (badgeClass, classificacao, radarData, riscos)
+  - Vitest: ListaUsuariosComponent (carregar, filtrar por nome e email)
+  - Vitest: ListaOrganizacoesComponent (carregar, filtrar por nome e slug, arquivar)
+  - Fix: app.spec.ts boilerplate quebrado corrigido
 
 ---
 
