@@ -1,0 +1,26 @@
+<footer class="pagination-footer">
+  <div class="pagination-info">
+    Mostrando <strong>{{ startIndex() }} - {{ endIndex() }}</strong> de <strong>{{ totalItems() }}</strong>
+  </div>
+  
+  <div class="pagination-actions">
+    <button type="button" class="p-btn" [disabled]="currentPage() === 1" (click)="changePage(currentPage() - 1)" title="Página anterior">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <div class="p-pages">
+      Página <strong>{{ currentPage() }}</strong> de {{ totalPages() }}
+    </div>
+    <button type="button" class="p-btn" [disabled]="currentPage() >= totalPages()" (click)="changePage(currentPage() + 1)" title="Próxima página">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+
+  <div class="p-size">
+    <span>Mostrar:</span>
+    <select [value]="pageSize()" (change)="changePageSize($any($event.target).value)">
+      @for (option of pageSizeOptions(); track option) {
+        <option [value]="option">{{ option }}</option>
+      }
+    </select>
+  </div>
+</footer>

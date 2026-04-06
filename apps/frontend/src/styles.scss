@@ -1,1 +1,67 @@
 /* You can add global styles to this file, and also import other style files */
+
+:root {
+  --primary: #001f3d;
+  --primary-container: #003461;
+  --on-primary: #ffffff;
+  --on-primary-container: #799ed1;
+  
+  --secondary: #575a8c;
+  --secondary-container: #c2c5fe;
+  --on-secondary: #ffffff;
+  
+  --tertiary: #371400;
+  --tertiary-container: #572501;
+  --on-tertiary: #ffffff;
+  
+  --background: #f8f9fa;
+  --on-background: #191c1d;
+  
+  --surface: #f8f9fa;
+  --on-surface: #191c1d;
+  --on-surface-variant: #43474f;
+  
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f3f4f5;
+  --surface-container: #edeeef;
+  --surface-container-high: #e7e8e9;
+  --surface-container-highest: #e1e3e4;
+  
+  --outline: #737780;
+  --outline-variant: #c3c6d0;
+  
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+  --on-error: #ffffff;
+  --on-error-container: #93000a;
+
+  --font-family-body: 'Inter', sans-serif;
+  --font-family-display: 'Outfit', sans-serif;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-body);
+  background-color: var(--background);
+  color: var(--on-surface);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}

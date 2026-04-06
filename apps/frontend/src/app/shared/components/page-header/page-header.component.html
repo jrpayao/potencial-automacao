@@ -1,0 +1,36 @@
+<div class="page-header-container animate-fade-in">
+  <div class="header-main">
+    <div class="header-content">
+      @if (breadcrumbs().length > 0) {
+        <nav class="breadcrumb">
+          @for (bc of breadcrumbs(); track bc.label; let last = $last) {
+            @if (!last) {
+              <a (click)="bc.route ? navigate(bc.route) : null" [class.clickable]="bc.route">
+                {{ bc.label }}
+              </a>
+              <span class="material-symbols-outlined separator">chevron_right</span>
+            } @else {
+              <span class="current">{{ bc.label }}</span>
+            }
+          }
+        </nav>
+      }
+      <div class="title-group">
+        <h1 class="page-title">{{ title() }}</h1>
+        @if (description()) {
+          <p class="page-description">{{ description() }}</p>
+        }
+      </div>
+    </div>
+
+    <div class="header-actions">
+      @if (showSearch()) {
+        <app-search-input
+          [placeholder]="searchPlaceholder()"
+          (search)="onSearch($event)"
+        />
+      }
+      <ng-content select="[actions]"></ng-content>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,108 @@
+:host {
+  display: block;
+  margin-bottom: 32px;
+}
+
+.page-header-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+}
+
+.header-content {
+  flex: 1;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+
+  a {
+    color: #94a3b8;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &.clickable {
+      cursor: pointer;
+      &:hover { color: var(--primary-container, #003461); }
+    }
+  }
+
+  .separator {
+    font-size: 16px;
+    color: #cbd5e1;
+  }
+
+  .current {
+    color: #0f172a;
+    font-weight: 700;
+  }
+}
+
+.title-group {
+  .page-title {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: -0.03em;
+    margin: 0;
+    line-height: 1.1;
+  }
+
+  .page-description {
+    color: #64748b;
+    margin-top: 10px;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 992px) {
+  .header-main {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 20px;
+  }
+
+  .header-actions {
+    justify-content: flex-start;
+    
+    app-search-input {
+      width: 100%;
+      max-width: none;
+    }
+    
+    ::ng-content {
+      width: 100%;
+    }
+  }
+}

@@ -1,0 +1,17 @@
+<div class="search-wrapper" [class.focused]="isFocused()">
+  <span class="material-symbols-outlined search-icon">search</span>
+  <input
+    #searchInput
+    type="text"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($any($event.target).value)"
+    (focus)="isFocused.set(true)"
+    (blur)="isFocused.set(false)"
+  />
+  @if (value()) {
+    <button type="button" class="clear-btn" (click)="clear()" title="Limpar busca">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+  }
+</div>
