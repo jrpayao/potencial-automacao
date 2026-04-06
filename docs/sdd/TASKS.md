@@ -139,15 +139,15 @@
 
 ## G11 — Frontend: Resultado
 
-- **T41** — Criar ResultadoComponent
+- [x] **T41** — Criar ResultadoComponent *(concluída em 2026-04-06)*
   - Busca avaliacao por :id da rota
   - Secao "Identificacao do Processo"
   - Secao "Memoria de Calculo" com todas as notas, pesos, calculos parciais
   - Badge grande com IPA Final + status
-- **T42** — Criar RadarChartComponent
+- [x] **T42** — Criar RadarChartComponent *(concluída em 2026-04-06)*
   - Chart.js radar com 2 datasets: IT (criterios tecnicos) e IN (criterios negocio)
   - 6 eixos: Seguranca, Estabilidade, Estruturacao, Risco, Impacto, Eficiencia
-- **T43** — Botoes de acao no resultado
+- [x] **T43** — Botoes de acao no resultado *(concluída em 2026-04-06)*
   - "Editar" → abre wizard preenchido com dados da avaliacao
   - "Exportar PDF" → chama endpoint /pdf, faz download
   - "Voltar" → retorna para lista de processos
@@ -156,13 +156,13 @@
 
 ## G12 — Frontend: Usuarios + Organizacoes
 
-- **T44** — Criar UsuariosService + ListaUsuariosComponent
+- [x] **T44** — Criar UsuariosService + ListaUsuariosComponent *(concluída em 2026-04-06)*
   - CRUD completo com signals
   - Tabela: Nome, Email, Perfil (badge), Status
   - Dialog para criar/editar usuario
   - Filtro por perfil
   - Visivel apenas para admin
-- **T45** — Criar OrganizacoesService + ListaOrganizacoesComponent
+- [x] **T45** — Criar OrganizacoesService + ListaOrganizacoesComponent *(concluída em 2026-04-06)*
   - CRUD com signals
   - Tabela: Nome, Slug, Status, Data Criacao
   - Dialog para criar/editar
@@ -195,4 +195,31 @@
   - Seed roda automaticamente no primeiro boot da API (verifica se banco vazio)
   - README.md com instrucoes: como rodar (dev e docker), como acessar, credenciais seed
   - Screenshots do sistema no README
+- [x] **T54** — Refatorar dashboard.component.ts e ranking-table.component.ts para design Stitch ✓ 2026-04-01
+  - dashboard.component.ts: titulo 2.75rem/800/001f3d, cards com accent-bar, box-shadow ghost, botao #003461
+  - ranking-table.component.ts: tabela sem bordas verticais, cabeçalho #f3f4f5/10px uppercase, badges border-radius 9999px
+  - dashboard.service.ts: adicionado vrIndiceTecnico? e vrIndiceNegocio? em RankingItem
+- [x] **T55** — Refatorar lista-processos.component.ts para design Stitch ✓ 2026-04-01
+  - Titulo 2.75rem/700/001f3d com breadcrumb, botao Nova Avaliacao #003461
+  - Filtros em card #f3f4f5 com inputs nativos (sem Angular Material)
+  - Tabela com status badges pill, IPA com barra de progresso colorida, botao de acao visibility
+  - Substituidos todos os modulos Angular Material por HTML/CSS nativo
+
+---
+
+## G14 — Refatoração Stitch: Auth & Wizard
+
+- [x] **T56** — Refatorar `LoginComponent` para design Stitch *(concluída em 2026-04-06)*
+- [x] **T57** — Refatorar `WizardComponent` (container) para design Stitch *(concluída em 2026-04-06)*
+- [x] **T58** — Refatorar steps do Wizard (Identificacao, Tecnica, Negocio) para design Stitch *(concluída em 2026-04-06)*
+- [x] **T59** — Refatorar steps do Wizard (Impedimento, Urgencia, Riscos) para design Stitch *(concluída em 2026-04-06)*
+- [x] **T60** — Refatorar `IpaPreviewComponent` para design Stitch *(concluída em 2026-04-06)*
+
+---
+
+## G15 — Refatoração Stitch: Feedback & Gestão
+
+- [x] **T61** — Refatorar `ResultadoComponent` + `RadarChartComponent` para design Stitch *(concluída em 2026-04-06)*
+- [x] **T62** — Implementar `ListaUsuariosComponent` com design Stitch *(concluída em 2026-04-06)*
+- [x] **T63** — Implementar `ListaOrganizacoesComponent` com design Stitch *(concluída em 2026-04-06)*
 

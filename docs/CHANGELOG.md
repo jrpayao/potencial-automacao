@@ -1,5 +1,32 @@
 # CHANGELOG — Sistema IPA
 
+## [2026-04-06] — feat(frontend): completar implementação e design Stitch (100%)
+
+### Implementado
+- Shared components: PageHeader, StatusBadge, SearchInput, CustomPaginator
+- Layout Stitch: AdminLayout, Header, Sidebar com navegação completa
+- Login Stitch: fundo navy, card branco centralizado, logo IPA
+- Dashboard + RankingTable com cards de métricas e ranking
+- ListaProcessos com filtros, paginação e status badges
+- ResultadoComponent + RadarChartComponent (score IPA, radar, memória de cálculo)
+- ListaUsuariosComponent + ListaOrganizacoesComponent com CRUD e design Stitch
+- Wizard reorganizado em steps/ com IpaPreview lateral
+- Deploy scripts: npm run deploy:frontend / deploy:api / deploy:all
+- Scripts de deploy adicionados ao package.json (CAPROVER_MACHINE=captain-01)
+
+### Corrigido
+- app root: removido NxWelcome, exibe apenas router-outlet
+- nginx: removido proxy interno, Angular chama API por URL pública
+- environment.prod.ts: apiUrl apontando para http://ipa-api.payao.tech/api
+- type safety: IAvaliacao com campo processo, remoção de AnyPipe
+- memory leak: SearchInputComponent com takeUntilDestroyed
+- computed() signals: badgeClass, radarData, etc. no ResultadoComponent
+
+### Código morto removido
+- step-*.component.ts e ipa-preview.component.ts da raiz de avaliacao-wizard
+
+### Tasks cobertas: T41–T45, T56–T63
+
 ## [2026-03-31] — feat(e2e-docker)
 - Playwright: config com chromium, auth setup compartilhado, locale pt-BR
 - Testes E2E: login (valido/invalido), dashboard (cards + ranking table)
