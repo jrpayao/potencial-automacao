@@ -66,7 +66,7 @@ deploy_app() {
     cp "$captain_file" "$tmpdir/extract/captain-definition"
     (cd "$tmpdir/extract" && tar -cf "$tmpdir/deploy.tar" .)
 
-    caprover deploy -n "$MACHINE" -a "$app_name" -t "$tmpdir/deploy.tar" --default
+    caprover deploy -n "$MACHINE" -a "$app_name" -t "$tmpdir/deploy.tar"
 
     echo "==> Deploy de $app_name concluido!"
     echo ""
