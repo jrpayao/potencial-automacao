@@ -1,4 +1,5 @@
 import { Perfil } from '../enums/perfil.enum.js';
+import { SituacaoUsuario } from '../enums/situacao-usuario.enum.js';
 
 export interface IUsuario {
   id: number;
@@ -6,6 +7,6 @@ export interface IUsuario {
   email: string;
   perfil: Perfil;
   organizacaoId: number;
-  situacao: string;
+  situacao: SituacaoUsuario;
   criadoEm: string;
 }
