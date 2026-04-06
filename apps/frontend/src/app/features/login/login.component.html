@@ -1,0 +1,104 @@
+<div class="login-page">
+  <div class="login-gradient">
+    <!-- Background Texture Overlay -->
+    <div class="bg-texture"></div>
+    
+    <!-- Login Card -->
+    <main class="login-card animate-slide-up">
+      <!-- Logo Section -->
+      <header class="login-header">
+        <h1 class="logo-text">IPA</h1>
+        <p class="logo-subtext">Índice de Potencial de Automação</p>
+      </header>
+
+      <!-- Login Form -->
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" class="login-form">
+        <!-- Email Field -->
+        <div class="form-group">
+          <label class="form-label" for="email">E-mail Institucional</label>
+          <div class="input-wrapper">
+            <span class="material-symbols-outlined input-icon">mail</span>
+            <input 
+              class="form-input" 
+              id="email" 
+              type="email" 
+              formControlName="email" 
+              placeholder="seu@email.com.br"
+              [class.input-error]="emailControl.touched && emailControl.invalid"
+            />
+          </div>
+          @if (emailControl.touched && emailControl.hasError('required')) {
+            <span class="error-text">O e-mail é obrigatório</span>
+          } @else if (emailControl.touched && emailControl.hasError('email')) {
+            <span class="error-text">Digite um e-mail válido</span>
+          }
+        </div>
+
+        <!-- Password Field -->
+        <div class="form-group">
+          <div class="label-row">
+            <label class="form-label" for="password">Senha de Acesso</label>
+            <a class="forgot-link" href="javascript:void(0)">Esqueceu a senha?</a>
+          </div>
+          <div class="input-wrapper">
+            <span class="material-symbols-outlined input-icon">lock</span>
+            <input 
+              class="form-input" 
+              id="password" 
+              [type]="hidePassword() ? 'password' : 'text'" 
+              formControlName="senha" 
+              placeholder="••••••••"
+              [class.input-error]="senhaControl.touched && senhaControl.invalid"
+            />
+            <button 
+              class="toggle-password" 
+              type="button" 
+              (click)="hidePassword.set(!hidePassword())"
+              tabindex="-1"
+              type="button"
+            >
+              <span class="material-symbols-outlined">
+                {{ hidePassword() ? 'visibility' : 'visibility_off' }}
+              </span>
+            </button>
+          </div>
+          @if (senhaControl.touched && senhaControl.hasError('required')) {
+            <span class="error-text">A senha é obrigatória</span>
+          }
+        </div>
+
+        @if (errorMessage()) {
+          <div class="error-banner">
+            <span class="material-symbols-outlined">error</span>
+            <span>{{ errorMessage() }}</span>
+          </div>
+        }
+
+        <!-- Action Button -->
+        <button 
+          class="login-button" 
+          type="submit" 
+          [disabled]="loading() || form.invalid"
+        >
+          @if (loading()) {
+            <span class="loader"></span>
+          } @else {
+            Entrar no Portal
+            <span class="material-symbols-outlined">login</span>
+          }
+        </button>
+      </form>
+
+      <!-- Support Links -->
+      <footer class="login-footer">
+        <p>Sistema de Avaliação de Potencial de Automação</p>
+        <p class="footer-version">Versão 2.5.0 • Especialista</p>
+      </footer>
+    </main>
+
+    <!-- Aesthetic Page Footer -->
+    <footer class="page-footer">
+      © 2024 Governança Digital & Automação Inteligente
+    </footer>
+  </div>
+</div>

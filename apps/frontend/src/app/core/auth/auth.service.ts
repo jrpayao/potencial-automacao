@@ -11,7 +11,7 @@ interface AuthTokens {
 interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  user: IUsuario;
+  usuario: IUsuario;
 }
 
 const ACCESS_TOKEN_KEY = 'ipa_access_token';
@@ -26,7 +26,10 @@ export class AuthService {
   readonly isAuthenticated = signal<boolean>(this.hasValidToken());
   readonly currentUser = signal<IUsuario | null>(this.loadUser());
 
-  readonly userPerfil = computed(() => this.currentUser()?.perfil ?? null);
+  readonly userPerfil = computed(() => {
+    const user = this.currentUser();
+    return user?.perfil ?? null;
+  });
 
   constructor(router: Router) {
     this.router = router;
@@ -45,10 +48,10 @@ export class AuthService {
     }
 
     const data: LoginResponse = await response.json();
+    
     this.saveTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
-    this.saveUser(data.user);
+    this.saveUser(data.usuario);
     this.isAuthenticated.set(true);
-    this.currentUser.set(data.user);
   }
 
   async refresh(): Promise<string | null> {
@@ -60,9 +63,9 @@ export class AuthService {
 
     try {
       const response = await fetch(`${this.apiUrl}/auth/refresh`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ refreshToken }),
+         method: 'POST',
+         headers: { 'Content-Type': 'application/json' },
+         body: JSON.stringify({ refreshToken }),
       });
 
       if (!response.ok) {
@@ -98,7 +101,7 @@ export class AuthService {
 
   private loadUser(): IUsuario | null {
     const raw = localStorage.getItem(USER_KEY);
-    if (!raw) return null;
+    if (!raw || raw === 'undefined') return null;
     try {
       return JSON.parse(raw) as IUsuario;
     } catch {
