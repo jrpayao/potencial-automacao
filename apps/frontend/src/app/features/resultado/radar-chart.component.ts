@@ -18,6 +18,7 @@ import {
   Filler,
   Tooltip,
   Legend,
+  ChartConfiguration,
 } from 'chart.js';
 
 Chart.register(
@@ -31,9 +32,9 @@ Chart.register(
 );
 
 export interface RadarChartData {
-  /** Dimensao Tecnica: [Seguranca, Estabilidade, Estruturacao] */
+  /** Dimensão Técnica: [Seguranca, Estabilidade, Estruturacao] */
   tecnica: [number, number, number];
-  /** Dimensao Negocio: [GestaoRisco, ImpactoCidadao, Eficiencia] */
+  /** Dimensão Negócio: [GestaoRisco, ImpactoCidadao, Eficiencia] */
   negocio: [number, number, number];
 }
 
@@ -42,16 +43,19 @@ export interface RadarChartData {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="chart-wrapper">
+    <div class="chart-container">
       <canvas #chartCanvas></canvas>
     </div>
   `,
   styles: `
-    .chart-wrapper {
+    .chart-container {
       position: relative;
       width: 100%;
-      max-width: 420px;
-      margin: 0 auto;
+      height: 100%;
+      min-height: 350px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
   `,
 })
@@ -81,71 +85,115 @@ export class RadarChartComponent implements AfterViewInit, OnDestroy, OnChanges 
     if (!this.data) return;
 
     const labels = [
-      'Seguranca',
+      'Segurança',
       'Estabilidade',
-      'Estruturacao',
-      'Gestao Risco',
-      'Impacto Cidadao',
-      'Eficiencia',
+      'Estruturação',
+      'Gestão Risco',
+      'Impacto Cidadão',
+      'Eficiência',
     ];
 
-    this.chart = new Chart(this.canvasRef.nativeElement, {
+    const config: ChartConfiguration<'radar'> = {
       type: 'radar',
       data: {
         labels,
         datasets: [
           {
-            label: 'Indice Tecnico (IT)',
-            data: [...this.data.tecnica, ...Array(3).fill(null)],
-            backgroundColor: 'rgba(33, 150, 243, 0.2)',
-            borderColor: '#2196F3',
+            label: 'Indice Técnico (IT)',
+            data: [...this.data.tecnica, null, null, null],
+            backgroundColor: 'rgba(0, 52, 97, 0.1)',
+            borderColor: '#003461',
             borderWidth: 2,
-            pointBackgroundColor: '#2196F3',
+            pointBackgroundColor: '#003461',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#003461',
+            fill: true,
+            tension: 0.1
           },
           {
-            label: 'Indice Negocio (IN)',
-            data: [...Array(3).fill(null), ...this.data.negocio],
-            backgroundColor: 'rgba(76, 175, 80, 0.2)',
-            borderColor: '#4CAF50',
+            label: 'Indice Negócio (IN)',
+            data: [null, null, null, ...this.data.negocio],
+            backgroundColor: 'rgba(16, 185, 129, 0.1)',
+            borderColor: '#10b981',
             borderWidth: 2,
-            pointBackgroundColor: '#4CAF50',
+            pointBackgroundColor: '#10b981',
+            pointBorderColor: '#fff',
+            pointHoverBackgroundColor: '#fff',
+            pointHoverBorderColor: '#10b981',
+            fill: true,
+            tension: 0.1
           },
         ],
       },
       options: {
         responsive: true,
-        maintainAspectRatio: true,
+        maintainAspectRatio: false,
         scales: {
           r: {
             min: 0,
             max: 5,
+            beginAtZero: true,
+            angleLines: {
+              display: true,
+              color: '#e2e8f0'
+            },
+            grid: {
+              color: '#e2e8f0'
+            },
             ticks: {
               stepSize: 1,
-              backdropColor: 'transparent',
+              display: false,
             },
             pointLabels: {
-              font: { size: 12 },
+              font: {
+                family: "'Inter', sans-serif",
+                size: 11,
+                weight: 600
+              },
+              color: '#64748b'
             },
           },
         },
         plugins: {
           legend: {
             position: 'bottom',
+            labels: {
+              usePointStyle: true,
+              pointStyle: 'circle',
+              padding: 20,
+              font: {
+                family: "'Inter', sans-serif",
+                size: 12,
+                weight: 500
+              },
+              color: '#1e293b'
+            }
           },
+          tooltip: {
+            backgroundColor: '#1e293b',
+            titleFont: { family: "'Inter', sans-serif", size: 13 },
+            bodyFont: { family: "'Inter', sans-serif", size: 12 },
+            padding: 12,
+            cornerRadius: 8,
+            displayColors: true
+          }
         },
       },
-    });
+    };
+
+    this.chart = new Chart(this.canvasRef.nativeElement, config);
   }
 
   private updateChart(): void {
     if (!this.chart || !this.data) return;
     this.chart.data.datasets[0].data = [
       ...this.data.tecnica,
-      ...Array(3).fill(null),
+      null, null, null
     ];
     this.chart.data.datasets[1].data = [
-      ...Array(3).fill(null),
-      ...this.data.negocio,
+      null, null, null,
+      ...this.data.negocio
     ];
     this.chart.update();
   }
