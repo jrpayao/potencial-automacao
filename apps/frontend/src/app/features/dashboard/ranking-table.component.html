@@ -1,0 +1,67 @@
+<div class="ranking-wrapper animate-fade-in">
+  <!-- Table Section -->
+  <div class="scroll-container">
+    <table class="stitch-table">
+      <thead>
+        <tr>
+          <th>Processo</th>
+          <th>Área</th>
+          <th class="text-center">Potencial</th>
+          <th class="text-center">IT</th>
+          <th class="text-center">IN</th>
+          <th class="text-center">Status</th>
+          <th class="text-right">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (row of filteredItems(); track row.idProcesso) {
+          <tr class="table-row" (click)="verDetalhes(row)">
+            <td class="primary-col">
+              <div class="proc-info">
+                <span class="proc-name">{{ row.noProcesso }}</span>
+                <span class="proc-id">#{{ row.idProcesso }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="area-tag">{{ row.noArea }}</span>
+            </td>
+            <td class="text-center">
+              <div class="ipa-pill" [style.--ipa-color]="ipaColor(row.vrIpaFinal)">
+                {{ row.vrIpaFinal | number: '1.2-2' }}
+              </div>
+            </td>
+            <td class="text-center">
+              <span class="index-val">{{ (row.vrIndiceTecnico || 0) | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-center">
+              <span class="index-val">{{ (row.vrIndiceNegocio || 0) | number: '1.2-2' }}</span>
+            </td>
+            <td class="text-center">
+              <app-status-badge [status]="row.coStatusIpa" />
+            </td>
+            <td class="text-right">
+              <button type="button" class="action-btn" (click)="verDetalhes(row); $event.stopPropagation()">
+                <span class="material-symbols-outlined">trending_flat</span>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="7" class="empty-state">
+              <span class="material-symbols-outlined">search_off</span>
+              <p>Nenhum processo localizado para este ranking.</p>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Custom Paginator -->
+  <app-custom-paginator
+    [totalItems]="totalItems()"
+    [pageSize]="pageSize()"
+    [currentPage]="currentPage()"
+    (pageChange)="onPageChange($event)"
+  />
+</div>

@@ -1,0 +1,54 @@
+<div class="dashboard-wrapper">
+  <!-- Page Header Conponentizado -->
+  <app-page-header
+    title="Dashboard de Automação"
+    description="Visão consolidada da maturidade e potencial de automação dos processos institucionais."
+  >
+    <button actions class="btn-stitch-primary" (click)="novoProcesso()">
+      <span class="material-symbols-outlined">add_circle</span>
+      Nova Avaliação
+    </button>
+  </app-page-header>
+
+  <!-- Summary Cards Grid -->
+  <section class="cards-grid">
+    @for (card of cards(); track card.label) {
+      <div class="summary-card glass-card" [style.--accent-color]="card.accent">
+        <div class="card-icon-wrapper" [style.background-color]="card.countBg">
+          <span class="material-symbols-outlined" [style.color]="card.countColor">
+            {{ getIconFor(card.label) }}
+          </span>
+        </div>
+        
+        <div class="card-content">
+          <div class="card-value-row">
+            <span class="card-value">{{ card.value }}</span>
+            <span class="card-label">{{ card.label }}</span>
+          </div>
+          <div class="card-footer">
+            <span class="card-sublabel">{{ card.sublabel }}</span>
+            <div class="trend-indicator">
+              <span class="dot" [style.background-color]="card.accent"></span>
+              Situação atual
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </section>
+
+  <!-- Ranking Section -->
+  <section class="ranking-container">
+    <header class="section-header">
+      <div class="section-title-group">
+        <span class="material-symbols-outlined section-icon">analytics</span>
+        <h2 class="section-title">Ranking de Priorização</h2>
+      </div>
+      <p class="section-desc">Classificação automática baseada nos índices técnico (IT) e de negócio (IN).</p>
+    </header>
+    
+    <div class="table-container">
+      <app-ranking-table />
+    </div>
+  </section>
+</div>

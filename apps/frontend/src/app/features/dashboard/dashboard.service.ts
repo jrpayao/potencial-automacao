@@ -18,6 +18,8 @@ export interface RankingItem {
   vrIpaFinal: number;
   coStatusIpa: string;
   tsCriacao: string;
+  vrIndiceTecnico?: number;
+  vrIndiceNegocio?: number;
 }
 
 export interface RankingResult {
