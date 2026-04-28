@@ -10,8 +10,7 @@ RUN apk add --no-cache wget
 WORKDIR /app
 COPY --from=builder /app/apps/api/dist .
 COPY --from=builder /app/node_modules ./node_modules
-RUN mkdir -p data && \
-    addgroup -S ipa && adduser -S ipa -G ipa && \
+RUN addgroup -S ipa && adduser -S ipa -G ipa && \
     chown -R ipa:ipa /app
 USER ipa
 ENV NODE_ENV=production

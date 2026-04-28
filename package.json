@@ -39,7 +39,6 @@
     "@swc/core": "1.15.8",
     "@swc/helpers": "0.5.18",
     "@types/bcrypt": "^6.0.0",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "20.19.9",
     "@types/passport-jwt": "^4.0.1",
     "@types/pdfmake": "^0.3.2",
@@ -54,7 +53,8 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
     "vitest": "^4.0.8",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "@types/pg": "^8.11.0"
   },
   "workspaces": [
     "packages/*",
@@ -79,7 +79,6 @@
     "@nestjs/typeorm": "^11.0.0",
     "axios": "^1.6.0",
     "bcrypt": "^6.0.0",
-    "better-sqlite3": "^12.8.0",
     "chart.js": "^4.5.1",
     "class-transformer": "^0.5.1",
     "class-validator": "^0.15.1",
@@ -88,6 +87,7 @@
     "pdfmake": "^0.3.7",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
-    "typeorm": "^0.3.28"
+    "typeorm": "^0.3.28",
+    "pg": "^8.13.0"
   }
 }
