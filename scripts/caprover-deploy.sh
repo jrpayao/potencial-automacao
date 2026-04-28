@@ -50,7 +50,12 @@ deploy_app() {
   git archive --format=tar -o "$tmpdir/repo.tar" "$BRANCH"
   mkdir -p "$tmpdir/extract"
   tar xf "$tmpdir/repo.tar" -C "$tmpdir/extract"
-  cp "$captain_file" "$tmpdir/extract/captain-definition"
+  # Gerar captain-definition com CACHEBUST para forçar rebuild do npm install
+  node -e "
+    const base = JSON.parse(require('fs').readFileSync('$captain_file', 'utf8'));
+    base.buildArgs = { CACHEBUST: Date.now().toString() };
+    require('fs').writeFileSync('$tmpdir/extract/captain-definition', JSON.stringify(base, null, 2));
+  "
   tar -cf "$tmpdir/deploy.tar" -C "$tmpdir/extract" .
 
   echo "==> Enviando para $base_url ..."
