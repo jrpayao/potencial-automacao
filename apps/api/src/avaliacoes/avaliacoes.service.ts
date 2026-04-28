@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -12,7 +13,11 @@ import {
   calcularIN,
   calcularIPA,
 } from '@ipa/shared';
-import type { CreateAvaliacaoDto, UpdateAvaliacaoDto } from '@ipa/shared';
+import type {
+  CreateAvaliacaoDto,
+  DraftAvaliacaoDto,
+  UpdateAvaliacaoDto,
+} from '@ipa/shared';
 import { Avaliacao } from './avaliacao.entity.js';
 import { Processo } from '../processos/processo.entity.js';
 
@@ -180,6 +185,253 @@ export class AvaliacoesService {
   ): Promise<Avaliacao> {
     // Rascunho: salva parcial, notas podem ser 0/null
     return this.update(id, organizacaoId, dto);
+  }
+
+  async getProcessoRascunho(
+    processoId: number,
+    organizacaoId: number,
+  ): Promise<DraftAvaliacaoDto> {
+    const processo = await this.processoRepo.findOne({
+      where: { idProcesso: processoId, idOrganizacao: organizacaoId },
+      relations: ['avaliacao'],
+    });
+
+    if (!processo) {
+      throw new NotFoundException(`Processo #${processoId} não encontrado`);
+    }
+
+    if (processo.avaliacao) {
+      return this.mapAvaliacaoToDraft(processo.avaliacao);
+    }
+
+    return this.parseDraftPayload(processo.deRascunhoAvaliacao);
+  }
+
+  async saveProcessoRascunho(
+    processoId: number,
+    organizacaoId: number,
+    dto: DraftAvaliacaoDto,
+  ) {
+    const processo = await this.processoRepo.findOne({
+      where: { idProcesso: processoId, idOrganizacao: organizacaoId },
+      relations: ['avaliacao'],
+    });
+
+    if (!processo) {
+      throw new NotFoundException(`Processo #${processoId} não encontrado`);
+    }
+
+    const baseDraft = processo.avaliacao
+      ? this.mapAvaliacaoToDraft(processo.avaliacao)
+      : this.parseDraftPayload(processo.deRascunhoAvaliacao);
+
+    const mergedDraft: DraftAvaliacaoDto = {
+      ...baseDraft,
+      ...dto,
+    };
+
+    processo.deRascunhoAvaliacao = JSON.stringify(mergedDraft);
+    if (processo.coSituacao === 'arquivado') {
+      throw new ConflictException(
+        `Processo #${processoId} está arquivado e não aceita rascunho`,
+      );
+    }
+    processo.coSituacao = 'rascunho';
+    await this.processoRepo.save(processo);
+
+    return {
+      processoId: processo.idProcesso,
+      situacao: processo.coSituacao,
+      rascunho: mergedDraft,
+      atualizadoEm: processo.tsAtualizacao,
+    };
+  }
+
+  async finalizarProcessoRascunho(
+    processoId: number,
+    organizacaoId: number,
+    usuarioId: number,
+    dto: DraftAvaliacaoDto,
+  ): Promise<Avaliacao> {
+    const processo = await this.processoRepo.findOne({
+      where: { idProcesso: processoId, idOrganizacao: organizacaoId },
+      relations: ['avaliacao'],
+    });
+
+    if (!processo) {
+      throw new NotFoundException(`Processo #${processoId} não encontrado`);
+    }
+
+    if (processo.coSituacao === 'arquivado') {
+      throw new ConflictException(
+        `Processo #${processoId} está arquivado e não pode ser finalizado`,
+      );
+    }
+
+    const baseDraft = processo.avaliacao
+      ? this.mapAvaliacaoToDraft(processo.avaliacao)
+      : this.parseDraftPayload(processo.deRascunhoAvaliacao);
+
+    const mergedDraft: DraftAvaliacaoDto = { ...baseDraft, ...dto };
+    const completeDto = this.assertDraftCompleto(processoId, mergedDraft);
+    const calculados = this.computarIPA(completeDto);
+
+    let avaliacao: Avaliacao;
+
+    if (processo.avaliacao) {
+      avaliacao = processo.avaliacao;
+      this.applyDtoToAvaliacao(avaliacao, completeDto);
+      Object.assign(avaliacao, calculados);
+      avaliacao.idUsuarioAvaliador = usuarioId;
+    } else {
+      avaliacao = this.avaliacaoRepo.create({
+        idProcesso: processo.idProcesso,
+        idOrganizacao: processo.idOrganizacao,
+        idUsuarioAvaliador: usuarioId,
+        ...this.toAvaliacaoFields(completeDto),
+        ...calculados,
+      });
+    }
+
+    const saved = await this.avaliacaoRepo.save(avaliacao);
+
+    processo.coSituacao = 'avaliado';
+    processo.deRascunhoAvaliacao = null;
+    await this.processoRepo.save(processo);
+
+    return saved;
+  }
+
+  private parseDraftPayload(raw: string | null): DraftAvaliacaoDto {
+    if (!raw) {
+      return {};
+    }
+
+    try {
+      return JSON.parse(raw) as DraftAvaliacaoDto;
+    } catch {
+      return {};
+    }
+  }
+
+  private assertDraftCompleto(
+    processoId: number,
+    draft: DraftAvaliacaoDto,
+  ): CreateAvaliacaoDto {
+    const requiredFields: Array<keyof DraftAvaliacaoDto> = [
+      'notaSegurancaAcessos',
+      'justifSegurancaAcessos',
+      'notaEstabilidadeLegado',
+      'justifEstabilidadeLegado',
+      'notaEstruturacaoDados',
+      'justifEstruturacaoDados',
+      'notaGestaoRisco',
+      'justifGestaoRisco',
+      'notaReducaoSla',
+      'notaAbrangencia',
+      'notaExperienciaCidadao',
+      'justifImpactoCidadao',
+      'notaVolumeMensal',
+      'notaFteLiberado',
+      'justifEficiencia',
+      'fatorImpedimento',
+      'justifImpedimento',
+      'fatorUrgencia',
+      'justifUrgencia',
+    ];
+
+    const missing = requiredFields.filter((field) => {
+      const value = draft[field];
+      return (
+        value === undefined ||
+        value === null ||
+        (typeof value === 'string' && value.trim() === '')
+      );
+    });
+
+    if (missing.length > 0) {
+      throw new BadRequestException(
+        `Rascunho incompleto para finalização. Campos ausentes: ${missing.join(', ')}`,
+      );
+    }
+
+    return {
+      processoId,
+      notaSegurancaAcessos: draft.notaSegurancaAcessos!,
+      justifSegurancaAcessos: draft.justifSegurancaAcessos!,
+      notaEstabilidadeLegado: draft.notaEstabilidadeLegado!,
+      justifEstabilidadeLegado: draft.justifEstabilidadeLegado!,
+      notaEstruturacaoDados: draft.notaEstruturacaoDados!,
+      justifEstruturacaoDados: draft.justifEstruturacaoDados!,
+      notaGestaoRisco: draft.notaGestaoRisco!,
+      justifGestaoRisco: draft.justifGestaoRisco!,
+      notaReducaoSla: draft.notaReducaoSla!,
+      notaAbrangencia: draft.notaAbrangencia!,
+      notaExperienciaCidadao: draft.notaExperienciaCidadao!,
+      justifImpactoCidadao: draft.justifImpactoCidadao!,
+      notaVolumeMensal: draft.notaVolumeMensal!,
+      notaFteLiberado: draft.notaFteLiberado!,
+      justifEficiencia: draft.justifEficiencia!,
+      fatorImpedimento: draft.fatorImpedimento!,
+      justifImpedimento: draft.justifImpedimento!,
+      fatorUrgencia: draft.fatorUrgencia!,
+      justifUrgencia: draft.justifUrgencia!,
+      riscosContingencia: draft.riscosContingencia,
+    };
+  }
+
+  private mapAvaliacaoToDraft(avaliacao: Avaliacao): DraftAvaliacaoDto {
+    return {
+      notaSegurancaAcessos: avaliacao.nuNotaSegurancaAcessos,
+      justifSegurancaAcessos: avaliacao.deJustifSegurancaAcessos,
+      notaEstabilidadeLegado: avaliacao.nuNotaEstabilidadeLegado,
+      justifEstabilidadeLegado: avaliacao.deJustifEstabilidadeLegado,
+      notaEstruturacaoDados: avaliacao.nuNotaEstruturacaoDados,
+      justifEstruturacaoDados: avaliacao.deJustifEstruturacaoDados,
+      notaGestaoRisco: avaliacao.nuNotaGestaoRisco,
+      justifGestaoRisco: avaliacao.deJustifGestaoRisco,
+      notaReducaoSla: avaliacao.nuNotaReducaoSla,
+      notaAbrangencia: avaliacao.nuNotaAbrangencia,
+      notaExperienciaCidadao: avaliacao.nuNotaExperienciaCidadao,
+      justifImpactoCidadao: avaliacao.deJustifImpactoCidadao,
+      notaVolumeMensal: avaliacao.nuNotaVolumeMensal,
+      notaFteLiberado: avaliacao.nuNotaFteLiberado,
+      justifEficiencia: avaliacao.deJustifEficiencia,
+      fatorImpedimento: avaliacao.vrFatorImpedimento,
+      justifImpedimento: avaliacao.deJustifImpedimento,
+      fatorUrgencia: avaliacao.vrFatorUrgencia,
+      justifUrgencia: avaliacao.deJustifUrgencia,
+      riscosContingencia: avaliacao.deRiscosContingencia ?? undefined,
+    };
+  }
+
+  private toAvaliacaoFields(dto: CreateAvaliacaoDto) {
+    return {
+      nuNotaSegurancaAcessos: dto.notaSegurancaAcessos,
+      deJustifSegurancaAcessos: dto.justifSegurancaAcessos,
+      nuNotaEstabilidadeLegado: dto.notaEstabilidadeLegado,
+      deJustifEstabilidadeLegado: dto.justifEstabilidadeLegado,
+      nuNotaEstruturacaoDados: dto.notaEstruturacaoDados,
+      deJustifEstruturacaoDados: dto.justifEstruturacaoDados,
+      nuNotaGestaoRisco: dto.notaGestaoRisco,
+      deJustifGestaoRisco: dto.justifGestaoRisco,
+      nuNotaReducaoSla: dto.notaReducaoSla,
+      nuNotaAbrangencia: dto.notaAbrangencia,
+      nuNotaExperienciaCidadao: dto.notaExperienciaCidadao,
+      deJustifImpactoCidadao: dto.justifImpactoCidadao,
+      nuNotaVolumeMensal: dto.notaVolumeMensal,
+      nuNotaFteLiberado: dto.notaFteLiberado,
+      deJustifEficiencia: dto.justifEficiencia,
+      vrFatorImpedimento: dto.fatorImpedimento,
+      deJustifImpedimento: dto.justifImpedimento,
+      vrFatorUrgencia: dto.fatorUrgencia,
+      deJustifUrgencia: dto.justifUrgencia,
+      deRiscosContingencia: dto.riscosContingencia ?? null,
+    };
+  }
+
+  private applyDtoToAvaliacao(avaliacao: Avaliacao, dto: CreateAvaliacaoDto): void {
+    Object.assign(avaliacao, this.toAvaliacaoFields(dto));
   }
 
   private computarIPA(dto: CreateAvaliacaoDto) {

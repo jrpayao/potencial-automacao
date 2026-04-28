@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.env.production
+captain-definition
 .nx/cache/
 .nx/workspace-data/
 *.sqlite

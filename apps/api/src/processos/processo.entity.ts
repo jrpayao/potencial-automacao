@@ -52,6 +52,9 @@ export class Processo {
   @Column({ name: 'CO_SITUACAO', type: 'varchar', length: 20, nullable: false, default: 'rascunho' })
   coSituacao!: string;
 
+  @Column({ name: 'DE_RASCUNHO_AVALIACAO', type: 'text', nullable: true })
+  deRascunhoAvaliacao!: string | null;
+
   @OneToOne('Avaliacao', 'processo')
   avaliacao?: Avaliacao;
 

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -37,5 +38,10 @@ export class OrganizacoesController {
     @Body() dto: Partial<CreateOrganizacaoDto>,
   ) {
     return this.service.update(id, dto);
+  }
+
+  @Delete(':id')
+  delete(@Param('id', ParseIntPipe) id: number) {
+    return this.service.softDelete(id);
   }
 }

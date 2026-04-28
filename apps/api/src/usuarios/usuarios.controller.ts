@@ -50,6 +50,15 @@ export class UsuariosController {
     return this.service.update(id, user.organizacaoId, dto);
   }
 
+  @Patch(':id/situacao')
+  alterarSituacao(
+    @Param('id', ParseIntPipe) id: number,
+    @CurrentUser() user: JwtUser,
+    @Body() body: { situacao: string },
+  ) {
+    return this.service.alterarSituacao(id, user.organizacaoId, body.situacao);
+  }
+
   @Delete(':id')
   delete(
     @Param('id', ParseIntPipe) id: number,

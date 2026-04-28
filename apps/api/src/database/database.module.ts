@@ -9,8 +9,8 @@ import { Avaliacao } from '../avaliacoes/avaliacao.entity.js';
   imports: [
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'data/ipa.sqlite',
-      synchronize: true,
+      database: process.env['DATABASE_PATH'] || 'data/ipa.sqlite',
+      synchronize: process.env['NODE_ENV'] !== 'production',
       entities: [Organizacao, Usuario, Processo, Avaliacao],
     }),
   ],

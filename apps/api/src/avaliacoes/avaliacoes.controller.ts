@@ -11,7 +11,11 @@ import {
 } from '@nestjs/common';
 import type { Response } from 'express';
 import { Perfil } from '@ipa/shared';
-import type { CreateAvaliacaoDto, UpdateAvaliacaoDto } from '@ipa/shared';
+import type {
+  CreateAvaliacaoDto,
+  DraftAvaliacaoDto,
+  UpdateAvaliacaoDto,
+} from '@ipa/shared';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
 import { RolesGuard } from '../auth/roles.guard.js';
 import { Roles } from '../auth/roles.decorator.js';
@@ -65,6 +69,41 @@ export class AvaliacoesController {
     @Body() dto: UpdateAvaliacaoDto,
   ) {
     return this.service.saveRascunho(id, user.organizacaoId, dto);
+  }
+
+  @Get('processo/:processoId/rascunho')
+  getRascunhoByProcesso(
+    @Param('processoId', ParseIntPipe) processoId: number,
+    @CurrentUser() user: JwtUser,
+  ) {
+    return this.service.getProcessoRascunho(processoId, user.organizacaoId);
+  }
+
+  @Post('processo/:processoId/rascunho')
+  saveRascunhoByProcesso(
+    @Param('processoId', ParseIntPipe) processoId: number,
+    @CurrentUser() user: JwtUser,
+    @Body() dto: DraftAvaliacaoDto,
+  ) {
+    return this.service.saveProcessoRascunho(
+      processoId,
+      user.organizacaoId,
+      dto,
+    );
+  }
+
+  @Post('processo/:processoId/finalizar')
+  finalizarByProcesso(
+    @Param('processoId', ParseIntPipe) processoId: number,
+    @CurrentUser() user: JwtUser,
+    @Body() dto: DraftAvaliacaoDto,
+  ) {
+    return this.service.finalizarProcessoRascunho(
+      processoId,
+      user.organizacaoId,
+      user.sub,
+      dto,
+    );
   }
 
   @Get(':id/pdf')

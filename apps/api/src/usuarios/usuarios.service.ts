@@ -2,11 +2,13 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Usuario } from './usuario.entity.js';
+import { SituacaoUsuario } from '@ipa/shared';
 import type { CreateUsuarioDto } from '@ipa/shared';
 
 @Injectable()
@@ -18,7 +20,8 @@ export class UsuariosService {
 
   async findAll(organizacaoId: number) {
     const usuarios = await this.repo.find({
-      where: { idOrganizacao: organizacaoId, icSituacao: 'A' },
+      where: { idOrganizacao: organizacaoId },
+      order: { tsCriacao: 'DESC' },
     });
     return usuarios.map((u) => this.sanitize(u));
   }
@@ -48,12 +51,7 @@ export class UsuariosService {
     organizacaoId: number,
     dto: Partial<CreateUsuarioDto>,
   ) {
-    const usuario = await this.repo.findOne({
-      where: { idUsuario: id, idOrganizacao: organizacaoId },
-    });
-    if (!usuario) {
-      throw new NotFoundException(`Usuário #${id} não encontrado`);
-    }
+    const usuario = await this.findUsuarioOrFail(id, organizacaoId);
 
     if (dto.nome !== undefined) usuario.noUsuario = dto.nome;
     if (dto.email !== undefined) usuario.deEmail = dto.email;
@@ -66,15 +64,45 @@ export class UsuariosService {
     return this.sanitize(saved);
   }
 
+  async alterarSituacao(
+    id: number,
+    organizacaoId: number,
+    situacao: string,
+  ) {
+    const validada = this.validarSituacao(situacao);
+    const usuario = await this.findUsuarioOrFail(id, organizacaoId);
+    usuario.icSituacao = validada;
+    const saved = await this.repo.save(usuario);
+    return this.sanitize(saved);
+  }
+
   async softDelete(id: number, organizacaoId: number): Promise<void> {
+    const usuario = await this.findUsuarioOrFail(id, organizacaoId);
+    usuario.icSituacao = SituacaoUsuario.INATIVO;
+    await this.repo.save(usuario);
+  }
+
+  private async findUsuarioOrFail(
+    id: number,
+    organizacaoId: number,
+  ): Promise<Usuario> {
     const usuario = await this.repo.findOne({
       where: { idUsuario: id, idOrganizacao: organizacaoId },
     });
     if (!usuario) {
       throw new NotFoundException(`Usuário #${id} não encontrado`);
     }
-    usuario.icSituacao = 'I';
-    await this.repo.save(usuario);
+    return usuario;
+  }
+
+  private validarSituacao(situacao: string): SituacaoUsuario {
+    const valores = Object.values(SituacaoUsuario) as string[];
+    if (!valores.includes(situacao)) {
+      throw new BadRequestException(
+        `Situação inválida "${situacao}". Valores aceitos: ${valores.join(', ')}`,
+      );
+    }
+    return situacao as SituacaoUsuario;
   }
 
   private sanitize(usuario: Usuario) {
