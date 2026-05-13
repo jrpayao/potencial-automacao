@@ -16,10 +16,13 @@ export interface CreateAvaliacaoDto {
   notaGestaoRisco: number;
   justifGestaoRisco: string;
   notaReducaoSla: number;
+  justifReducaoSla?: string;
   notaAbrangencia: number;
+  justifAbrangencia?: string;
   notaExperienciaCidadao: number;
   justifImpactoCidadao: string;
   notaVolumeMensal: number;
+  justifVolumeMensal?: string;
   notaFteLiberado: number;
   justifEficiencia: string;
 

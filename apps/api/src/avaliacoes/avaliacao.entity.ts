@@ -69,8 +69,14 @@ export class Avaliacao {
   @Column({ name: 'NU_NOTA_REDUCAO_SLA', type: 'int', nullable: false })
   nuNotaReducaoSla!: number;
 
+  @Column({ name: 'DE_JUSTIF_REDUCAO_SLA', type: 'text', nullable: true })
+  deJustifReducaoSla!: string | null;
+
   @Column({ name: 'NU_NOTA_ABRANGENCIA', type: 'int', nullable: false })
   nuNotaAbrangencia!: number;
+
+  @Column({ name: 'DE_JUSTIF_ABRANGENCIA', type: 'text', nullable: true })
+  deJustifAbrangencia!: string | null;
 
   @Column({ name: 'NU_NOTA_EXPERIENCIA_CIDADAO', type: 'int', nullable: false })
   nuNotaExperienciaCidadao!: number;
@@ -80,6 +86,9 @@ export class Avaliacao {
 
   @Column({ name: 'NU_NOTA_VOLUME_MENSAL', type: 'int', nullable: false })
   nuNotaVolumeMensal!: number;
+
+  @Column({ name: 'DE_JUSTIF_VOLUME_MENSAL', type: 'text', nullable: true })
+  deJustifVolumeMensal!: string | null;
 
   @Column({ name: 'NU_NOTA_FTE_LIBERADO', type: 'int', nullable: false })
   nuNotaFteLiberado!: number;
