@@ -87,4 +87,66 @@ describe('AvaliacoesService', () => {
       NotFoundException,
     );
   });
+
+  it('deve mapear deJustifReducaoSla, deJustifAbrangencia e deJustifVolumeMensal para o draft', async () => {
+    const processo = {
+      idProcesso: 5,
+      idOrganizacao: 1,
+      coSituacao: 'avaliado',
+      deRascunhoAvaliacao: null,
+      avaliacao: {
+        nuNotaSegurancaAcessos: 3, deJustifSegurancaAcessos: 'a',
+        nuNotaEstabilidadeLegado: 3, deJustifEstabilidadeLegado: 'b',
+        nuNotaEstruturacaoDados: 3, deJustifEstruturacaoDados: 'c',
+        nuNotaGestaoRisco: 3, deJustifGestaoRisco: 'd',
+        nuNotaReducaoSla: 2, deJustifReducaoSla: 'SLA justif',
+        nuNotaAbrangencia: 4, deJustifAbrangencia: 'Abrangencia justif',
+        nuNotaExperienciaCidadao: 3, deJustifImpactoCidadao: 'e',
+        nuNotaVolumeMensal: 1, deJustifVolumeMensal: 'Volume justif',
+        nuNotaFteLiberado: 2, deJustifEficiencia: 'f',
+        vrFatorImpedimento: 1, deJustifImpedimento: 'g',
+        vrFatorUrgencia: 1, deJustifUrgencia: 'h',
+        deRiscosContingencia: null,
+      },
+    };
+
+    mockProcessoRepo.findOne.mockResolvedValue(processo);
+
+    const draft = await service.getProcessoRascunho(5, 1);
+
+    expect(draft.justifReducaoSla).toBe('SLA justif');
+    expect(draft.justifAbrangencia).toBe('Abrangencia justif');
+    expect(draft.justifVolumeMensal).toBe('Volume justif');
+  });
+
+  it('deve mapear null em deJustifReducaoSla como undefined no draft', async () => {
+    const processo = {
+      idProcesso: 6,
+      idOrganizacao: 1,
+      coSituacao: 'avaliado',
+      deRascunhoAvaliacao: null,
+      avaliacao: {
+        nuNotaSegurancaAcessos: 3, deJustifSegurancaAcessos: 'a',
+        nuNotaEstabilidadeLegado: 3, deJustifEstabilidadeLegado: 'b',
+        nuNotaEstruturacaoDados: 3, deJustifEstruturacaoDados: 'c',
+        nuNotaGestaoRisco: 3, deJustifGestaoRisco: 'd',
+        nuNotaReducaoSla: 2, deJustifReducaoSla: null,
+        nuNotaAbrangencia: 4, deJustifAbrangencia: null,
+        nuNotaExperienciaCidadao: 3, deJustifImpactoCidadao: 'e',
+        nuNotaVolumeMensal: 1, deJustifVolumeMensal: null,
+        nuNotaFteLiberado: 2, deJustifEficiencia: 'f',
+        vrFatorImpedimento: 1, deJustifImpedimento: 'g',
+        vrFatorUrgencia: 1, deJustifUrgencia: 'h',
+        deRiscosContingencia: null,
+      },
+    };
+
+    mockProcessoRepo.findOne.mockResolvedValue(processo);
+
+    const draft = await service.getProcessoRascunho(6, 1);
+
+    expect(draft.justifReducaoSla).toBeUndefined();
+    expect(draft.justifAbrangencia).toBeUndefined();
+    expect(draft.justifVolumeMensal).toBeUndefined();
+  });
 });
