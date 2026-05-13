@@ -74,10 +74,13 @@ export class AvaliacoesService {
       nuNotaGestaoRisco: dto.notaGestaoRisco,
       deJustifGestaoRisco: dto.justifGestaoRisco,
       nuNotaReducaoSla: dto.notaReducaoSla,
+      deJustifReducaoSla: dto.justifReducaoSla ?? null,
       nuNotaAbrangencia: dto.notaAbrangencia,
+      deJustifAbrangencia: dto.justifAbrangencia ?? null,
       nuNotaExperienciaCidadao: dto.notaExperienciaCidadao,
       deJustifImpactoCidadao: dto.justifImpactoCidadao,
       nuNotaVolumeMensal: dto.notaVolumeMensal,
+      deJustifVolumeMensal: dto.justifVolumeMensal ?? null,
       nuNotaFteLiberado: dto.notaFteLiberado,
       deJustifEficiencia: dto.justifEficiencia,
 
@@ -146,14 +149,20 @@ export class AvaliacoesService {
       avaliacao.deJustifGestaoRisco = dto.justifGestaoRisco;
     if (dto.notaReducaoSla !== undefined)
       avaliacao.nuNotaReducaoSla = dto.notaReducaoSla;
+    if (dto.justifReducaoSla !== undefined)
+      avaliacao.deJustifReducaoSla = dto.justifReducaoSla;
     if (dto.notaAbrangencia !== undefined)
       avaliacao.nuNotaAbrangencia = dto.notaAbrangencia;
+    if (dto.justifAbrangencia !== undefined)
+      avaliacao.deJustifAbrangencia = dto.justifAbrangencia;
     if (dto.notaExperienciaCidadao !== undefined)
       avaliacao.nuNotaExperienciaCidadao = dto.notaExperienciaCidadao;
     if (dto.justifImpactoCidadao !== undefined)
       avaliacao.deJustifImpactoCidadao = dto.justifImpactoCidadao;
     if (dto.notaVolumeMensal !== undefined)
       avaliacao.nuNotaVolumeMensal = dto.notaVolumeMensal;
+    if (dto.justifVolumeMensal !== undefined)
+      avaliacao.deJustifVolumeMensal = dto.justifVolumeMensal;
     if (dto.notaFteLiberado !== undefined)
       avaliacao.nuNotaFteLiberado = dto.notaFteLiberado;
     if (dto.justifEficiencia !== undefined)
