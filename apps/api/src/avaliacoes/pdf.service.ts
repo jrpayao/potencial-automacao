@@ -102,12 +102,12 @@ export class PdfService {
               [
                 'Redução de SLA',
                 { text: String(avaliacao.nuNotaReducaoSla), alignment: 'center' },
-                '-',
+                avaliacao.deJustifReducaoSla || '-',
               ],
               [
                 'Abrangência',
                 { text: String(avaliacao.nuNotaAbrangencia), alignment: 'center' },
-                '-',
+                avaliacao.deJustifAbrangencia || '-',
               ],
               [
                 'Experiência do Cidadão',
@@ -117,7 +117,7 @@ export class PdfService {
               [
                 'Volume Mensal',
                 { text: String(avaliacao.nuNotaVolumeMensal), alignment: 'center' },
-                '-',
+                avaliacao.deJustifVolumeMensal || '-',
               ],
               [
                 'FTE Liberado',
