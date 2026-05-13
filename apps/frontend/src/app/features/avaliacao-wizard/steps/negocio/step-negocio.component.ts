@@ -6,6 +6,7 @@ interface SubCriterio {
   label: string;
   control: string;
   descriptors: { value: number; label: string }[];
+  controlJustif?: string; // se presente, renderiza textarea individual
 }
 
 interface BlocoNegocio {
@@ -51,6 +52,7 @@ export class StepNegocioComponent {
         {
           label: 'Redução de SLA (Tempo de Resposta)',
           control: 'notaReducaoSla',
+          controlJustif: 'justifReducaoSla',
           descriptors: [
             { value: 5, label: 'Reduz SLA em > 80%' },
             { value: 4, label: 'Reduz SLA em 60-80%' },
@@ -63,6 +65,7 @@ export class StepNegocioComponent {
         {
           label: 'Abrangência (Volume de Cidadãos)',
           control: 'notaAbrangencia',
+          controlJustif: 'justifAbrangencia',
           descriptors: [
             { value: 5, label: '> 100 mil cidadãos/ano' },
             { value: 4, label: '50-100 mil cidadãos/ano' },
@@ -93,6 +96,7 @@ export class StepNegocioComponent {
         {
           label: 'Volume Mensal de Execuções',
           control: 'notaVolumeMensal',
+          controlJustif: 'justifVolumeMensal',
           descriptors: [
             { value: 5, label: '> 10 mil execuções/mês' },
             { value: 4, label: '5-10 mil execuções/mês' },

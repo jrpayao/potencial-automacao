@@ -33,6 +33,19 @@
                   </label>
                 }
               </div>
+
+              @if (sub.controlJustif) {
+                <div class="justificativa-field">
+                  <label [for]="sub.controlJustif" class="field-label">Justificativa</label>
+                  <textarea
+                    [id]="sub.controlJustif"
+                    [formControlName]="sub.controlJustif"
+                    class="textarea-control"
+                    placeholder="Descreva o impacto esperado..."
+                    rows="2"
+                  ></textarea>
+                </div>
+              }
             </div>
           }
 
