@@ -41,7 +41,9 @@
     "@types/bcrypt": "^6.0.0",
     "@types/node": "20.19.9",
     "@types/passport-jwt": "^4.0.1",
+    "@types/pdfkit": "^0.17.6",
     "@types/pdfmake": "^0.3.2",
+    "@types/pg": "^8.11.0",
     "@typescript-eslint/utils": "^8.40.0",
     "angular-eslint": "^21.2.0",
     "eslint": "^9.8.0",
@@ -53,8 +55,7 @@
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
     "vitest": "^4.0.8",
-    "webpack-cli": "^5.1.4",
-    "@types/pg": "^8.11.0"
+    "webpack-cli": "^5.1.4"
   },
   "workspaces": [
     "packages/*",
@@ -84,10 +85,11 @@
     "class-validator": "^0.15.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
-    "pdfmake": "^0.3.7",
+    "pdfkit": "^0.18.0",
+    "pdfmake": "^0.2.23",
+    "pg": "^8.13.0",
     "reflect-metadata": "^0.1.13",
     "rxjs": "~7.8.0",
-    "typeorm": "^0.3.28",
-    "pg": "^8.13.0"
+    "typeorm": "^0.3.28"
   }
 }
